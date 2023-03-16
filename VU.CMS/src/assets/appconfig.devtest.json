@@ -1,0 +1,7 @@
+{
+  "remoteServiceBaseUrl": "http://118.70.215.61:8089",
+  "appBaseUrl": "http://epic-invest.stecom.vn:10200",
+  "baseUrlHome": "http://epic-home.stecom.vn:10200",
+  "clientId": "client1",
+  "clientSecret": "secret1"
+}

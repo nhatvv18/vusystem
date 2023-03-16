@@ -1,0 +1,41 @@
+<div
+  class="card b-page-detail {{ isLoadingPage ? 'b-loading' : '' }}"
+  *ngIf="!isLoadingPage"
+>
+  <div class="p-fluid p-formgrid grid b-header">
+    <div class="card col-12 md:col-12 b-actions">
+      <div
+        class="flex justify-content-between flex-wrap card-container purple-container"
+      >
+        <h5 class="title-info mb-0 ml-0">Chi tiết khách hàng</h5>
+      </div>
+    </div>
+  </div>
+  <p-tabView
+    styleClass="custom-tabview"
+    [(activeIndex)]="activeIndex"
+    (onChange)="changeTab($event)"
+  >
+    <p-tabPanel [header]="'overview'">
+      <ng-template pTemplate="header">
+        <span> Thông tin chung</span>
+      </ng-template>
+      <individual-customer-detail-overview
+        *ngIf="tabViewActive['overview']"
+      ></individual-customer-detail-overview>
+    </p-tabPanel>
+    <p-tabPanel [header]="'offer'">
+      <ng-template pTemplate="header">
+        <span> Danh sách ưu đãi </span>
+      </ng-template>
+      <individual-customer-detail-offer
+        *ngIf="tabViewActive['offer']"
+      ></individual-customer-detail-offer>
+    </p-tabPanel>
+    <p-tabPanel [header]="'event'">
+      <ng-template pTemplate="header">
+        <span> Sự kiện tham gia </span>
+      </ng-template>
+    </p-tabPanel>
+  </p-tabView>
+</div>

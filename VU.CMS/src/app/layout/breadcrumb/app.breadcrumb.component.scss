@@ -1,0 +1,13 @@
+div.notification {
+    animation: animation-repeat 2s;
+}
+
+@keyframes animation-repeat {
+    0% {
+        transform: translateX(100%);
+    }
+
+    100% {
+        transform: translateX(0%);
+    }
+}

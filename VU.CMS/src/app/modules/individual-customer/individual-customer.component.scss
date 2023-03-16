@@ -1,0 +1,8 @@
+:host::ng-deep {
+  .text-ellipsis {
+    div {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+  }
+}

@@ -1,0 +1,13 @@
+.layout-content {
+    flex: 1 0 auto;
+    background-color: #fff; //custom
+    padding-bottom: 0px;
+    &.custom-layout {
+         
+        .card {
+            .p-formgrid.grid {
+                min-height: 45px;
+            }
+        }
+    } 
+}

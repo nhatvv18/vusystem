@@ -1,0 +1,86 @@
+::ng-deep .b-calendar-home {
+  width: 100%;
+  .p-datepicker {
+    width: 100% !important;
+    border: none;
+    .p-datepicker-header {
+      border-bottom: none;
+    }
+    .p-datepicker-calendar-container {
+      table {
+        thead {
+          th {
+            tr {
+              th {
+                padding: 0;
+              }
+            }
+          }
+        }
+        tbody {
+          tr {
+            td {
+              padding: 0;
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+.b-nav-right {
+  border-left: 1px solid #f6f6f6;
+  border-bottom: 1px solid #f6f6f6;
+  border-radius: 8px;
+}
+
+::ng-deep .pcalendarHome {
+  span {
+    input {
+      background: rgba(0, 0, 0, 0.02);
+    }
+  }
+}
+::ng-deep #reportTradingProviderId {
+  position: relative;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+::ng-deep .notice {
+  display: flex;
+  margin-left: 50%;
+  transform: translateX(-60%);
+  z-index: 100000000;
+}
+.notice1,
+.notice2 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 1rem;
+}
+.block_notice1 {
+  width: 40px;
+  height: 12px;
+  background-color: #6c63f0;
+  margin-right: 10px;
+}
+.block_notice2 {
+  width: 40px;
+  height: 12px;
+  background-color: #ed589d;
+  margin-right: 10px;
+}
+
+// Policy
+
+#policyId {
+  position: relative;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+::ng-deep .rocket-img {
+  z-index: 100000000000000000;
+}

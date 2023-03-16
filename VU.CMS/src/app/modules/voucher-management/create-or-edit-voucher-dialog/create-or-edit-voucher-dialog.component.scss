@@ -1,0 +1,71 @@
+.img-zone {
+  border: 1px dashed #bbb;
+  width: 100%;
+  min-height: 200px;
+  padding: 5px;
+  img {
+    width: 100%;
+  }
+}
+.border-box {
+  border: 1px solid #eee;
+  padding: 10px;
+  display: block;
+  width: 100%;
+  height: 200px;
+  overflow-y: scroll;
+}
+
+.border-box img {
+  width: 100%;
+}
+
+::ng-deep {
+  .custom-tabview-order {
+    .p-tabview-nav-container {
+      .p-tabview-nav-content {
+        .p-tabview-nav {
+          border: none;
+          li {
+            // border-bottom: 1px solid;
+            .p-tabview-nav-link {
+              box-shadow: none;
+              border-radius: 0;
+              border-color: #dee2e6 !important;
+              border-right: none;
+              margin: 0;
+              padding: 8px 16px;
+            }
+            // css cho phần tử đầu tiên
+            &:first-child {
+              .p-tabview-nav-link {
+                border-top-left-radius: 8px;
+                border-bottom-left-radius: 8px;
+              }
+            }
+            // css cho phần tử cuối cùng
+            &:nth-last-child(2) {
+              .p-tabview-nav-link {
+                border-top-right-radius: 8px !important;
+                border-bottom-right-radius: 8px !important;
+                border-right: 1px solid #5346e0;
+              }
+            }
+            &.p-highlight {
+              .p-tabview-nav-link {
+                border-color: #5346e0 !important;
+                color: #5346e0;
+                border-right: 1px solid #5346e0;
+              }
+              & + li {
+                .p-tabview-nav-link {
+                  border-left: none;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

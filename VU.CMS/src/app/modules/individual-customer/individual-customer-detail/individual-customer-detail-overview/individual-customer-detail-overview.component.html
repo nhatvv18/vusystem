@@ -1,0 +1,201 @@
+<div class="col-12">
+  <div class="card">
+    <h5 class="title-info">Thông tin khách hàng</h5>
+  </div>
+  <div class="p-fluid p-formgrid grid">
+    <div class="flex b-w-100">
+      <div class="field col-2">
+        <p-image
+          [src]="faceImage"
+          alt="Image"
+          [width]="'100%'"
+          [height]="'100%'"
+          class="cursor-pointer"
+        ></p-image>
+      </div>
+      <div class="field col-10 b-w-100">
+        <div class="flex b-w-100">
+          <div class="field col-2">
+            <label class="title-info">Mã khách hàng</label>
+            <input
+              pInputText
+              [(ngModel)]="overview.code"
+              class="custom-input b-disabled"
+              type="text"
+              [disabled]="true"
+            />
+          </div>
+          <div class="field col-2">
+            <label class="title-info"
+              >Họ và tên <span class="required-field"> * </span></label
+            >
+            <input
+              pInputText
+              [(ngModel)]="overview.name"
+              class="custom-input b-disabled"
+              type="text"
+              [disabled]="true"
+            />
+          </div>
+          <div class="field col-2">
+            <label class="title-info"
+              >Ngày sinh <span class="required-field"> * </span></label
+            >
+            <p-calendar
+              dateFormat="dd/mm/yy"
+              class="b-disabled"
+              locale="vi"
+              appendTo="body"
+              utc="true"
+              [(ngModel)]="overview.birthday"
+              [disabled]="true"
+            >
+            </p-calendar>
+          </div>
+          <div class="field col-2">
+            <label class="title-info">
+              Giới tính <span class="required-field"> * </span></label
+            >
+            <p-dropdown
+              [autoDisplayFirst]="false"
+              class="b-disabled"
+              [options]="listGender"
+              [(ngModel)]="overview.gender"
+              [disabled]="true"
+            >
+            </p-dropdown>
+          </div>
+          <div class="field col-2">
+            <label class="title-info"
+              >Mã giới thiệu <span class="required-field"> * </span></label
+            >
+            <input
+              pInputText
+              [(ngModel)]="overview.referralCode"
+              class="custom-input b-disabled"
+              type="text"
+              [disabled]="true"
+            />
+          </div>
+        </div>
+        <div class="flex b-w-100">
+          <div class="field col-2">
+            <label class="title-info">Số điện thoại</label>
+            <input
+              pInputText
+              [(ngModel)]="overview.numberPhone"
+              class="custom-input b-disabled"
+              type="text"
+              [disabled]="true"
+            />
+          </div>
+          <div class="field col-4">
+            <label class="title-info">Email</label>
+            <input
+              pInputText
+              [(ngModel)]="overview.email"
+              class="custom-input b-disabled"
+              type="text"
+              [disabled]="true"
+            />
+          </div>
+          <div class="field col-2">
+            <label class="title-info"> Loại giấy tờ</label>
+            <input
+              pInputText
+              [(ngModel)]="overview.cardType"
+              class="custom-input b-disabled"
+              type="text"
+              [disabled]="true"
+            />
+          </div>
+          <div class="field col-2">
+            <label class="title-info">Mã số</label>
+            <input
+              pInputText
+              [(ngModel)]="overview.cardNumber"
+              class="custom-input b-disabled"
+              type="text"
+              [disabled]="true"
+            />
+          </div>
+        </div>
+        <div class="flex b-w-100">
+          <div class="field col-6">
+            <label class="title-info">Địa chỉ liên hệ</label>
+            <input
+              pInputText
+              [(ngModel)]="overview.address"
+              class="custom-input b-disabled"
+              type="text"
+              [disabled]="true"
+            />
+          </div>
+          <div class="field col-2">
+            <label class="title-info"
+              >Ngày tham gia <span class="required-field"> * </span></label
+            >
+            <p-calendar
+              dateFormat="dd/mm/yy"
+              class="b-disabled"
+              locale="vi"
+              appendTo="body"
+              utc="true"
+              [(ngModel)]="overview.joinDate"
+              [disabled]="true"
+            >
+            </p-calendar>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <h5 class="title-info">Thông tin tích điểm</h5>
+  </div>
+  <div class="p-fluid p-formgrid grid">
+    <div class="flex b-w-100">
+      <div class="field col-2">
+        <label class="title-info">Tổng điểm</label>
+        <input
+          pInputText
+          [(ngModel)]="accumulate.totalPoint"
+          class="custom-input b-disabled"
+          type="text"
+          [disabled]="true"
+        />
+      </div>
+      <div class="field col-2">
+        <label class="title-info">Điểm tiêu</label>
+        <input
+          pInputText
+          [(ngModel)]="accumulate.usePoint"
+          class="custom-input b-disabled"
+          type="text"
+          [disabled]="true"
+        />
+      </div>
+      <div class="field col-2">
+        <label class="title-info">Điểm còn lại</label>
+        <input
+          pInputText
+          [(ngModel)]="accumulate.remainPoint"
+          class="custom-input b-disabled"
+          type="text"
+          [disabled]="true"
+        />
+      </div>
+      <div class="field col-2">
+        <label class="title-info"> Hạng thành viên</label>
+        <p-dropdown
+          [autoDisplayFirst]="false"
+          class="b-disabled"
+          [options]="listMembershipClass"
+          [(ngModel)]="accumulate.membershipClass"
+          [disabled]="true"
+        >
+        </p-dropdown>
+      </div>
+    </div>
+  </div>
+</div>

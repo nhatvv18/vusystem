@@ -1,0 +1,206 @@
+<div class="col-12" style="padding-bottom: 70px">
+  <div class="card p-0">
+    <h5 class="title-info mb-2">Thông tin voucher</h5>
+  </div>
+  <div class="p-fluid p-formgrid grid">
+    <div class="px-2">
+      <label (click)="insertImageVoucher($event)">
+        <p-image
+          [src]="selectedImageVoucher.src"
+          alt="Image"
+          [width]="selectedImageVoucher.width"
+          [height]="selectedImageVoucher.height"
+          [imageStyle]="{ 'object-fit': 'cover' }"
+          class="cursor-pointer"
+        >
+        </p-image>
+      </label>
+    </div>
+    <div class="flex b-w-100">
+      <div class="field col-3">
+        <label class="title-info">Loại voucher</label>
+        <p-dropdown
+          [options]="listVoucherType"
+          [(ngModel)]="crudVoucher.type"
+          [disabled]="isDisable"
+        >
+        </p-dropdown>
+      </div>
+      <div class="field col-5">
+        <label class="title-info"
+          >Tên voucher <span class="required-field"> * </span></label
+        >
+        <input
+          pInputText
+          [(ngModel)]="crudVoucher.name"
+          class="custom-input"
+          type="text"
+          [disabled]="isDisable"
+          placeholder="Nhập tên voucher"
+        />
+      </div>
+      <div
+        class="field col-4"
+        *ngIf="crudVoucher.type !== this.listVoucherType[0].value"
+      >
+        <label class="title-info"
+          >Link voucher <span class="required-field"> * </span></label
+        >
+        <input
+          pInputText
+          [(ngModel)]="crudVoucher.link"
+          class="custom-input"
+          type="text"
+          placeholder="Nhập link voucher"
+          [disabled]="isDisable"
+        />
+      </div>
+    </div>
+    <div class="flex b-w-100">
+      <div class="field col-3">
+        <label class="title-info">Điểm quy đổi (Điểm)</label>
+        <input
+          pInputText
+          [(ngModel)]="crudVoucher.point"
+          class="custom-input"
+          type="number"
+          placeholder="Nhập số điểm"
+          [disabled]="isDisable"
+        />
+      </div>
+      <div class="field col-3">
+        <label class="title-info">Giá trị (VND)</label>
+        <p-inputNumber
+          [(ngModel)]="crudVoucher.value"
+          placeholder="Nhập giá trị"
+          class="custom-input"
+          [disabled]="isDisable"
+        >
+        </p-inputNumber>
+      </div>
+      <div class="field col-3">
+        <label class="title-info"
+          >Ngày áp dụng <span class="required-field"> * </span></label
+        >
+        <p-calendar
+          dateFormat="dd/mm/yy"
+          locale="vi"
+          appendTo="body"
+          utc="true"
+          [(ngModel)]="crudVoucher.applyDate"
+          [showIcon]="true"
+          placeholder="dd/mm/yy"
+          [disabled]="isDisable"
+        >
+        </p-calendar>
+      </div>
+      <div class="field col-3">
+        <label class="title-info">Ngày hết hạn</label>
+        <p-calendar
+          dateFormat="dd/mm/yy"
+          locale="vi"
+          appendTo="body"
+          utc="true"
+          [(ngModel)]="crudVoucher.expireDate"
+          [showIcon]="true"
+          placeholder="dd/mm/yy"
+          [disabled]="isDisable"
+        >
+        </p-calendar>
+      </div>
+    </div>
+  </div>
+
+  <ng-container *ngIf="crudVoucher.type === this.listVoucherType[0].value">
+    <div class="card p-0">
+      <h5 class="title-info mb-2">Nội dung mô tả</h5>
+    </div>
+    <div class="p-fluid p-formgrid grid">
+      <div class="b-w-100 col-12">
+        <p-selectButton
+          optionValue="value"
+          optionLabel="name"
+          class="mb-2 mt-2"
+          [options]="htmlMarkdownOptions"
+          [(ngModel)]="crudVoucher.contentType"
+          [disabled]="isDisable"
+        ></p-selectButton>
+      </div>
+      <div class="flex b-w-100">
+        <div
+          class="field {{
+            crudVoucher.contentType === MARKDOWN_OPTIONS.MARKDOWN
+              ? 'col-6'
+              : 'col-12'
+          }}"
+        >
+          <label>Nhập thông tin</label>
+          <div *ngIf="crudVoucher.contentType === MARKDOWN_OPTIONS.MARKDOWN">
+            <textarea
+              #myTextArea
+              (click)="getCaretPos(myTextArea)"
+              (keyup)="getCaretPos(myTextArea)"
+              pInputTextarea
+              [rows]="11"
+              [(ngModel)]="crudVoucher.content"
+              placeholder="Nhập nội dung mô tả"
+              class="custom-input"
+              [disabled]="isDisable"
+            ></textarea>
+            <div style="width: 150px" class="mt-2">
+              <p-button
+                (click)="insertImageContent()"
+                class="p-button-outlined p-button-info"
+                label="Chèn ảnh"
+                icon="pi pi-image"
+                iconPos="left"
+                [disabled]="isDisable"
+              >
+              </p-button>
+            </div>
+          </div>
+
+          <div *ngIf="crudVoucher.contentType === MARKDOWN_OPTIONS.HTML">
+            <angular-editor
+              [(ngModel)]="crudVoucher.content"
+              class="custom-input"
+              [placeholder]="'Nhập nội dung'"
+              [config]="{ height: '15rem', sanitize: false, editable: true }"
+              [disabled]="isDisable"
+            >
+            </angular-editor>
+          </div>
+        </div>
+        <div
+          *ngIf="crudVoucher.contentType === MARKDOWN_OPTIONS.MARKDOWN"
+          class="field col-6"
+        >
+          <label>Hiển thị</label>
+          <markdown class="border-box" [data]="displayContent"> </markdown>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</div>
+<div
+  *ngIf="!isDisable"
+  class="p-dialog-footer"
+  style="width: 100%; position: fixed; left: 0; bottom: 0"
+>
+  <button
+    pButton
+    pRipple
+    label="Hủy"
+    icon="pi pi-times"
+    class="p-button-text p-confirm-dialog-reject"
+    (click)="close($event)"
+  ></button>
+  <button
+    pButton
+    pRipple
+    label="Lưu"
+    icon="pi pi-check"
+    class="p-button-text p-confirm-dialog-approve"
+    (click)="save($event)"
+  ></button>
+</div>

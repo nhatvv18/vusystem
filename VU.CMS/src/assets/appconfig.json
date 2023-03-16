@@ -1,0 +1,7 @@
+{
+  "remoteServiceBaseUrl": "https://localhost:5000",
+  "appBaseUrl": "http://localhost:4208",
+  "baseUrlHome": "http://localhost:4200",
+  "clientId": "client1",
+  "clientSecret": "secret1"
+}

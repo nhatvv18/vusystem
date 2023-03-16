@@ -1,0 +1,35 @@
+﻿<div class="login-body" [ngClass]="{'layout-dark': dark, 'layout-light': !dark}">
+    <div class="login-content">
+        <div class="night-switch">
+            <p-button styleClass="dark-switch"  icon="pi pi-circle-on" (click)="dark = true"></p-button>
+            <p-button styleClass="light-switch"  icon="pi pi-circle-off" (click)="dark = false"></p-button>
+        </div>
+        <div class="login-panel">
+            <div class="login-panel-content">
+                <div class="logo">
+                    <img src="assets/layout/images/logo-mirage@2x.png" alt="mirage-layout" />
+                </div>
+                <h1>Xin chào!</h1>
+                <p>Đăng nhập để bắt đầu công việc của bạn.</p>
+                <div class="forms">
+                    <div class="login-input-wrapper mb-1">
+                        <label for="username">Tài khoản</label>
+                        <input id="username" #username pInputText [(ngModel)]="authService.authenticateModel.username" placeholder="Tài khoản" />
+                        <i class="pi pi-user"></i>
+                    </div>
+
+                    <div class="login-input-wrapper mt-4">
+                        <label for="password">Mật khẩu</label>
+                        <input type="password" id="password" pPassword (keyup.enter)="login()" [(ngModel)]="authService.authenticateModel.password" placeholder="Mật khẩu" [feedback]="false"/>
+                        <i class="pi pi-lock"></i>
+                    </div>
+                    <div class="buttons">
+                        <button pButton type="button" (click)="login()"  label="Đăng nhập" [disabled]="submitting"></button>
+                        <a href="#" class="secondary-button">Quên mật khẩu?</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="desert"></div>
+    </div>
+</div>

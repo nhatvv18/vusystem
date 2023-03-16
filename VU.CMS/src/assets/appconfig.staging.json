@@ -1,0 +1,7 @@
+{
+  "remoteServiceBaseUrl": "https://api-staging.epicpartner.vn",
+  "appBaseUrl": "https://eloyalty-staging.epicpartner.vn",
+  "baseUrlHome": "https://home-staging.epicpartner.vn",
+  "clientId": "client1",
+  "clientSecret": "secret1"
+}

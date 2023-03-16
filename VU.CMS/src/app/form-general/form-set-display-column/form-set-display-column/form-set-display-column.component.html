@@ -1,0 +1,19 @@
+<div class="grid p-fluid">
+    <p-checkbox 
+        class="col-12 md:col-12 border-bottom-1 border-gray-200 check-all checkbox" name="selectedColumns" 
+        [binary]="true" label="Sửa cột hiển thị" inputId="selectAllCheckbox" 
+        [(ngModel)]="checkAll" (onChange)="selectAllCheckbox()">
+    </p-checkbox>
+    <div class="col-12 md:col-12 border-bottom-1 border-gray-200" *ngFor="let col of selectColumns">
+            <p-checkbox
+                *ngIf="col?.type !== 'hidden'"
+                class="checkbox" 
+                name="selectedColumns" value="col" [value]="col" label="{{col.header}}" 
+                [(ngModel)]="selectedColumns" [inputId]="col.field" [disabled]="col?.isPin" (onChange)="checkCheckAll()">
+            </p-checkbox>
+    </div>
+    <div class="p-dialog-footer" style="width: 100%; position: fixed; left: 0; bottom: 0; border: none;">
+        <button pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject" (click)="cancel()"></button>
+        <button pButton pRipple label="Áp dụng" icon="pi pi-check" class="p-button-text p-confirm-dialog-approve" [disabled]="submitted" (click)="accept()"></button>
+    </div>
+</div>
