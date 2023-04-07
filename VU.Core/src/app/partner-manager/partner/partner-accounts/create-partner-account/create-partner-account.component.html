@@ -1,0 +1,39 @@
+<div class="card p-0">
+    <div class="grid p-fluid">
+        <div class="col-12 md:col-6">
+            <div class="field mb-0">
+                <label for="displayName"> Tên hiển thị (<span class="required-field"> * </span>)</label>
+                <input type="text" id="displayName" name="displayName" pInputText [(ngModel)]="user.displayName" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !user.userName}"/>         
+            </div>
+        </div>
+        <div class="col-12 md:col-6">
+            <div class="field mb-0">
+                <label for="userName"> Tên đăng nhập (<span class="required-field"> * </span>)</label>
+                <input type="text" id="userName" name="userName" pInputText [(ngModel)]="user.userName" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !user.userName}" [disabled]="user.userId >=0"/>         
+            </div>
+        </div>
+        <div class="col-12 md:col-6">
+            <div class="field mb-0">
+                <label for="password"> Mật khẩu (<span class="required-field"> * </span>)</label>
+                <input type="password" id="password" name="password" pPassword [(ngModel)]="user.password" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !user.password}" autocomplete="new-password"/>         
+            </div>
+        </div>
+        <div class="col-12 md:col-6">
+            <div class="field mb-0">
+                <label for="confirm-password"> Nhập lại mật khẩu (<span class="required-field"> * </span>)</label>
+                <input type="password" [class]="'ng-invalid ng-dirty'" id="confirm-password" name="confirmPassword" pPassword [(ngModel)]="user.confirmPassword" autofocus autocomplete="off"/>
+                <small class="ng-dirty ng-invalid p-error" *ngIf="validatePassword()"> Mật khẩu không khớp!</small>         
+            </div>
+        </div>
+        <div class="col-12 md:col-12">
+            <div class="field mb-0">
+                <label for="email"> Email (<span class="required-field"> * </span>)</label>
+                <input type="text" id="email" name="email" pInputText [(ngModel)]="user.email" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !user.email}"/>         
+            </div>
+        </div>
+    </div>
+    <div class="p-dialog-footer" style="width: 100%; position: fixed; left: 0; bottom: 0;">
+        <button pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject" (click)="cancel()"></button>
+        <button pButton pRipple label="Đồng ý" icon="pi pi-check" class="p-button-text p-confirm-dialog-approve" [disabled]="!validForm() || submitted" (click)="save()"></button>
+    </div>
+</div>

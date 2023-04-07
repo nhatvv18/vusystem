@@ -8,8 +8,8 @@ namespace VU.SeverSystem.Entities.Dtos.Shared
         [FromQuery(Name = "pageSize")]
         public int PageSize { get; set; }
 
-        [FromQuery(Name = "pageIndex")]
-        public int PageIndex { get; set; }
+        [FromQuery(Name = "pageNumber")]
+        public int PageNumber { get; set; }
 
         private string _keyword;
         [FromQuery(Name = "keyword")]

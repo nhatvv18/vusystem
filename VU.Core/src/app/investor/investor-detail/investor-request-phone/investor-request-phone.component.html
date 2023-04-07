@@ -1,0 +1,18 @@
+<div class="grid p-fluid">
+    <div class="col-12 md:col-12">
+        <div class="field">
+            <label> {{title}} </label>   
+            <input [disabled]="true" pInputText maxlength="500" class="custom-input-disabled" [(ngModel)]="phone" />
+        </div>
+    </div>
+    <div class="col-12 md:col-12">
+        <div class="field">
+            <label> {{titleRequest}} </label>   
+            <input  pInputText maxlength="500" class="custom-input-disabled" [(ngModel)]="dataRequest.requestNote" />
+        </div>
+    </div>
+</div>
+<div class="p-dialog-footer" style="width: 100%; position: fixed; left: 0; bottom: 0;">
+    <button pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject" (click)="cancel()"></button>
+    <button pButton pRipple label="Đồng ý" icon="pi pi-check" class="p-button-text p-confirm-dialog-approve" [disabled]="!validForm()" (click)="accept()"></button>
+</div>

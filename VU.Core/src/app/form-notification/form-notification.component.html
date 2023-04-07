@@ -1,0 +1,23 @@
+<div>
+    <div class="grid p-fluid">
+        <div class="col-12 md:col-12">
+            <div class="field" style="text-align: center">
+                <p-image
+                    [src]="(data?.icon)" 
+                    [imageStyle]="{'border-radius':'8px','max-height':'240px', 'width': '8%'}" 
+                    styleClass="dialog_confirmation"
+                    >
+                </p-image>      
+            </div>
+        </div>
+        <div class="col-12 md:col-12">
+            <div class="field">
+                <label style="display: block; text-align: center; margin: -1rem auto 2rem;"> {{data.title }} </label>         
+            </div>
+        </div>
+    </div>
+    <div class="p-dialog-footer" style="width: 100%; position: fixed; left: 0; bottom: 0;">
+        <button pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject" (click)="cancel()"></button>
+        <button pButton pRipple label="Đồng ý" icon="pi pi-check" class="p-button-text p-confirm-dialog-approve" [disabled]="submitted" (click)="accept()"></button>
+    </div>
+</div>

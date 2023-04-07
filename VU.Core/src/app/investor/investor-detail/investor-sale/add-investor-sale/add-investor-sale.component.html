@@ -1,0 +1,57 @@
+<app-loading-page *ngIf="isLoading"></app-loading-page>
+
+<div class="grid p-fluid {{ isLoading ? 'b-loading' : '' }}">
+    <div class="col-12 md:col-3">
+        <div class="field mb-0">
+            <label> Họ tên / Tên doanh nghiệp</label>
+            <input pInputText [value]="(investorInfo?.fullname || investor?.name) ?? null" [disabled]="true"  class="custom-input-disabled"/>         
+        </div>
+    </div>
+    <div class="col-12 md:col-3">
+        <div class="field mb-0" *ngIf="investorInfo?.idNo">
+            <label> Số CMND/CCCD </label>
+            <input pInputText [value]="( investorInfo?.idNo ) ?? null" [disabled]="true" class="custom-input-disabled"/>         
+        </div>
+        <div class="field mb-0" *ngIf="!investorInfo?.idNo">
+            <label> Mã số thuế </label>
+            <input pInputText [value]="( investor?.taxCode ) ?? null" [disabled]="true" class="custom-input-disabled"/>         
+        </div>
+    </div>
+    <div class="col-12 md:col-3">
+        <div class="field mb-0">
+            <label> SĐT </label>
+            <input pInputText [value]="(investor?.investor?.phone || investor?.phone) ?? null" [disabled]="true" class="custom-input-disabled"/>         
+        </div>
+    </div>
+    <div class="col-12 md:col-3">
+        <div class="field mb-0">
+            <label style="color: white;"> Tìm kiếm </label>
+            <p-button label="Tìm kiếm" icon="pi pi-search" (onClick)="filterInvestor()"></p-button>
+        </div>
+    </div>
+    <div class="col-12 md:col-12">
+        <div class="field mb-0">
+            <label> Địa chỉ </label>
+            <input pInputText value="{{ investorInfo?.placeOfResidence ?? investor?.address}}" [disabled]="true" class="custom-input-disabled"/>         
+        </div>
+    </div>
+    <div class="col-12 md:col-6 mt-3" *ngIf="investorInfo?.idFrontImageUrl">
+        <div class="field mb-0 text-center">
+            <p-image [src]="baseUrlApi + investorInfo?.idFrontImageUrl" alt="Image" [preview]="true" [imageStyle]="{'max-height':'250px','width':'auto', 'padding': '10px', 'border': '2px dashed gray'}"></p-image>
+            <br>
+            <label> Giấy tờ mặt trước </label>
+        </div>
+    </div>
+    <div class="col-12 md:col-6 mt-3" *ngIf="investorInfo?.idBackImageUrl">
+        <div class="field mb-0 text-center">
+            <p-image [src]="baseUrlApi + investorInfo?.idBackImageUrl" alt="Image" [preview]="true" [imageStyle]="{'max-height':'250px','width':'auto', 'padding': '10px', 'border': '2px dashed gray'}"></p-image>
+            <br>   
+            <label> Giấy tờ mặt sau </label>
+        </div>
+    </div>
+    
+</div>
+<div class="p-dialog-footer" style="width: 100%; position: fixed; left: 0; bottom: 0;">
+    <button pButton pRipple label="Hủy bỏ" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject" (click)="close()"></button>
+    <button pButton pRipple label="Lưu" icon="pi pi-check" class="p-button-text p-confirm-dialog-approve" [disabled]="submitted" (click)="save()"></button>
+</div>

@@ -1,0 +1,115 @@
+<div class="card">
+    <div class="grid formgrid">
+        <div class="field col-3">
+            <h5>Loại thông báo</h5>
+            <div class="custom-skeleton">
+                <p-listbox [options]="items" [(ngModel)]="itemSelected" optionLabel="label" (ngModelChange)="notificationChange()">
+                    <ng-template let-item pTemplate="item">
+                        <div class="notification-item">
+                            {{item.notificationTemplateName}}
+                        </div> 
+                    </ng-template>
+                </p-listbox>
+            </div>
+        </div>
+        <p-message *ngIf="!itemSelected" severity="error" text="Vui lòng chọn loại thông báo để cấu hình"></p-message>
+        <div *ngIf="itemSelected" class="field col-9"> 
+            <h5>Thông tin cấu hình: {{ itemSelected?.notificationTemplateName}}</h5>
+            <p-button *ngIf="isGranted([PermissionCoreConst.CoreThongBaoMacDinh_CapNhat])" style="float: right;" icon="pi pi-save" (click)="saveSetting()" label="Lưu tất cả cài đặt">
+            </p-button>
+            <div class="custom-skeleton">
+                <p-message severity="info" text="{{ itemSelected?.description }}"></p-message>
+                <div class="p-fluid p-formgrid grid mt-5">
+                    <div class="field col-12">
+                        <label htmlFor="title">Hành động</label> 
+                        <p-multiSelect [(ngModel)]="configKeys[currentKey].actions" showToggleAll="true"
+                            optionLabel="name" optionValue="value" [options]="actionsList">
+                        </p-multiSelect>
+                    </div>
+
+                    <div class="field col-12">
+                        <label htmlFor="content">Tiêu đề thông báo</label>
+                            <textarea #myTextArea pInputTextarea [rows]="5" [(ngModel)]="configKeys[currentKey].titleAppContent"
+                                id="title" class="custom-input"> </textarea>
+                    </div>
+
+                    <p-divider *ngIf="configKeys[currentKey].actions.includes('PUSH_NOTIFICATION')" class="col-12"
+                        align="center"><b>Thông báo APP</b></p-divider>
+
+                    <div class="field col-12" *ngIf="configKeys[currentKey].actions.includes('PUSH_NOTIFICATION')">
+                        <label htmlFor="content">Loại nội dung thông báo app</label>
+                        <p-selectButton [(ngModel)]="configKeys[currentKey].pushAppContentType" optionValue="value"
+                            class="mb-2 mt-2" [options]="htmlMarkdownOptions" optionLabel="name"></p-selectButton>
+                    </div>
+
+                    <div *ngIf="configKeys[currentKey].actions.includes('PUSH_NOTIFICATION')"
+                        class="field {{ configKeys[currentKey].pushAppContentType == 'MARKDOWN' ? 'col-6' : 'col-12' }}">
+                        
+                        <label htmlFor="content">Nội dung thông báo app</label>
+                        <div *ngIf="configKeys[currentKey].pushAppContentType == 'MARKDOWN'">
+                            <textarea #myTextArea (click)="getCaretPos(myTextArea)" (keyup)="getCaretPos(myTextArea)" pInputTextarea [rows]="11" [(ngModel)]="configKeys[currentKey].pushAppContent"
+                                class="custom-input"></textarea>
+                            <div style="width: 150px;">
+                                <p-button (click)="insertImage('pushAppContent')"
+                                    class="p-button-outlined p-button-info" label="Chèn ảnh" icon="pi pi-image"
+                                    iconPos="left"></p-button>
+                            </div>
+                        </div>
+                        <div *ngIf="configKeys[currentKey].pushAppContentType == 'HTML'">
+                            <angular-editor [(ngModel)]="configKeys[currentKey].pushAppContent" class="custom-input"
+                                [placeholder]="'Nhập nội dung '" [config]="{height: '15rem', editable: true, sanitize: false }">
+                            </angular-editor>
+                        </div>
+                    </div>
+                    <div *ngIf="configKeys[currentKey].actions.includes('PUSH_NOTIFICATION') && configKeys[currentKey].pushAppContentType == 'MARKDOWN'"
+                        class="field col-6 md:col-6 ">
+                        <label htmlFor="content">Nội dung xem trước</label>
+                        <markdown class="border-box" [data]="configKeys[currentKey].pushAppContent">
+                        </markdown>
+                    </div>
+                    <p-divider *ngIf="configKeys[currentKey].actions.includes('SEND_SMS')" class="col-12"
+                        align="center"><b>Thông báo SMS</b></p-divider>
+                    <div *ngIf="configKeys[currentKey].actions.includes('SEND_SMS')" class="field col-12 md:col-12">
+                        <label htmlFor="content">Nội dung SMS</label>
+                        <textarea #myTextArea (click)="getCaretPos(myTextArea)" (keyup)="getCaretPos(myTextArea)" pInputTextarea [rows]="5" [(ngModel)]="configKeys[currentKey].smsContent"
+                            id="smsContent" class="custom-input"> </textarea>
+                    </div>
+                    <p-divider *ngIf="configKeys[currentKey].actions.includes('SEND_EMAIL')" class="col-12"
+                        align="center"><b>Thông báo Email</b></p-divider>
+
+                    <div class="field col-12" *ngIf="configKeys[currentKey].actions.includes('SEND_EMAIL')">
+                        <label htmlFor="content">Loại nội dung email</label>
+                        <p-selectButton [(ngModel)]="configKeys[currentKey].emailContentType"
+                            [ngModelOptions]="{standalone: true}" optionValue="value" class="mb-2 mt-2"
+                            [options]="htmlMarkdownOptions" optionLabel="name"></p-selectButton>
+                    </div>
+                    <div *ngIf="configKeys[currentKey].actions.includes('SEND_EMAIL')"
+                        class="field {{ configKeys[currentKey].emailContentType == 'MARKDOWN' ? 'col-6' : 'col-12' }}">
+                        <label htmlFor="content">Nội dung</label>
+                        <div *ngIf="configKeys[currentKey].emailContentType == 'MARKDOWN'">
+                            <textarea [(ngModel)]="configKeys[currentKey].emailContent" #myTextArea (click)="getCaretPos(myTextArea)" (keyup)="getCaretPos(myTextArea)" pInputTextarea [rows]="11"
+                                id="emailContent" class="custom-input"></textarea>
+                            <div style="width: 150px;">
+                                <p-button (click)="insertImage('emailContent')" class="p-button-outlined p-button-info"
+                                    label="Chèn ảnh" icon="pi pi-image" iconPos="left"></p-button>
+                            </div>
+                        </div>
+
+                        <div *ngIf="configKeys[currentKey].emailContentType == 'HTML'">
+                            <angular-editor [(ngModel)]="configKeys[currentKey].emailContent" id="content"
+                                class="custom-input" [placeholder]="'Nhập nội dung '"
+                                [config]="{height: '15rem', editable: true, sanitize: false }">
+                            </angular-editor>
+                        </div>
+                    </div>
+                    <div *ngIf="configKeys[currentKey].actions.includes('SEND_EMAIL') && configKeys[currentKey].emailContentType == 'MARKDOWN'"
+                        class="field col-6 md:col-6 ">
+                        <label htmlFor="content">Nội dung xem trước</label>
+                        <markdown class="border-box" [data]="configKeys[currentKey].emailContent">
+                        </markdown>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

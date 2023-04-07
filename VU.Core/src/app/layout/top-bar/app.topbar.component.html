@@ -1,0 +1,91 @@
+<div class="layout-topbar">
+    <div class="layout-topbar-wrapper">
+        <div class="layout-topbar-left">
+            <div class="layout-topbar-logo-wrapper">
+                <a href="#" class="layout-topbar-logo">
+                    <img src="assets/layout/images/logo-mirage@2x.png" alt="mirage-layout" />
+                    <span class="app-name">Epic</span>
+                </a>
+            </div>
+
+            <a href="#" class="sidebar-menu-button" (click)="appMain.onMenuButtonClick($event)">
+                <i class="pi pi-bars"></i>
+            </a>
+
+            <a href="#" class="megamenu-mobile-button" (click)="appMain.onMegaMenuMobileButtonClick($event)">
+                <i class="pi pi-align-right megamenu-icon"></i>
+            </a>
+
+            <a href="#" class="topbar-menu-mobile-button" (click)="appMain.onTopbarMobileMenuButtonClick($event)">
+                <i class="pi pi-ellipsis-v"></i>
+            </a>
+        </div>
+        <div class="layout-topbar-right fadeInDown">
+            <ul class="layout-topbar-actions">
+                <li #profile class="topbar-item profile-item" [ngClass]="{'active-topmenuitem': appMain.activeTopbarItem === profile}">
+                    <a href="#" (click)="appMain.onTopbarItemClick($event,profile)">
+                    <span class="profile-image-wrapper">
+                        <img style="border-radius: 50%;" src="assets/layout/images/topbar/anonymous-avatar.jpg" alt="mirage-layout" />
+                    </span>
+                    <span class="profile-info-wrapper">
+                        <h3>{{ userInfo?.displayName }}</h3>
+                        <span>{{ userInfo?.userName }}</span>
+                    </span>
+                    </a>
+                    <ul class="profile-item-submenu fadeInDown">
+                        <div class="b-new-div-account-display">
+                             <div class="b-avt-detail">
+                                 <img class="b-avt-detail" src="assets/layout/images/topbar/anonymous-avatar.jpg">
+                             </div>
+                             <div class="b-name-detail">
+                                 <p class="b-display-name">{{ userInfo?.displayName }}</p>
+                                 <p class="b-email-detail">{{ userInfo?.email }}</p>
+                             </div>
+                             <div class="b-manage-account">
+                                 <p (click)="editUser()" class="b-manage-account-text">Quản lý tài khoản của bạn</p>
+                             </div>
+                             <div class="b-logout-detail">
+                                <button (click)="logout()">Đăng xuất</button>
+                             </div>
+                        </div>
+                    </ul>
+
+                </li>
+            </ul>
+        </div>
+       
+    </div>
+</div>
+<p-toast></p-toast>
+<p-dialog [(visible)]="userDialog" [style]="{width: '450px'}" header="Cập nhật tài khoản" [modal]="true" class="p-fluid" [closeOnEscape]="false" [position]="false">
+    <ng-template pTemplate="content">
+        <div class="grid formgrid">
+            <div class="field col-12 md:col-6">
+                <span class="p-float-label">
+                    <input type="text" id="displayName" pInputText [(ngModel)]="user.displayName" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !user.displayName}"/>
+                    <label for="displayName">Tên hiển thị</label>
+                </span>
+                <!-- <small class="ng-dirty ng-invalid" *ngIf="submitted && !user.displayName"> => Nhập tên hiển thị!</small> -->
+            </div>
+            <div class="field col-12 md:col-6">
+                <span class="p-float-label">
+                    <input type="text" id="userName" pInputText [(ngModel)]="user.userName" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !user.userName}" [disabled]="user.userId >=0"/>
+                    <label for="userName">Tên đăng nhập</label>
+                </span>
+                <!-- <small class="ng-dirty ng-invalid" *ngIf="submitted && !user.userName"> => Nhập tên hiển thị!</small> -->
+            </div>
+            <div class="field col-12 md:col-12">
+                <span class="p-float-label">
+                    <input type="text" id="email" pInputText [(ngModel)]="user.email" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !user.email}"/>
+                    <label for="email">Email</label>
+                </span>
+                <!-- <small class="ng-dirty ng-invalid" *ngIf="submitted && !user.email"> => Nhập tên hiển thị!</small> -->
+            </div>
+        </div>
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Lưu" icon="pi pi-check" class="p-button-text" (click)="saveUser()"></button>
+    </ng-template>
+</p-dialog>

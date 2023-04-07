@@ -1,0 +1,15 @@
+<div class="card pt-0">
+    <div class="grid detail">
+        <div class="p-fluid p-formgrid grid">
+            <div class="col-12">
+                <div class="field">
+                    <label>Ghi chú </label>
+                    <textarea pInputTextarea [(ngModel)]="notice" class="custom-input-disabled"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" pButton pRipple label="Trình duyệt" icon="pi pi-save" (click)="nhapToTrinhDuyet()"></button>
+    </div>
+</div>

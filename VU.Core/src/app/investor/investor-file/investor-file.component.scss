@@ -1,0 +1,87 @@
+::ng-deep .custom-tabview {
+    .p-tabview-panels {
+        padding: 0;
+    }
+}
+.gallery {
+    // width: 50%;
+    text-align: center;
+}
+
+.gallery img {
+
+    height: auto;
+}
+
+::ng-deep .img-face-verify {
+    max-height: 18rem !important;
+}
+
+.title {
+    font-weight: 600;
+    padding-top: 1rem;
+    margin: auto;
+}
+
+.desc {
+    background: #FEEAEC !important;
+    color: #EF233C;
+    border-radius: 10px;
+    vertical-align: middle;
+    padding: auto;
+    margin: auto;
+}
+
+.descRate {
+    text-align: center;
+    cursor: pointer;
+    background: #E2E6F2 !important;
+    color: #212633;
+    border-radius: 10px;
+    padding: auto;
+    margin: auto;
+}
+
+.descRateHigh   {
+    background: #d8f2d8 !important;
+    color: #1EC689;
+    border-radius: 10px;
+    vertical-align: middle;
+    padding: auto;
+    margin: auto;
+}
+
+.descRateAverage   {
+    background: #f7f6d5 !important;
+    color: #c25106;
+    border-radius: 10px;
+    vertical-align: middle;
+    padding: auto;
+    margin: auto;
+}
+
+.gallery-image {
+    height: 110px;
+    width: 100%;
+    background-size: cover !important;
+    background-color: #eee !important;
+}
+
+.ui-dialog-footer-custom {
+    border-radius: 10px !important;
+    padding: 0px;
+    float: right;
+}
+
+.header-face {
+    margin-top: 2rem;
+}
+
+.text-footer {
+    transform: translate(0, 60%);
+}
+
+.default-image {
+    min-height: 18rem;
+    width: 18rem !important;
+}

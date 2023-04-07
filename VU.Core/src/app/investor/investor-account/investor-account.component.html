@@ -1,0 +1,113 @@
+<div class="grid mr-0 ml-0 mt-0">
+    <div class="col-12">
+        <div *ngIf="isGranted([PermissionCoreConst.CoreKHCN_Account_DanhSach])" class="card p-0">
+            <p-toast></p-toast>
+            <p-confirmDialog [style]="{ width: 'auto' }" [baseZIndex]="10000"></p-confirmDialog>
+            <p-table  
+                [value]="listUsers" [loading]="isLoading" [rowHover]="true"
+				[paginator]="false" responsiveLayout="scroll" dataKey="code" [scrollable]="true"
+				styleClass="custom-table">
+				<ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <!-- <div class="flex justify-content-between flex-column sm:flex-row">
+                            <span class="block mt-2 md:mt-0 p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" placeholder="Tìm kiếm..." style="width: 300px"
+                                    [(ngModel)]="keyword" (keyup)="changeKeyword($event)" 
+                                />
+                            </span>
+                        </div> -->
+                        <!-- <div class="">
+                            <button pButton pRipple label="Thêm mới" icon="pi pi-plus" class="p-button-success mr-2"
+                                (click)="createUser()"></button>
+                        </div> -->
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="min-width: 5rem; max-width: 5rem;"> # ID </th>
+                        <th style="min-width: 15rem;"> Tên đăng nhập </th>
+                        <th style="min-width: 10rem">Số điện thoại</th>
+                        <th style="min-width: 20rem">Email</th>
+                        <th style="min-width: 10rem">Loại tài khoản</th>
+                        <th style="min-width: 10rem">EKYC</th>
+                        <th style="min-width: 10rem">Nhận diện</th>
+                        <!-- <th style="min-width: 10rem" pTooltip="Xác minh số điện thoại">Xác minh Sđt</th> -->
+                        <th style="min-width: 10rem">Xác minh email</th>
+                        <th style="min-width: 15rem">Liên kết ngân hàng</th>
+                        <th style="min-width: 10rem">Thiết lập mã pin</th>
+                        <th style="min-width: 10rem">Ngày đăng ký</th>
+                        <th style="min-width: 10rem">Ngày sử dụng cuối</th>
+                        <th style="min-width: 10rem">Epic kiểm tra</th>
+                        <!-- <th style="min-width: 10rem">Trạng thái sử dụng</th> -->
+						<th style="min-width: 7rem; max-width: 7rem;" >Trạng thái tài khoản</th>
+                        <th style="min-width: 8rem; max-width: 8rem; justify-content: center;" pFrozenColumn alignFrozen="right" [frozen]="true">Thao tác</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+                    <tr>
+                        <td style="min-width: 5rem; max-width: 5rem;"> {{ row.userId }} </td>
+                        <td style="min-width: 15rem;"> {{ row.userName }} </td>
+                        <td style="min-width: 10rem">{{ row.phone }}</td>
+                        <td style="min-width: 20rem">{{ row.email }}</td>
+                        <td style="min-width: 10rem"> 
+                            <p-tag 
+                                styleClass="p-tag-{{ InvestorConst.getUserTypeSeverity(row?.userType) }}" 
+                                severity="{{ InvestorConst.getUserTypeSeverity(row?.userType) }}" 
+                                value="{{ InvestorConst.getUserTypeName(row?.userType) }}">
+                            </p-tag> 
+                        </td>
+                        <td style="min-width: 10rem"> <i class="pi pi-check" *ngIf="row.isEkyc == YesNoConst.YES"></i></td>
+                        <td style="min-width: 10rem">
+                            <i class="pi pi-check" *ngIf="row.isVerifiedFace == YesNoConst.YES"></i>
+                        </td>
+                        <!-- <td style="min-width: 10rem">{{ row.isVerifiedPhone }}</td> -->
+                        <td style="min-width:10rem; justify-content: center;">
+                            <i class="pi pi-check" *ngIf="row.isVerifiedEmail == YesNoConst.YES"></i>
+                        </td>
+                        <td style="min-width: 15rem">
+                            <i class="pi pi-check" *ngIf="row.isHaveBank == YesNoConst.YES"></i>
+                        </td>
+                        <td style="min-width:10rem; justify-content: center;">
+                            <i class="pi pi-check" *ngIf="row.isHavePin == YesNoConst.YES"></i>
+                        </td>
+                        
+                        <td style="min-width: 10rem">{{ row.createdDate | dateview }}</td>
+                        <td style="min-width: 10rem">{{ row.lastLogin | dateview}}</td>
+                        <td style="min-width:10rem; justify-content: center;">
+                            <i class="pi pi-check" *ngIf="row.isCheck == YesNoConst.YES"></i>
+                        </td>
+                        <!-- <td style="min-width: 10rem">{{ row.statusUsed }}</td> -->
+						<td style="min-width: 7rem; max-width: 7rem;" >
+                            <p-tag 
+                                styleClass="p-tag-{{ UserConst.STATUS_SEVERITY[row.status] }}" 
+                                severity="{{ UserConst.STATUS_SEVERITY[row.status] }}" 
+                                value="{{ UserConst.STATUS_NAME[row.status] }}">
+                            </p-tag> 
+                        </td>
+                        <td style="min-width: 8rem; max-width: 8rem; justify-content: center;" pFrozenColumn alignFrozen="right" [frozen]="true" class="b-table-actions">
+                            <div class="flex">
+                                <div class="flex">
+                                    <i class="pi pi-ellipsis-h"  (click)="menu.toggle($event)"></i>
+                                    <p-menu #menu [popup]="true"class="button-actions" [model]="listAction[rowIndex]" appendTo="body"></p-menu>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="7">Không có dữ liệu.</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="loadingbody">
+                    <tr>
+                        <td colspan="7">Đang tải dữ liệu ...</td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <!-- <p-paginator styleClass="at-paginator-sm" [totalRecords]="page.totalItems" [rows]="page.pageSize"
+                (onPageChange)="setPage($event)"></p-paginator> -->
+        </div>
+    </div>
+</div>

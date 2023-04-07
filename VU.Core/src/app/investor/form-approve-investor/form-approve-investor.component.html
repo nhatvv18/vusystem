@@ -1,0 +1,138 @@
+<div class="grid p-fluid">
+    <div class="col-12 md:col-12">
+        <div class="checkbox_approve mb-4">
+            <p-radioButton  [(ngModel)]="check_approve"   [value]="true" class="approve_button mr-3" label="Xác nhận thông tin" name="approve" ></p-radioButton>
+            <p-radioButton  [(ngModel)]="check_approve"  [value]="false" name="unapprove" label="Từ chối"></p-radioButton>
+            <br>
+        </div>
+        <div class="field">
+            <label onClick="checkApprove()"> Ghi chú </label>
+            <textarea pInputTextarea [(ngModel)]="dataApprove.approveNote"></textarea>         
+        </div>
+        <div class="checkbox_approve mb-4" *ngIf="isDiffEmailPhone == true">
+            <div class="approve_button mr-3"><p-tag styleClass="mr-2 text-base" styleClass = "bg-cyan-500 text-base">
+                Thông tin :
+            </p-tag></div>
+            <div class="approve_button mr-3"> {{diffDetail.oldValue }} </div>
+            <div class="approve_button mr-3"> <i class="pi pi-arrow-circle-right"></i> </div>
+            <div class="approve_button mr-3"> {{diffDetail.newValue }} </div>
+            <br>
+        </div>
+        
+        <div *ngIf="(check_approve == false && isDiffEmailPhone != true)">
+
+            <div class="checkbox_approve mb-3 row" >
+                <div class="field-checkbox col-4">
+                    <p-checkbox name="group1" value="Số"  [(ngModel)]="selected.temp1" inputId="ny1"></p-checkbox>
+                    <label for="ny">Mã số </label>
+                </div>
+                <div class="field-checkbox col-4">
+                    <p-checkbox name="group2" value="Họ và tên"  [(ngModel)]="selected.temp2" inputId="ny2"></p-checkbox>
+                    <label for="ny">Họ và tên</label>
+                </div>
+                <div class="field-checkbox col-4">
+                    <p-checkbox name="group3" value="Quốc tịch"  [(ngModel)]="selected.temp3" inputId="ny3"></p-checkbox>
+                    <label for="ny">Quốc tịch</label>
+                </div>
+                
+            </div>
+            <div class="checkbox_approve mb-3 row">
+                <div class="field-checkbox col-4">
+                    <p-checkbox name="group4" value="Ngày sinh"  [(ngModel)]="selected.temp4" inputId="ny4"></p-checkbox>
+                    <label for="ny">Ngày sinh</label>
+                </div>
+                <div class="field-checkbox col-4">
+                    <p-checkbox name="group5" value="Nơi sinh"  [(ngModel)]="selected.temp5" inputId="ny5"></p-checkbox>
+                    <label for="ny">Nơi sinh</label>
+                </div>
+                <div class="field-checkbox col-4">
+                    <p-checkbox name="group6" value="Giới tính"  [(ngModel)]="selected.temp6" inputId="ny6"></p-checkbox>
+                    <label for="ny">Giới tính</label>
+                </div>
+                
+            </div>
+            <div class="checkbox_approve mb-3 row">
+                <div class="field-checkbox col-4">
+                    <p-checkbox name="group7" value="Ngày cấp"  [(ngModel)]="selected.temp7" inputId="ny7"></p-checkbox>
+                    <label for="ny">Ngày cấp</label>
+                </div>
+                <div class="field-checkbox col-4">
+                    <p-checkbox name="group8" value="Ngày hết hạn"  [(ngModel)]="selected.temp8" inputId="ny8"></p-checkbox>
+                    <label for="ny">Ngày hết hạn</label>
+                </div>
+                <div class="field-checkbox col-4">
+                    <p-checkbox name="group9" value="Nơi cấp"  [(ngModel)]="selected.temp9" inputId="ny9"></p-checkbox>
+                    <label for="ny">Nơi cấp</label>
+                </div>
+                
+            </div>
+            <div class="checkbox_approve mb-3 row">
+                <div class="field-checkbox col-4">
+                    <p-checkbox name="group10" value="Tài khoản ngân hàng"  [(ngModel)]="selected.temp10" inputId="ny10"></p-checkbox>
+                    <label for="ny">Tài khoản ngân hàng</label>
+                </div>
+                <div class="field-checkbox col-4">
+                    <p-checkbox name="group11" value="File đính kèm"  [(ngModel)]="selected.temp11" inputId="ny11"></p-checkbox>
+                    <label for="ny">File đính kèm</label>
+                </div>
+                <div class="field-checkbox col-4">
+                    <p-checkbox name="group12" value="Địa chỉ giao dịch"  [(ngModel)]="selected.temp12" inputId="ny12"></p-checkbox>
+                    <label for="ny">Địa chỉ giao dịch</label>
+                </div>
+                
+            </div>
+            <div class="checkbox_approve mb-3 row">
+                <div class="field-checkbox col-4">
+                    <p-checkbox name="group13" value="Tài khoản chứng khoán"  [(ngModel)]="selected.temp13" inputId="ny13"></p-checkbox>
+                    <label for="ny">Tài khoản chứng khoán</label>
+                </div>
+                
+            </div>
+        </div>
+    </div>
+    
+    
+    <ng-container *ngIf="isInvestorProf">
+        <div class="col-12 md:col-6">
+            <div class="field">
+                <label for="date1"> Ngày bắt đầu chuyên nghiệp (<span class="required-field"> * </span>)</label>
+                <p-calendar inputId="date1" dateFormat="dd/mm/yy" locale="vi" appendTo="body"
+                    utc="true" placeholder="dd/mm/yyyy" [(ngModel)]="dataApprove.date1"
+                    [showIcon]="true">
+                </p-calendar>
+            </div>
+        </div>
+        <div class="col-12 md:col-6">
+            <div class="field">
+                <label for="date2"> Ngày đáo hạn chuyên nghiệp (<span class="required-field"> * </span>)</label>
+                <p-calendar inputId="date2" dateFormat="dd/mm/yy" locale="vi" appendTo="body"
+                    utc="true" placeholder="dd/mm/yyyy" [(ngModel)]="dataApprove.date2"
+                    [showIcon]="true">
+                </p-calendar>
+            </div>
+        </div>
+    </ng-container>
+</div>
+<div class="flex justify-content-between p-dialog-footer" style="width: 100%; position: fixed; left: 0; bottom: 0;">
+    <div >
+        <!-- <div class="field">
+            Thông tin thay đổi 
+            <div>
+                {{diffDetail.oldValue }} -> {{diffDetail.newValue}}
+            </div>
+        </div> -->
+        <!-- *ngIf="cifCode != null || actionType == 2"  -->
+        <p-button *ngIf="isDiff != false" id="butionShowChange"(onClick)="showDiff()"  styleClass=" p-button-text">
+            <label for="butionShowChange" class=" pt-1">Chi tiết thay đổi</label>
+            <!-- <i class="pi pi-history ml-2 p-text-secondary "  pBadge style="font-size: 1.6rem" size="13px" severity="danger"></i> -->
+        </p-button>
+        <!-- <p-button *ngIf="isDiffEmailPhone == true" id="butionShowChange"(onClick)="showDiffEmailPhone()"  styleClass=" p-button-text">
+            <label for="butionShowChange" class=" pt-1">Chi tiết thay đổi</label>
+            <i class="pi pi-history ml-2 p-text-secondary "  pBadge style="font-size: 1.6rem" size="13px" severity="danger"></i>
+        </p-button> -->
+    </div> 
+    <div>
+        <button pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject" (click)="cancel()"></button>
+        <button pButton pRipple label="Xác nhận" icon="pi pi-check" class="p-button-text p-confirm-dialog-approve" [disabled]="!validForm() || submitted" (click)="accept()"></button>
+    </div>
+</div>

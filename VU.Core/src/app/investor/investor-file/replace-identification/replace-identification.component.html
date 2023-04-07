@@ -1,0 +1,173 @@
+<div class="grid p-fluid">
+	<!-- <p-toast *ngIf="isToastIdentifi"></p-toast> -->
+    <ng-container>
+        <div class="col-12"></div>
+        <div class="col-12 md:col-12">
+            <div class="field mb-0">
+                <label htmlFor="code">Lý do cập nhật<span class="required-field"> * </span>
+                </label>
+                <p-dropdown optionLabel="name" optionValue="code" appendTo="body" class="custom-input-disabled"
+                    [autoDisplayFirst]="false" [options]="ReplaceIdentificationConst.reason"
+                    [(ngModel)]="replaceIdentification.reason" >
+                </p-dropdown>
+            </div>
+        </div>
+        <div class="col-12 md:col-12" *ngIf="replaceIdentification.reason == ReplaceIdentificationConst.KHAC">
+            <div class="field mb-0">
+                <label htmlFor="code">Nhập mô tả : 
+                </label>
+                <textarea name="description" [(ngModel)]="replaceIdentification.description" pInputText></textarea>
+            </div>
+        </div>
+        <div class="col-12 md:col-12">
+            <div class="field mb-0">
+                <label htmlFor="code">Chọn giấy tờ cập nhật<span class="required-field"> * </span>
+                </label>
+                <p-dropdown optionLabel="labelName" optionValue="id" appendTo="body" class="custom-input-disabled"
+                    [autoDisplayFirst]="false" [options]="listIdentification"
+                    [(ngModel)]="replaceIdentification.identificationId" >
+                </p-dropdown>
+            </div>
+        </div>
+    </ng-container>
+    <ng-container>
+        <div class="col-12 md:col-12">
+            <label htmlFor="code">Thêm giấy tờ mới :
+            </label>
+	<!--  grid formgrid custom-fixed-->
+			<div id="block-image" class=""> 
+				<div *ngIf="!((investorEkyc | keyvalue).length > 0)" class="col-12">
+					<div class="field col-3">
+						<label htmlFor="bondPrimaryId">Chọn loại giấy tờ</label>
+						<p-dropdown [disabled]="isDisable == true" optionLabel="name" optionValue="code" [autoDisplayFirst]="true"
+							[options]="InvestorConst.IdTypes" [(ngModel)]="model.type" appendTo="body">
+						</p-dropdown>
+					</div>
+				</div>
+			</div>
+		
+			
+		</div>
+
+        <div *ngIf="!isPassport()" class="col-12 md:col-6">
+            <div class="field image-left-custom">
+                <h5>Mặt trước</h5>
+                <app-investor-image [idInput]="'input-front'" [idImage]="'image-front'"
+                    [(image)]="model.frontImage" [isDisable]="isDisable">
+                </app-investor-image>
+            </div>
+        </div>
+
+        <div *ngIf="!isPassport()" class="col-12 md:col-6 flex flex-row justify-content-center">
+            <div class="field">
+                <h5>Mặt sau</h5>
+                <app-investor-image [idInput]="'input-back'" [idImage]="'image-back'"
+                    [(image)]="model.backImage" [isDisable]="isDisable">
+                </app-investor-image>
+            </div>
+        </div>
+
+    
+		<div *ngIf="isPassport()" class="flex flex-row justify-content-center" style="width: 100%">
+            <app-investor-image [idInput]="'input-passport'" [idImage]="'image-passport'"
+                [(image)]="model.passportImage" [isDisable]="isDisable" >
+            </app-investor-image>
+        </div>
+        <div *ngIf="(investorEkyc | keyvalue).length > 0" class="col-12">
+				<div class="p-fluid p-formgrid grid">
+					<div class="col-12 md:col-12 title-group-input">
+						<h5>Giấy tờ tùy thân </h5>
+						<hr class="mt-1" />
+					</div>
+					<div class="col-12 md:col-4">
+						<div class="field b-field">
+							<label class="b-hightline-title">Mã số </label>
+							<input  autofocus required pInputText [(ngModel)]="investorEkyc.idNo" maxlength="50"class="custom-input-disabled" />
+						</div>
+					</div>
+					<div class="col-12 md:col-8">
+						<div class="field b-field">
+							<label class="">Họ và tên</label>
+							<input pInputText [(ngModel)]="investorEkyc.name" autofocus required maxlength="500" class="custom-input-disabled" [pKeyFilter]="KeyFilter.stringOnlyBlockSpecial"/>
+						</div>
+					</div>
+					<div class="col-12 md:col-4">
+						<div class="field b-field">
+							<label>Giới tính </label>
+							<p-dropdown optionLabel="name" optionValue="code" [autoDisplayFirst]="true"
+								styleClass="w-full"  autofocus required [options]="InvestorConst.ListSex" [(ngModel)]="investorEkyc.sex">
+							</p-dropdown>
+						</div>
+					</div>
+					<div class="col-12 md:col-4">
+						<div class="field b-field">
+							<label class="b-hightline-title">Ngày sinh </label>
+							<p-calendar dateMask autofocus required inputId="closeCellDate" dateFormat="dd/mm/yy" locale="vi" appendTo="body"
+								utc="true" [(ngModel)]="investorEkyc.dateOfBirth" [showIcon]="true">
+							</p-calendar>
+						</div>
+					</div>
+					<div class="col-12 md:col-4">
+						<div class="field">
+							<label>Quốc tịch </label>
+							<p-dropdown  autofocus required optionLabel="name" optionValue="name" [autoDisplayFirst]="true"
+								styleClass="w-full" [options]="NatinalityList" [(ngModel)]="investorEkyc.nationality">
+							</p-dropdown>
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="field">
+							<label>Nguyên quán </label>
+							<textarea  autofocus required pInputTextarea [(ngModel)]="investorEkyc.placeOfOrigin" maxlength="512"
+								class="custom-input-disabled"></textarea>
+						</div>
+					</div>
+					<div class="col-12">
+						<div class="field">
+							<label>Địa chỉ thường trú </label>
+							<textarea  autofocus required pInputTextarea [(ngModel)]="investorEkyc.placeOfResidence" maxlength="512"
+								class="custom-input-disabled"></textarea>
+						</div>
+					</div>
+					<div class="col-12 md:col-4">
+						<div class="field b-field">
+							<label class="b-hightline-title">Ngày cấp </label>
+							<p-calendar dateMask autofocus required inputId="closeCellDate" dateFormat="dd/mm/yy" locale="vi" appendTo="body"
+								utc="true" [(ngModel)]="investorEkyc.idIssueDate" [showIcon]="true" > 
+							</p-calendar>
+						</div>
+					</div>
+					<div class="col-12 md:col-4">
+						<div class="field b-field">
+							<label>Ngày hết hạn </label>
+							<p-calendar dateMask autofocus required inputId="closeCellDate" dateFormat="dd/mm/yy" locale="vi" appendTo="body"
+								utc="true" [(ngModel)]="investorEkyc.idIssueExpDate" [minDate]="minDate" [showIcon]="true">
+							</p-calendar>
+						</div>
+					</div>
+					<div class="col-12 md:col-4">
+						<div class="field b-field">
+							<label class="b-hightline-title">Nơi cấp  (<span
+								class="required-field"> * </span>)</label>
+							<input  autofocus required pInputText [(ngModel)]="investorEkyc.idIssuer" maxlength="256" class="custom-input-disabled" />
+						</div>
+					</div>
+				</div>
+			</div>
+           
+    </ng-container>
+</div>
+<div class="p-dialog-footer" style="width: 100%; position: fixed; left: 0; bottom: 0">
+    <p-progressBar *ngIf="isSend" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+    <button pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text"
+        (click)="close()"></button>
+    <button  
+        *ngIf="(investorEkyc | keyvalue).length > 0" pButton pRipple label="Làm lại" icon="pi pi-undo"
+        class="p-button-text" (click)="undo()" [disabled]="isLoading">
+    </button>
+    <button 
+        pButton pRipple [label]="saveLabel()" icon="pi pi-check" class="p-button-text" [disabled]="submitted"
+        (click)="onSave()" [disabled]="isLoading">
+    </button>
+    <!-- || !validForm() -->
+</div>

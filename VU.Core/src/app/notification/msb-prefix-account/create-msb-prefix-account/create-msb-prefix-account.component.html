@@ -1,0 +1,59 @@
+<input type="password" style="display: none;">
+<p-toast [baseZIndex]="10000"></p-toast>
+<div class="grid p-fluid" >
+    <div class="col-12 md:col-12">
+        <div class="field mb-0">
+            <label htmlFor=""> Tài khoản giao dịch <span class="required-field"> * </span></label>
+            <p-dropdown 
+                name="tradingBankAccountId" [disabled]="view" class="b-disabled"
+                optionLabel="labelName" optionValue="businessCustomerBankAccId" 
+                [options]="listBanks" appendTo="body"
+                [(ngModel)]="prefix.tradingBankAccountId">
+            </p-dropdown>
+        </div>
+    </div>
+    <div class="col-12 md:col-12">
+        <div class="field mb-0">
+            <label htmlFor=""> Chủ tài khoản <span class="required-field"> * </span></label>
+            <input [value]="getNameBank(prefix.tradingBankAccountId)" [disabled]="true" pInputText class="b-disabled" [title]="getNameBank(prefix.tradingBankAccountId)"/>
+        </div>
+    </div>
+    <!--  -->
+    <div class="col-12 md:col-6">
+        <div class="field">
+            <label htmlFor="code"> T_ID <span class="required-field"> * </span> </label>
+            <p-password [(ngModel)]="prefix.tId" [toggleMask]="true" [disabled]="view" [feedback]="false" class="b-disabled"></p-password>
+        </div>
+    </div>
+    <!--  -->
+    <div class="col-12 md:col-6">
+        <div class="field">
+            <label htmlFor="code"> M_ID <span class="required-field"> * </span> </label>
+            <p-password [(ngModel)]="prefix.mId" [toggleMask]="true" [disabled]="view" [feedback]="false" class="b-disabled"></p-password>
+        </div>
+    </div>
+    <!--  -->
+    <div class="col-12 md:col-6">
+        <div class="field">
+            <label htmlFor="code">Mã truy cập <span class="required-field"> * </span> </label>
+            <p-password [(ngModel)]="prefix.accessCode" [toggleMask]="true" [disabled]="view" [feedback]="false" class="b-disabled"></p-password>
+        </div>
+    </div>
+    <!--  -->
+    <div class="col-12 md:col-6">
+        <div class="field">
+            <label htmlFor="code">Tiền tố MSB <span class="required-field"> * </span> </label>
+            <p-password [(ngModel)]="prefix.prefixMsb" [toggleMask]="true" [disabled]="view" [feedback]="false" class="b-disabled"></p-password>
+        </div>
+    </div>
+</div>
+<div class="p-dialog-footer" style="width: 100%; position: fixed; left: 0; bottom: 0;">
+    <button *ngIf="view != true" pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject" (click)="close()"></button>
+    <button *ngIf="view == true" pButton pRipple label="Thoát" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject" (click)="close()"></button>
+    <button 
+    *ngIf="view != true"
+        pButton pRipple label="Lưu" icon="pi pi-check" class="p-button-text p-confirm-dialog-approve" [disabled]="!validForm() || submitted" (click)="save()">
+    </button>
+</div>
+
+         

@@ -3,7 +3,7 @@
     public class Users
     {
         public int Id { get; set; }
-
+        public int? InvestorId { get; set; }
         /// <summary>
         /// Tên đăng nhập
         /// </summary>
@@ -73,6 +73,10 @@
         /// Trạng thái tài khoản (A: hoạt động, D: đang khóa)
         /// </summary>
         public string Status { get; set; }
+        /// <summary>
+        /// Loai tài khoản (I: nha dau tu, V: nhatvv)
+        /// </summary>
+        public string UserType { get; set; }
 
         public string CreatedBy { get; set; }
         public DateTime? CreatedDate { get; set; }

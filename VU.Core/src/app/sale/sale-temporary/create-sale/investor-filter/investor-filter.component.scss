@@ -1,0 +1,141 @@
+::ng-deep {
+    .custom-tabview-order {
+        .p-tabview-panels {
+            margin: 1.5rem auto;
+            border: 2px solid rgba(145, 153, 169, 0.3);
+            border-radius: 8px;
+            padding-top: 0px;
+
+            .custom-table.order {
+                .p-datatable-table {
+                    .p-datatable-thead {
+                        tr {
+                            th {
+                                border: none;
+                            }
+                        }
+                    }
+
+                    .p-datatable-tbody {
+                        border-top: 2px solid rgba(145, 153, 169, 0.3);
+                        tr {
+                            border-bottom: none !important;
+                            background: white;
+                            &:hover {
+                                // background: white;
+                            }
+
+                            td {
+                                padding: 20px 0px 0px 0px;
+                                div {
+                                    // background-color: #F7F9FF;
+                                    width: 100%;
+                                    .b-wrapper-info {
+                                        padding: 20px;
+                                        background-color: #F7F9FF;
+                                        &.b-cut-text {
+                                            text-overflow: ellipsis;
+                                            overflow: hidden; 
+                                            width: 30rem; 
+                                            white-space: nowrap;
+                                        }
+
+                                        &.b-choose {
+                                            padding: 14px;
+                                        }
+
+                                        &.b-empty-data {
+                                            opacity: 0.9;
+                                            text-align: center;
+                                            font-weight: bold;
+                                            color: #525B73;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        .p-tabview-nav-container {
+            .p-tabview-nav-content {
+                .p-tabview-nav {
+                    border: none;
+                    li {
+                        // border-bottom: 1px solid;
+                        .p-tabview-nav-link {
+                            box-shadow: none;
+                            border-radius: 0;
+                            border-color: #dee2e6 !important;
+                            border-right: none;
+                            margin: 0;
+                            padding: 8px 16px;
+                        }
+                        // css cho phần tử đầu tiên
+                        &:first-child {
+                            .p-tabview-nav-link {
+                                border-top-left-radius: 8px;
+                                border-bottom-left-radius: 8px;
+                            }
+                        }
+                        // css cho phần tử cuối cùng
+                        &:nth-last-child(2) {
+                            .p-tabview-nav-link {
+                                border-top-right-radius: 8px !important;
+                                border-bottom-right-radius: 8px !important;
+                                border-right: 1px solid #5346E0;
+                            }
+                        }
+                        &.p-highlight {
+                            .p-tabview-nav-link {
+                                border-color: #5346E0 !important;
+                                color: #5346E0;
+                                border-right: 1px solid #5346E0;
+                            }
+                            & + li {
+                                .p-tabview-nav-link {
+                                    border-left: none;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    p-card {
+        .p-card {
+            box-shadow: none;
+
+            .p-card-body {
+                padding: 1rem 0.75rem;
+                .p-card-title {
+                    margin-bottom: 0;
+                    .wrapper-title-search {
+                        position: relative;
+                        .wrapper-order-search {
+                            position: absolute;
+                            right: 0;
+                            .custom-input-search {
+                                input {
+                                    padding: 8px 30px;
+                                }
+                            }
+                            .p-button {
+                                padding: 8px 16px;
+                            }
+                        }
+                    }
+
+                }
+
+                .p-card-content {
+                    padding-top: 0px;
+                }
+            }
+        }
+    }
+}

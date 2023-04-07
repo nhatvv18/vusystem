@@ -1,0 +1,144 @@
+<div class="grid ml-0 mr-0 mt-0">
+    <div class="col-12">
+        <div class="card p-0 pt-5">
+            <p-toast></p-toast>
+            <p-confirmDialog [style]="{width: 'auto'}" [baseZIndex]="10000"></p-confirmDialog>
+            <p-table *ngIf="isGranted([PermissionCoreConst.CoreKHCN_NDTCN_DanhSach])" #userTable selectionMode="multiple" responsiveLayout="scroll" scrollHeight="500px" dataKey="id"
+                styleClass="custom-table" [value]="rows" [rowHover]="true" [paginator]="false" [scrollable]="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="min-width: 3rem; justify-content: center;" class="b-border-frozen-left" pFrozenColumn alignFrozen="left"  [frozen]="true">#ID </th>
+                        <th style="min-width: 8rem; justify-content: center;"  alignFrozen="left"  [frozen]="true">Hành động </th>
+                        <th style="min-width: 12rem;">Ngày yêu cầu </th>
+                        <th style="min-width: 10rem;"> Thông tin duyệt </th>  
+                        <th style="min-width: 15rem;"> Ngày duyệt/ Ngày hủy </th>  
+                        <th style="min-width: 10rem;"> Ghi chú yêu cầu </th>
+                        <th style="min-width: 10rem;"> Ghi chú hủy </th>
+                        <th style="min-width: 7rem;  justify-content: center;" pFrozenColumn alignFrozen="right" [frozen]="true" class="b-border-frozen-right">Trạng thái </th>
+                        <th style="min-width: 7rem; justify-content: center;" pFrozenColumn alignFrozen="right" [frozen]="true"> Thao tác </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+                    <tr>
+                        <td style="min-width: 3rem;justify-content: center;" pFrozenColumn alignFrozen="left" class="b-border-frozen-left"  [frozen]="true"> {{row?.approveID}} </td>
+                        <td style="min-width: 8rem; justify-content: center;"  alignFrozen="left" [frozen]="true" > 
+                            <p-tag class="wrapper-status-phsc" *ngIf="row.actionType"
+                                value="{{ ApproveConst.getActionTypeName(row.actionType) }}"
+                                severity="{{ ApproveConst.getActionTypeSeverity(row?.actionType) }}"></p-tag>
+                        </td>
+                        <td style="min-width: 12rem;" pFrozenColumn alignFrozen="left"  [frozen]="true">
+                            {{ row?.requestDate | datetimeview }}
+                        </td>
+                        <td style="min-width: 10rem;"> {{ row?.summary }} </td>
+                        <td style="min-width: 15rem;"> {{ row?.approveDate | datetimeview }}  {{row?.cancelDate | datetimeview }} </td>
+                        <td style="min-width: 10rem;"> {{ row?.requestNote }}</td>
+                        <td style="min-width: 10rem;"> {{ row?.approveNote }}</td>
+                        <td style="min-width: 7rem; justify-content: center;" pFrozenColumn alignFrozen="right" [frozen]="true"
+                            class="b-border-frozen-right">
+                            <p-tag class="wrapper-status-phsc" *ngIf="row?.status"
+                                styleClass="p-tag-{{ApproveConst.getStatusSeverity(row?.status)}}"
+
+                                severity="{{ ApproveConst.getStatusSeverity(row?.status) }}"
+                                value="{{ ApproveConst.getStatusName(row.status) }}"></p-tag>
+                        </td>
+                        <td  style="min-width: 7rem; justify-content: center;" pFrozenColumn alignFrozen="right" [frozen]="true"
+                            class="b-table-actions">
+                            <div class="flex">
+                                <i class="pi pi-ellipsis-h" (click)="menu.toggle($event)"></i>
+                                <p-menu #menu [popup]="true" class="button-actions" [model]="actions[rowIndex]"
+                                    appendTo="body">
+                                </p-menu>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="7">Không có dữ liệu.</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="loadingbody">
+                    <tr>
+                        <td colspan="7"> Đang tải dữ liệu ... </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+            <!-- <p-paginator styleClass="at-paginator-sm" [totalRecords]="page.totalItems" [rows]="page.pageSize"
+                (onPageChange)="setPage($event)"></p-paginator> -->
+        </div>
+
+        <p-dialog [(visible)]="modalDialog" [style]="{width: '1000px', height: '500px'}" header="Các tệp tin" [modal]="true"
+            class="p-fluid">
+            <p-table  [value]="rowsFile" [loading]="isLoading" [rowHover]="true"
+            (onPageChange)="setPage($event)" responsiveLayout="scroll" dataKey="code" [scrollable]="true" scrollHeight="{{ (screenHeight*0.75) + 'px' }}"
+                styleClass="custom-table">
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <!-- <div class="flex">
+                            <span class="block mt-2 md:mt-0 p-input-icon-left mr-1">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" placeholder="Tìm kiếm..." [(ngModel)]="keyword" 
+                                    (keyup)="changeKeyword()" style="width: 300px;"
+                                    (input)="setPage()"/>
+                            </span>
+                        </div> -->
+                      
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="min-width: 5rem;" pFrozenColumn alignFrozen="left">#</th>
+                        <th style="min-width: 10rem;" pFrozenColumn alignFrozen="left">Tên tệp tin</th>
+                        <th style="min-width: 10rem;" pFrozenColumn alignFrozen="left">Loại tệp tin</th>
+                        <th style="min-width: 10rem;" pFrozenColumn alignFrozen="right">Thao tác</th>
+                        <th style="min-width: 10rem;" pFrozenColumn alignFrozen="right">Tệp tin</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row>
+                    <tr>
+                        <td style="min-width: 5rem;" pFrozenColumn alignFrozen="left"> {{ row?.id }} </td>
+                        <td style="min-width: 10rem;" pFrozenColumn alignFrozen="left"> {{ row?.profFileName }} </td>
+                        <td style="min-width: 10rem;" pFrozenColumn alignFrozen="left"> {{ row?.profFileType }} </td>
+                        <td style="min-width:10rem;" pFrozenColumn alignFrozen="right">
+                            <i class="pi pi-eye mr-4" (click)="viewFile(row?.profFileUrl)" style="cursor:pointer;" pTooltip="Xem file"></i>
+                            <i class="pi pi-download mr-4" (click)="downloadFile(row?.profFileUrl)" style="cursor:pointer;" pTooltip="Tải file"></i>
+                        </td>
+                        <td style="min-width: 10rem;"  [ngStyle]="{'z-index': (row?.profFileType == '.jpg' || row?.profFileType == '.svg' || row?.profFileType == '.png') ? '1': '0'}" pFrozenColumn alignFrozen="right">
+                            <p-image *ngIf="row?.profFileUrl && (row?.profFileType == '.jpg' || row?.profFileType == '.svg' || row?.profFileType == '.png')" src="{{baseUrl}}/{{ row?.profFileUrl }}" alt="Image" width="40" [preview]="true"></p-image>
+                            <p-image *ngIf="row?.profFileUrl && (row?.profFileType == '.docx' || row?.profFileType == '.doc')"
+                                src="assets/demo/images/typeImg/doc-file.png" 
+                                alt="Image" width="40"  [preview]="false"></p-image>
+                            <p-image *ngIf="row?.profFileUrl && row?.profFileType == '.pdf'"
+                                src="assets/demo/images/typeImg/pdf-file.png" 
+                                alt="Image" width="40" [preview]="false"></p-image>
+                            <p-image *ngIf="row?.profFileUrl && (row?.profFileType == '.xlsx'|| row?.profFileType == '.csv' || row?.profFileType == '.xls')"
+                                src="assets/demo/images/typeImg/xls-file.png" 
+                                alt="Image" width="40"  [preview]="false"></p-image>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="7">Không có dữ liệu.</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="loadingbody">
+                    <tr>
+                        <td colspan="7"> Đang tải dữ liệu ... </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Đóng" icon="pi pi-times" class="p-button-text"
+                    (click)="hideDialog()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <app-form-view-pdf-file *ngIf="modalDialogPDF" (onClose)="hideDialog()" [modalDialogPDF]="modalDialogPDF" [urlfilePDF]="urlfilePDF"></app-form-view-pdf-file>
+
+    </div>
+</div>

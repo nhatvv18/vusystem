@@ -1,0 +1,37 @@
+.gallery {
+    margin: 5px;
+    border: 1px solid #ccc;
+    float: left;
+    width: 134px;
+}
+
+.gallery:hover {
+    border: 1px solid #777;
+}
+
+.gallery img {
+    width: 100%;
+    height: auto;
+}
+
+.desc {
+    padding: 5px;
+    text-align: center;
+    cursor: pointer; 
+}
+.desc:hover {
+    color: red;
+    background-color: #eee;
+}
+.gallery-image {
+    height: 110px;
+    width: 100%;
+    background-size: cover !important;
+    background-color: #eee !important;
+}
+
+.ui-dialog-footer-custom {
+    border-radius: 10px !important;
+    padding: 0px;
+    float: right;
+}

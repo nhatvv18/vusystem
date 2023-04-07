@@ -1,0 +1,70 @@
+
+<div class="grid ml-0 mr-0 mt-0 p-0">
+    <div class="col-12 p-0">
+        <div class="card p-0">
+            <p-table 
+                #historyUpdateTable [value]="rows" 
+                [loading]="isLoading" [rowHover]="true" [paginator]="false" responsiveLayout="scroll" dataKey="code"
+                [scrollable]="true" scrollHeight="{{(screenHeight*0.56) + 'px'}}" styleClass="">
+                <ng-template pTemplate="header">
+					<tr>
+					    <th style="min-width: 4rem;max-width: 4rem;" pFrozenColumn alignFrozen="left"> STT </th>
+                        <th style="min-width: 16rem; max-width: 16rem;" pFrozenColumn alignFrozen="left" class="b-border-frozen-left"> Trường thay đổi </th>
+                        <th style="min-width: 20rem;"> Dữ liệu cũ </th>
+                        <th style="min-width: 20rem;"> Dữ liệu mới </th>
+                        <th style="min-width: 12rem; max-width: 12rem;"> Thông tin sửa </th>
+                  
+                        <!-- <th style="min-width: 8rem; max-width: 8rem;" class="justify-content-end"> Số ngày </th> -->
+                        <!-- <th style="min-width: 10rem;" pFrozenColumn alignFrozen="right" [frozen]="true" class="b-border-frozen-right"> Trạng thái </th> -->
+					</tr>
+				</ng-template>
+                <ng-template pTemplate="body" let-row let-index="rowIndex">
+                    <tr>
+                        <td style="min-width: 4rem;max-width: 4rem;" pFrozenColumn alignFrozen="left"> {{ index + 1 }} </td>
+                        <td style="min-width: 16rem; max-width: 16rem" pFrozenColumn alignFrozen="left" class="b-border-frozen-left" [title]="SaleConst.getNameHistoryField(row.fieldName)"> 
+                            {{ SaleConst.getNameHistoryField(row.fieldName) }}
+                        </td>
+                        <td *ngIf="row.fieldName != 'SaleType'" style="min-width: 20rem;"> {{ row.oldValue }} </td>
+                        <td *ngIf="row.fieldName == 'SaleType'" style="min-width: 20rem;"> {{ SaleConst.getNameSaleType(row.oldValue) }} </td>
+                        <!-- <td *ngIf="row.fieldName == 'DepartmentId'" style="min-width: 20rem;"> {{ getNameDepartment(row.oldValue) }} </td> -->
+                        
+                        <td *ngIf="row.fieldName != 'SaleType'" style="min-width: 20rem;"> {{ row.newValue }} </td>
+                        <td *ngIf="row.fieldName == 'SaleType'" style="min-width: 20rem;"> {{ SaleConst.getNameSaleType(row.newValue) }} </td>
+                        <!-- <td *ngIf="row.fieldName == 'DepartmentId'" style="min-width: 20rem;"> {{ getNameDepartment(row.newValue) }} </td> -->
+                        <td style="min-width: 12rem; max-width: 12rem;">
+                            {{ formatDateTime(row.createdDate)}} <br>
+                            {{ row.createdBy  }} 
+                        </td>
+
+
+                        <!-- <td style="min-width: 8rem; max-width: 8rem;" class="justify-content-end"> {{ row.numberOfDays}} </td> -->
+                        <!-- <td style="min-width: 10rem;" pFrozenColumn alignFrozen="right" [frozen]="true" class="b-border-frozen-right"> 
+                            {{ StatusCoupon.getName(row.status) }}
+                        </td> -->
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage">
+					<tr>
+						<td colspan="7">Không có dữ liệu.</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="loadingbody">
+					<tr>
+						<td colspan="7"> Đang tải dữ liệu ... </td>
+					</tr>
+				</ng-template>
+            </p-table>
+            <p-paginator 
+                [rows]="page.pageSize" 
+                [totalRecords]="page.totalItems" 
+                [rowsPerPageOptions]="page.perPageOptions" 
+                currentPageReportTemplate="Tất cả {{ page.totalItems }} dòng" 
+                showCurrentPageReport="true"
+                (onPageChange)="setPage($event)">
+            </p-paginator>
+        </div>
+		<!-- THEM & SUA-->
+    </div>
+</div>
+
+

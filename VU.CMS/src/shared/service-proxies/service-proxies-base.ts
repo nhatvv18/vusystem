@@ -106,7 +106,7 @@ export class ServiceProxyBase {
 	 * @return Success
 	 */
 	private refreshToken(body: any): Observable<any> {
-		let url_ = this.baseUrl + "/connect/token";
+		let url_ = this.baseUrl + "/api/users/login";
 		url_ = url_.replace(/[?&]$/, "");
 
 		const content_ = JSON.stringify(body);

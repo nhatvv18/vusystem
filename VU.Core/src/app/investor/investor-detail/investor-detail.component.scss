@@ -1,0 +1,10 @@
+::ng-deep .image-identification-investor {
+    max-height: 230px !important;
+    object-fit: cover !important;
+}
+
+::ng-deep .custom-tabview {
+    .p-tabview-panels {
+        padding-bottom: 0;
+    }
+}

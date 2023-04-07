@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using VU.SeverSystem.Entities.DataEntities;
+using VU.SeverSystem.Entities.Dtos.Investors;
 using VU.SeverSystem.Entities.Dtos.Users;
 
 namespace VU.SeverSystem.Entities.MapperProfiles
@@ -10,6 +11,7 @@ namespace VU.SeverSystem.Entities.MapperProfiles
         {
             CreateMap<Users, CreateUsersDto>().ReverseMap();
             CreateMap<Users, UsersDto>();
+            CreateMap<InvestorIdentification, InvestorDto>().ReverseMap();
         }
     }
 }

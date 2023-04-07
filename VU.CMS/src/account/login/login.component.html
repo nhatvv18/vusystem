@@ -1,35 +1,104 @@
-﻿<div class="login-body" [ngClass]="{'layout-dark': dark, 'layout-light': !dark}">
-    <div class="login-content">
-        <div class="night-switch">
-            <p-button styleClass="dark-switch"  icon="pi pi-circle-on" (click)="dark = true"></p-button>
-            <p-button styleClass="light-switch"  icon="pi pi-circle-off" (click)="dark = false"></p-button>
-        </div>
-        <div class="login-panel">
-            <div class="login-panel-content">
-                <div class="logo">
-                    <img src="assets/layout/images/logo-mirage@2x.png" alt="mirage-layout" />
-                </div>
-                <h1>Xin chào!</h1>
-                <p>Đăng nhập để bắt đầu công việc của bạn.</p>
-                <div class="forms">
-                    <div class="login-input-wrapper mb-1">
-                        <label for="username">Tài khoản</label>
-                        <input id="username" #username pInputText [(ngModel)]="authService.authenticateModel.username" placeholder="Tài khoản" />
-                        <i class="pi pi-user"></i>
-                    </div>
+﻿<div *ngIf="isLoading">
+    <div class="b-progress-spinner">
+        <p-progressSpinner [style]="{width: '80px', height: '80px'}" styleClass="custom-spinner" strokeWidth="4" animationDuration=".5s"></p-progressSpinner>
+    </div>
+</div>
 
+<!--  -->
+<div class="login-body destop" *ngIf="!isMobile()">
+    <div class="login-content">
+       <div class="login-content-left col-6" >
+        <div class="login-content-left-main">
+           
+            <div class="login-title">
+                <div class="logo">
+                    <img src="../../assets/layout/images/logo.png" alt="">
+                </div>
+                <h2>Đăng nhập</h2>
+                <p class="login-title-sub mb-4">
+                    Đăng nhập và trải nghiệm đầu tư thông minh tại EPIC ngay hôm nay!
+                </p>
+            </div>
+            <div class="login-form">
+                    <div class="login-input-wrapper mb-1">
+                        <label for="username" class="phone_login">Tài khoản</label>
+                        <input id="username" #username (keyup.enter)="login()" pInputText [(ngModel)]="authService.authenticateModel.username" placeholder="Nhập tài khoản" />
+                    </div>
+    
                     <div class="login-input-wrapper mt-4">
-                        <label for="password">Mật khẩu</label>
-                        <input type="password" id="password" pPassword (keyup.enter)="login()" [(ngModel)]="authService.authenticateModel.password" placeholder="Mật khẩu" [feedback]="false"/>
-                        <i class="pi pi-lock"></i>
+                        <label for="password" class="pass_login">Mật khẩu</label>
+                        <input type="password" id="password" (keyup.enter)="login()" pPassword [(ngModel)]="authService.authenticateModel.password" [feedback]="false" placeholder="Nhập mật khẩu"/>
                     </div>
+                    <div class="login-handle">
+                        <div class="remember-and-forgetPass">
+                        <input type="checkbox">
+                        <p class="remember_pass">Ghi nhớ mật khẩu lần sau</p>
+                        </div>
+                       <!-- <div>
+                        <a class="forgot-pass" href="account/forgot-password">Quên mật khẩu</a>
+                       </div> -->
+                    </div>
+    
                     <div class="buttons">
-                        <button pButton type="button" (click)="login()"  label="Đăng nhập" [disabled]="submitting"></button>
-                        <a href="#" class="secondary-button">Quên mật khẩu?</a>
-                    </div>
+                        <button class="login-button mb-2" pButton type="button" (click)="login()" label="Đăng nhập" [disabled]="submitting"></button>
+                            <button class="help-button" pButton type="button"  label="Cần hỗ trợ? Hotline 18006085">
+                                <i class="pi pi-question-circle question-icon"></i>
+                            </button>
+                </div>
+                
+            </div>
+            <div class="no-copy-right-center">
+                <p class="no-copy-right">
+                    Bản quyền thuộc EPIC @2022
+                </p>
+            </div>
+        </div>
+       </div>
+       <div class="login-content-right col-6" >
+            <div class="ellipse-img">
+                <img src="../../assets/layout/images/Ellipse 757.png" alt="">
+            </div>
+            <div class="ellipse-blur"></div>
+       </div>
+    </div>
+</div>
+
+<div class="login-content mobile" *ngIf="isMobile()">
+    <p-toast></p-toast>
+    <!-- MÀN HÌNH NHẬP SỐ ĐIỆN THOẠI -->
+    <div class="login-content-left open md:col-6 xs:col-12">
+     <div class="login-content-left-main">
+        <div class="login-title">
+            <div class="logo">
+                <img src="../../assets/layout/images/logo.png" alt="">
+            </div>
+            <h4 class="mb-2">Đăng nhập</h4>
+            <p class="login-title-sub mb-2">
+                Đăng nhập và trải nghiệm HIDDEN ngay hôm nay!
+            </p>
+        </div>
+        <div class="login-form">
+            <div class="mt-2">
+                <label for="username" class="phone_login">Tài khoản</label>
+                <input id="username" #username (keyup.enter)="login()" pInputText [(ngModel)]="authService.authenticateModel.username" placeholder="Nhập tài khoản"/>
+            </div>
+            <div class="mt-2 mb-3">
+                <label for="password" class="pass_login">Mật khẩu</label>
+                <input type="password" id="password" (keyup.enter)="login()" pPassword [(ngModel)]="authService.authenticateModel.password" [feedback]="false" placeholder="Nhập mật khẩu"/>
+            </div>
+            <div class="buttons">
+                <button class="login-button mb-2" pButton type="button" (click)="login()" label="Đăng nhập" [disabled]="submitting"></button>
+                <div class="wrapper-support-info">
+                    <i class="pi pi-question-circle question-icon mr-2"></i>
+                    <span class="help-text">Cần hỗ trợ? Hotline 10081008</span>
                 </div>
             </div>
         </div>
-        <div class="desert"></div>
+        <div class="no-copy-right-center">
+            <p class="no-copy-right">
+                Bản quyền thuộc HIDDEN @2023
+            </p>
+        </div>
+     </div>
     </div>
 </div>

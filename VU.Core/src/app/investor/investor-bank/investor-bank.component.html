@@ -1,0 +1,121 @@
+<div class="grid ml-0 mr-0 mt-0">
+    <div class="col-12">
+        <div class="card p-0">
+            <p-toast></p-toast>
+            <p-confirmDialog [style]="{width: 'auto'}" [baseZIndex]="10000"></p-confirmDialog>
+            <p-table *ngIf="(isGranted([PermissionCoreConst.CoreDuyetKHCN_TKNH_DanhSach]) && isTemp == InvestorConst.TEMP.YES) 
+                || (isGranted([PermissionCoreConst.CoreKHCN_TKNH_DanhSach]) && isTemp == InvestorConst.TEMP.NO)" 
+                #userTable selectionMode="multiple" responsiveLayout="scroll" dataKey="id"
+                styleClass="custom-table" [value]="rows" [rowHover]="true" [paginator]="false" [scrollable]="true">
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <div class="flex justify-content-between flex-column sm:flex-row">
+                        </div>
+                        <div class="">
+                            <button 
+                                *ngIf="((isGranted([PermissionCoreConst.CoreDuyetKHCN_TKNH_ThemMoi]) && isTemp == InvestorConst.TEMP.YES) 
+                                || (isGranted([PermissionCoreConst.CoreKHCN_TKNH_ThemMoi]) && isTemp == InvestorConst.TEMP.NO)) 
+                                && investorDetail?.approve?.status != 2" 
+                                pButton pRipple label="Thêm tài khoản ngân hàng" icon="pi pi-plus-circle"
+                                class="p-button-success mr-2" (click)="createBank()">
+                            </button>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="min-width:5rem; max-width:5rem;"> # ID </th>
+                        <th style="width:12rem;"> Số tài khoản </th>
+                        <th style="width:15rem;"> Tên tài khoản </th>
+                        <th style="width:15rem;"> Tên ngân hàng </th>
+                        <th style="width:10rem; justify-content: center;"> Mặc định </th>
+                        <th style="width: 5rem; justify-content: center;" pFrozenColumn alignFrozen="right"> Thao tác </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+                    <tr>
+                        <td style="width:5rem; max-width:5rem;" pFrozenColumn alignFrozen="left"> {{ row.id }} </td>
+                        <td style="width:12rem;"> {{ row.bankAccount }} </td>
+                        <td style="width:15rem;"> {{ row.ownerAccount }} </td>
+                        <td style="width:15rem;">{{row.coreBankName}}</td>
+                        <td style="width:10rem; justify-content: center;">
+                            <i class="pi pi-check" *ngIf="row.isDefault == YesNoConst.YES"></i>
+                        </td>
+
+                        <td style="width: 5rem; justify-content: center;" pFrozenColumn alignFrozen="right">
+                            <div class="flex" *ngIf="actions[rowIndex]?.length">
+                                <i class="pi pi-ellipsis-h" (click)="menu.toggle($event)"></i>
+                                <p-menu #menu [popup]="true" class="button-actions" [model]="actions[rowIndex]"
+                                    appendTo="body">
+                                </p-menu>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="7">Không có dữ liệu.</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="loadingbody">
+                    <tr>
+                        <td colspan="7"> Đang tải dữ liệu ... </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        <!-- THEM & SUA-->
+        <p-dialog [(visible)]="modalDialog" [style]="{width: '600px', height: '500px'}" [header]="header()" [modal]="true"
+            class="p-fluid">
+            <ng-template pTemplate="content">
+                <div class="grid formgrid">
+                    <ng-container>
+						<div class="col-12">
+							<div class="field b-field">
+								<label class="b-hightline-title">Ngân hàng </label>
+								<p-dropdown 
+                                    optionLabel= "labelName" optionValue="bankId" appendTo="body"
+                                    [autoDisplayFirst]="false" [filter]="true" filterBy="labelName" 
+                                    [disabled]="investorBank.id" class="custom-input-disabled w-full"
+									styleClass="w-full" [options]="banks" [(ngModel)]="investorBank.bankId"
+                                    (onChange)="changeBankId($event.value)">
+								</p-dropdown>
+							</div>
+						</div>
+
+                        <div class="col-12">
+                            <div class="field" >
+                                <label htmlFor="bankAccount">Số tài khoản(<span class="required-field"> *
+                                    </span>)</label>
+                                <input type="text" id="bankAccount" name="bankAccount" pInputText maxlength="128"
+                                    [(ngModel)]="investorBank.bankAccount" (keypress)="numberOnly($event)"
+                                    [ngClass]="{'ng-invalid ng-dirty' : fieldErrors?.bankAccount}"
+                                    (click)="resetValid('bankAccount')"  (keyup)="changeKeyword($event)" />
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="field">
+                                <label htmlFor="ownerAccount">Tên tài khoản(<span class="required-field"> *
+                                    </span>)</label>
+                                <input type="text" id="ownerAccount" AccName="ownerAccount" pInputText class="custom-input-disabled w-full"
+                                    [disabled]="isLoading" [(ngModel)]="investorBank.ownerAccount" maxlength="512" [pKeyFilter]="KeyFilter.stringOnlyBlockSpecial"
+                                    [ngClass]="{'ng-invalid ng-dirty' : fieldErrors?.ownerAccount}"
+                                    (click)="resetValid('ownerAccount')" />
+                            </div>
+                        </div>
+
+
+                    </ng-container>
+
+                </div>
+            </ng-template>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text"
+                    (click)="hideDialog()"></button>
+                <button pButton pRipple label="Lưu" icon="pi pi-check" class="p-button-text"
+                    [disabled]="!validForm() || submitted" (click)="save()"></button>
+            </ng-template>
+        </p-dialog>
+    </div>
+</div>

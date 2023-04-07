@@ -1,0 +1,62 @@
+﻿<div class="login-body" [ngClass]="{'layout-dark': dark, 'layout-light': !dark}">
+    <div class="login-content">
+
+        <!-- <div class="night-switch">
+            <p-button styleClass="dark-switch"  icon="pi pi-circle-on" (click)="dark = true"></p-button>
+            <p-button styleClass="light-switch"  icon="pi pi-circle-off" (click)="dark = false"></p-button>
+        </div> -->
+       <div class="login-content-left col-6" >
+        <div class="login-content-left-main">
+           
+            <div class="login-title">
+                <div class="logo">
+                    <!-- <img src="../../assets/layout/images/01.png" alt=""> -->
+                </div>
+                <h2>Đăng nhập</h2>
+                <p class="login-title-sub mb-4">
+                    Đăng nhập và trải nghiệm đầu tư thông tin tại Hidden ngay hôm nay!
+                </p>
+            </div>
+            <div class="login-form">
+                    <div class="login-input-wrapper mb-1">
+                        <label for="username" class="phone_login">Số điện thoại</label>
+                        <input id="username" #username (keyup.enter)="login()" pInputText [(ngModel)]="authService.authenticateModel.username" placeholder="Nhập số điện thoại" />
+                    </div>
+    
+                    <div class="login-input-wrapper mt-4">
+                        <label for="password" class="pass_login">Mật khẩu</label>
+                        <input type="password" id="password" (keyup.enter)="login()" pPassword [(ngModel)]="authService.authenticateModel.password" [feedback]="false" placeholder="Nhập mật khẩu"/>
+                    </div>
+                    <div class="login-handle">
+                        <div class="remember-and-forgetPass">
+                        <input type="checkbox">
+                        <p class="remember_pass">Ghi nhớ mật khẩu lần sau</p>
+                        </div>
+                       <!-- <div>
+                        <a class="forgot-pass" href="account/forgot-password">Quên mật khẩu</a>
+                       </div> -->
+                    </div>
+    
+                    <div class="buttons">
+                        <button class="login-button mb-2" pButton type="button" (click)="login()" label="Đăng nhập" [disabled]="submitting"></button>
+                            <button class="help-button" pButton type="button"  label="Cần hỗ trợ? Hotline 18006085">
+                                <i class="pi pi-question-circle question-icon"></i>
+                            </button>
+                </div>
+                
+            </div>
+            <div class="no-copy-right-center">
+                <p class="no-copy-right">
+                    Bản quyền thuộc EPIC @2022
+                </p>
+            </div>
+        </div>
+       </div>
+       <div class="login-content-right col-6" >
+            <div class="ellipse-img">
+                <img src="../../assets/layout/images/test4.png" alt="">
+            </div>
+            <div class="ellipse-blur"></div>
+       </div>
+    </div>
+</div>

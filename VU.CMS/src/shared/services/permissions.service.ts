@@ -12,13 +12,13 @@ export class PermissionsService {
     }
  
     getAllPermission() {
-        this._userService.getAllPermission().subscribe(res => {
-            //console.log({ permissionsOnChange: res });
-            this.permissions = res.data;
-        }, () => {
-            console.error('Không lấy được permission trong project');
-            this.permissions = [];
-        });
+        // this._userService.getAllPermission().subscribe(res => {
+        //     //console.log({ permissionsOnChange: res });
+        //     this.permissions = res.data;
+        // }, () => {
+        //     console.error('Không lấy được permission trong project');
+        //     this.permissions = [];
+        // });
     }
 
     /**
@@ -32,6 +32,6 @@ export class PermissionsService {
                 return true;
             }
         }
-        return false;
+        return true;
     }
 }

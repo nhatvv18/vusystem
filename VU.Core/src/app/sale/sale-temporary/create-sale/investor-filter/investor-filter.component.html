@@ -1,0 +1,184 @@
+<app-loading-page *ngIf="isLoadingPage"></app-loading-page>
+<p-card>
+    <ng-template pTemplate="title">
+            <div class="flex flex-row flex-wrap card-container blue-container wrapper-title-search" style="position: relative">
+                <!-- <div class="flex align-items-center justify-content-center">
+                    <h4 class="title-info mb-0 "> Tìm kiếm khách hàng </h4>
+                </div> -->
+                <div class="flex flex-row flex-wrap card-container blue-container wrapper-order-search z-1">
+                    <div class="custom-input-search mr-3">
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" placeholder="Tìm kiếm..." [(ngModel)]="keyword" (input)="changeKeyword($event)" style="width: 300px;"/>
+                        </span>
+                    </div>
+                    <p-button label="Tìm kiếm" styleClass="p-button" (click)="getInfoCustomer()"></p-button>
+                </div>
+            </div>
+    </ng-template>
+    <ng-template pTemplate="content">
+        <div class="{{ isLoadingPage ? 'b-loading' : '' }}">
+            <p-tabView styleClass="custom-tabview-order" [(activeIndex)]="activeIndex" (onChange)="changeTabview($event.index)">
+                <p-tabPanel>
+                    <ng-template pTemplate = "header">
+                        <!-- <i class="pi pi-star mr-2"></i> -->
+                        <span> Khách hàng cá nhân </span>
+                    </ng-template>
+                    <p-table 
+                        #businessCustomerTable 
+                        [value]="customers" [loading]="isLoading" [rowHover]="true"
+                        [paginator]="false" responsiveLayout="scroll" dataKey="code"
+                        [scrollable]="true" styleClass="custom-table order" scrollHeight="150px"
+                    >
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <!-- <th style="width: 5rem;" pFrozenColumn alignFrozen="left">#</th> -->
+                                <th [ngStyle]="{'min-width': customers?.length ? '16rem' : 'auto', 'max-width': customers?.length ? '16rem' : 'auto'}">Tên </th>
+                                <th [ngStyle]="{'min-width': customers?.length ? '10rem' : 'auto', 'max-width': customers?.length ? '10rem' : 'auto'}"> Số điện thoại </th>
+                                <th [ngStyle]="{'min-width': customers?.length ? '10rem' : 'auto', 'max-width': customers?.length ? '10rem' : 'auto'}">Số CMND/CCCD </th>
+                                <th [ngStyle]="{'min-width': customers?.length ? '15rem' : 'auto'}">Email </th>
+                                <th [ngStyle]="{'min-width': customers?.length ? '30rem' : 'auto'}">Địa chỉ </th>
+                                <!-- <th style="min-width: 10rem;">Trạng thái </th> -->
+                                <th style="min-width: 6rem; max-width: 6rem; justify-content: end;" pFrozenColumn alignFrozen="right"> </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-row>
+                            <tr>
+                                <td [ngStyle]="{'min-width': customers?.length ? '16rem' : 'auto', 'max-width': customers?.length ? '16rem' : 'auto'}"> 
+                                    <div>
+                                        <div class="b-wrapper-info b-cut-text" [title]="row?.name"> {{ row?.defaultIdentification?.fullname ?? 'None' }} </div>
+                                    </div> 
+                                </td>
+                                <td [ngStyle]="{'min-width': customers?.length ? '10rem' : 'auto', 'max-width': customers?.length ? '10rem' : 'auto'}"> 
+                                    <div>
+                                        <div class="b-wrapper-info"> {{ row.phone ?? 'None' }} </div>
+                                    </div> 
+                                </td>
+                                <td [ngStyle]="{'min-width': customers?.length ? '10rem' : 'auto', 'max-width': customers?.length ? '10rem' : 'auto'}"> 
+                                    <div>
+                                        <div class="b-wrapper-info"> {{ row?.defaultIdentification?.idNo ?? 'None' }} </div>
+                                    </div>
+                                </td>
+                                <td [ngStyle]="{'min-width': customers?.length ? '15rem' : 'auto'}">
+                                    <div>
+                                        <div class="b-wrapper-info"> {{ row.email ?? 'None' }} </div>
+                                    </div> 
+                                </td>
+                                <td [ngStyle]="{'min-width': customers?.length ? '30rem' : 'auto'}"> 
+                                    <div>
+                                        <div class="b-wrapper-info b-cut-text" [title]="row?.address"> {{ (row?.address || row?.defaultIdentification?.placeOfResidence) ?? 'None' }} </div>
+                                    </div> 
+                                </td>
+                                <!-- <td style="min-width: 10rem;"> 
+                                    <div>
+                                        <div class="b-wrapper-info b-cut-text">
+                                            <p-tag styleClass="p-tag-{{ BusinessCustomerConst.getStatusSeverity(row.status) }}" severity="{{ BusinessCustomerConst.getStatusSeverity(row.status) }}" value="{{ BusinessCustomerConst.getStatusName(row.status) }}"></p-tag> 
+                                        </div>
+                                    </div> 
+                                </td> -->
+                                <td style="width: 6rem; max-width: 6rem; justify-content: end;" pFrozenColumn alignFrozen="right">
+                                    <div>
+                                        <div class="b-wrapper-info b-choose text-center">
+                                            <p-button label="Chọn" icon="pi pi-check" styleClass="p-button-sm" (click)="isChooseInvestorCustomer(row)"></p-button> 
+                                        </div>
+                                    </div> 
+                                </td>
+                            </tr>
+                        </ng-template>
+        
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="7">
+                                    <div>
+                                        <div class="b-wrapper-info b-empty-data"> Không có dữ liệu </div>
+                                    </div>
+                                    
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="loadingbody">
+                            <tr>
+                                <td colspan="7"> Đang tải dữ liệu ... </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-tabPanel>
+                <p-tabPanel>
+                    <ng-template pTemplate = "header">
+                        <span> Khách hàng doanh nghiệp </span>
+                    </ng-template>
+                    <p-table 
+                        #businessCustomerTable 
+                        [value]="businiessCustomers" [loading]="isLoading" [rowHover]="true" [scrollable]="true"
+                        [paginator]="false" responsiveLayout="scroll" dataKey="code" scrollHeight="150px"
+                        styleClass="custom-table order">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th [ngStyle]="{'min-width': businiessCustomers?.length ? '30rem' : 'auto', 'max-width': customers?.length ? '30rem' : 'auto'}"> Tên doanh nghiệp </th>
+                                <!-- <th [ngStyle]="{'min-width': businiessCustomers?.length ? '12rem' : 'auto'}">Tên viết tắt </th> -->
+                                <th [ngStyle]="{'min-width': businiessCustomers?.length ? '10rem' : 'auto', 'max-width': businiessCustomers?.length ? '10rem' : 'auto'}">Mã số thuế </th>
+                                <th [ngStyle]="{'min-width': businiessCustomers?.length ? '15rem' : 'auto', 'max-width': businiessCustomers?.length ? '15rem' : 'auto'}">Thư điện tử </th>
+                                <th [ngStyle]="{'min-width': businiessCustomers?.length ? '10rem' : 'auto', 'max-width': businiessCustomers?.length ? '10rem' : 'auto'}">Số điện thoại </th>
+                                <th style="width: 8rem; justify-content: center;" pFrozenColumn alignFrozen="right" [frozen]="true"> </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-row>
+                            <tr style="cursor: pointer;">
+                                <td [ngStyle]="{'min-width': businiessCustomers?.length ? '30rem' : 'auto', 'max-width': businiessCustomers?.length ? '30rem' : 'auto'}"> 
+                                    <div>
+                                        <div class="b-wrapper-info b-cut-text-30" [title]="row?.name"> {{ row?.name ?? 'None' }} </div>
+                                    </div>
+                                </td>
+                                <!-- <td [ngStyle]="{'min-width': businiessCustomers?.length ? '12rem' : 'auto'}">
+                                    <div>
+                                        <div class="b-wrapper-info"> {{ row?.shortName ?? 'None' }} </div>
+                                    </div>
+                                 </td> -->
+                                <td [ngStyle]="{'min-width': businiessCustomers?.length ? '10rem' : 'auto', 'max-width': businiessCustomers?.length ? '10rem' : 'auto'}">
+                                    <div>
+                                        <div class="b-wrapper-info"> {{ row?.taxCode ?? 'None' }} </div>
+                                    </div> 
+                                </td>
+                                <td [ngStyle]="{'min-width': businiessCustomers?.length ? '15rem' : 'auto', 'max-width': businiessCustomers?.length ? '15rem' : 'auto'}">
+                                    <div>
+                                        <div class="b-wrapper-info"> {{ row?.email ?? 'None' }} </div>
+                                    </div> 
+                                </td>
+                                <td [ngStyle]="{'min-width': businiessCustomers?.length ? '10rem' : 'auto', 'max-width': businiessCustomers?.length ? '10rem' : 'auto'}"> 
+                                    <div>
+                                        <div class="b-wrapper-info"> {{ row?.phone ?? 'None' }} </div>
+                                    </div> 
+                                </td>
+                                <td style="width: 8rem; justify-content: center;" pFrozenColumn alignFrozen="right" [frozen]="true">
+                                    <div>
+                                        <div class="b-wrapper-info b-choose text-center"> 
+                                            <p-button label="Chọn" icon="pi pi-check" styleClass="p-button-sm" (click)="isChooseBusinessCustomer(row)"></p-button>
+                                        </div>
+                                    </div> 
+                                </td>
+                            </tr>
+                        </ng-template>
+        
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="6">
+                                    <div>
+                                        <div class="b-wrapper-info b-empty-data"> Không có dữ liệu </div>
+                                    </div>
+                                    
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="loadingbody">
+                            <tr>
+                                <td colspan="7"> Đang tải dữ liệu ... </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-tabPanel>
+
+               
+            </p-tabView>
+        </div>
+    </ng-template>
+</p-card>

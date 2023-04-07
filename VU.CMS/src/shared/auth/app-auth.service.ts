@@ -40,22 +40,27 @@ export class AppAuthService {
     }
 
     authenticate(finallyCallback?: () => void): void {
-    finallyCallback = finallyCallback || (() => { });
-    this._tokenAuthService
-        .authenticate(this.authenticateModel)
-        .pipe(
-            finalize(() => {
-                finallyCallback();
-            })
-        )
-        .subscribe((result: AuthenticateResultModel) => {
-            console.log({ resultLogin: result });
-            this.processAuthenticateResult(result);
-        });
-    }
+        finallyCallback = finallyCallback || (() => { });
+        this._tokenAuthService
+            .authenticate(this.authenticateModel)
+            .pipe(
+                finalize(() => {
+                    finallyCallback();
+                })
+            )
+            .subscribe((result: AuthenticateResultModel) => {
+                // this._router.navigate([
+                //     "/home" ,
+                //   ]);
+                console.log({ resultLogin: result });
+                this.processAuthenticateResult(result);
+            });
+        }
 
     private processAuthenticateResult(authenticateResult: AuthenticateResultModel) {
         this.authenticateResult = authenticateResult;
+        console.log("authenticateResult",authenticateResult);
+        
         if (authenticateResult.access_token) {
             // Successfully logged in
             this.login(

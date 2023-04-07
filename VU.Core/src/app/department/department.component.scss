@@ -1,0 +1,49 @@
+::ng-deep .department-tree {
+    // height: 75vh;
+    .node-manager {
+        position: relative;
+        min-width: 135px;
+        margin-right: 20px;
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+        }
+        &.node-0 {
+            min-width: unset !important;
+            .wrapper-text-node {
+                margin-bottom: 0px !important;
+            }
+            .department-name {
+                margin: 0px;
+            }
+        }
+        div {
+            .icon-option {
+                position: absolute;
+                right: -30px;
+                top: 53%;
+                transform: translate(0%, -50%);
+            }
+        }
+    }
+    .p-treenode {
+        position: relative;
+        .p-treenode-content.p-highlight {
+            background-color: white !important;
+            color: unset !important;
+            box-shadow: 0 0 0 0.1rem #5346e0 !important;
+        }
+    }  
+}
+
+::ng-deep .b-sale-table {
+    .p-datatable-header {
+        padding-bottom: 0px;
+    }
+}
+
+.button-show-node {
+    margin-left: 1.75rem;
+}
+

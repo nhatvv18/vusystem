@@ -22,6 +22,262 @@ namespace VU.SeverSystem.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("VU.SeverSystem.Entities.DataEntities.CoreBanks", b =>
+                {
+                    b.Property<int?>("BankId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("BankId"), 1L, 1);
+
+                    b.Property<string>("BankCode")
+                        .HasColumnType("VARCHAR(50)");
+
+                    b.Property<string>("BankName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("FullBankName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("BankId");
+
+                    b.ToTable("CoreBanks", (string)null);
+                });
+
+            modelBuilder.Entity("VU.SeverSystem.Entities.DataEntities.InvestorBanks", b =>
+                {
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"), 1L, 1);
+
+                    b.Property<string>("BankAccount")
+                        .HasColumnType("VARCHAR(50)");
+
+                    b.Property<int?>("BankId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("DATETIME")
+                        .HasDefaultValueSql("getdate()");
+
+                    b.Property<string>("Deleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("VARCHAR(20)")
+                        .HasDefaultValue("N");
+
+                    b.Property<int?>("InvestorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("IsDefault")
+                        .HasColumnType("VARCHAR(50)");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("VARCHAR(20)");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("OwnerAccount")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("InvestorBanks", (string)null);
+                });
+
+            modelBuilder.Entity("VU.SeverSystem.Entities.DataEntities.InvestorContractAddress", b =>
+                {
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"), 1L, 1);
+
+                    b.Property<string>("ContractAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("DATETIME")
+                        .HasDefaultValueSql("getdate()");
+
+                    b.Property<string>("Deleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("VARCHAR(20)")
+                        .HasDefaultValue("N");
+
+                    b.Property<string>("DetailAddress")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DistrictCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("InvestorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("IsDefault")
+                        .HasColumnType("VARCHAR(50)");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("VARCHAR(20)");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ProviceCode")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("WardCode")
+                        .HasColumnType("VARCHAR(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("InvestorContractAddress", (string)null);
+                });
+
+            modelBuilder.Entity("VU.SeverSystem.Entities.DataEntities.InvestorIdentification", b =>
+                {
+                    b.Property<int?>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("Id"), 1L, 1);
+
+                    b.Property<DateTime?>("BirthDay")
+                        .HasColumnType("DATETIME");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("VARCHAR(50)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("DATETIME")
+                        .HasDefaultValueSql("getdate()");
+
+                    b.Property<string>("Deleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("VARCHAR(20)")
+                        .HasDefaultValue("N");
+
+                    b.Property<string>("FullName")
+                        .HasColumnType("VARCHAR(50)");
+
+                    b.Property<string>("IdBackImageUrl")
+                        .HasColumnType("VARCHAR(512)");
+
+                    b.Property<DateTime?>("IdDate")
+                        .HasColumnType("DATETIME");
+
+                    b.Property<DateTime?>("IdExpriredDate")
+                        .HasColumnType("DATETIME");
+
+                    b.Property<string>("IdFrontImageUrl")
+                        .HasColumnType("VARCHAR(512)");
+
+                    b.Property<string>("IdIssuer")
+                        .HasColumnType("VARCHAR(50)");
+
+                    b.Property<string>("IdNo")
+                        .HasColumnType("VARCHAR(50)");
+
+                    b.Property<string>("IdType")
+                        .HasColumnType("VARCHAR(50)");
+
+                    b.Property<int?>("InvestorId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("IsDefault")
+                        .HasColumnType("VARCHAR(50)");
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("VARCHAR(20)");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Nationality")
+                        .HasColumnType("VARCHAR(50)");
+
+                    b.Property<string>("PlaceOfOrigin")
+                        .HasColumnType("VARCHAR(50)");
+
+                    b.Property<string>("PlaceOfResidence")
+                        .HasColumnType("VARCHAR(50)");
+
+                    b.Property<string>("Sex")
+                        .HasColumnType("VARCHAR(50)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("InvestorIdentification", (string)null);
+                });
+
+            modelBuilder.Entity("VU.SeverSystem.Entities.DataEntities.Investors", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Avatar")
+                        .HasColumnType("VARCHAR(1024)");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("VARCHAR(50)");
+
+                    b.Property<DateTime?>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("DATETIME")
+                        .HasDefaultValueSql("getdate()");
+
+                    b.Property<string>("Deleted")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("VARCHAR(20)")
+                        .HasDefaultValue("N");
+
+                    b.Property<string>("Email")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("IsTemp")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
+
+                    b.Property<string>("ModifiedBy")
+                        .HasColumnType("VARCHAR(20)");
+
+                    b.Property<DateTime?>("ModifiedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Phone")
+                        .HasColumnType("VARCHAR(50)");
+
+                    b.Property<string>("Status")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("VARCHAR(20)")
+                        .HasDefaultValue("1");
+
+                    b.Property<string>("TaxCode")
+                        .HasColumnType("VARCHAR(50)");
+
+                    b.Property<int?>("TradingProviderId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Investors", (string)null);
+                });
+
             modelBuilder.Entity("VU.SeverSystem.Entities.DataEntities.Users", b =>
                 {
                     b.Property<int>("Id")
@@ -51,7 +307,6 @@ namespace VU.SeverSystem.Migrations
                         .HasDefaultValueSql("getdate()");
 
                     b.Property<string>("Deleted")
-                        .IsRequired()
                         .ValueGeneratedOnAdd()
                         .HasColumnType("VARCHAR(20)")
                         .HasDefaultValue("N");
@@ -67,6 +322,9 @@ namespace VU.SeverSystem.Migrations
 
                     b.Property<string>("IdentifierCode")
                         .HasColumnType("VARCHAR(20)");
+
+                    b.Property<int?>("InvestorId")
+                        .HasColumnType("int");
 
                     b.Property<string>("IsIdentifier")
                         .ValueGeneratedOnAdd()
@@ -94,7 +352,12 @@ namespace VU.SeverSystem.Migrations
                     b.Property<string>("Status")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("VARCHAR(20)")
-                        .HasDefaultValue("N");
+                        .HasDefaultValue("A");
+
+                    b.Property<string>("UserType")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("VARCHAR(20)")
+                        .HasDefaultValue("I");
 
                     b.Property<string>("Username")
                         .IsRequired()

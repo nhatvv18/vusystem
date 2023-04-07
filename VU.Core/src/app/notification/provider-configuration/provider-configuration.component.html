@@ -1,0 +1,148 @@
+<app-loading-page *ngIf="isLoading"></app-loading-page>
+<div style="display: none;"> 
+    <input type="password" id="taxCode" name="taxCode" pInputText/>
+</div>
+<!--  -->
+<div class="card b-page-detail" *ngIf="!isLoading">
+    <p-toast></p-toast>
+    <p-confirmDialog [style]="{width: 'auto'}" [baseZIndex]="10000"></p-confirmDialog>
+    <div class="p-fluid p-formgrid grid b-header align-items-end">
+        <div class="col-12 md:col-8">
+            <!-- <h4 class="mb-0"> Server thông báo </h4> -->
+        </div>
+        <div class="col-12 md:col-4 b-actions">
+            
+            <div class="text-right" *ngIf="!activeIndex">
+                <p-button 
+                    *ngIf="isGranted([PermissionCoreConst.CoreCauHinhNCC_ThemMoi]) && providerConfig?.smsConfig?.USERNAME == null"
+					styleClass="p-button custom-button "
+					label="{{ labelButton }}"
+                    icon="pi {{ isEdit ? 'pi-save' : 'pi-pencil' }}" 
+					(click)="changeEdit()"> 
+                </p-button>
+                <p-button 
+                    *ngIf="isGranted([PermissionCoreConst.CoreCauHinhNCC_CapNhat]) && providerConfig?.smsConfig?.USERNAME != null"
+					styleClass="p-button custom-button "
+					label="{{ labelButtonEdit }}" 
+					icon="pi {{ isEdit ? 'pi-save' : 'pi-pencil' }}" 
+					(click)="changeEdit()"> 
+				</p-button>
+                <!--  -->
+            </div>
+        </div>
+    </div>
+
+    <div  class="grid detail partner">
+        <div class="col-12">
+            <div class="card pt-0 pb-0 mb-0">
+                <h5 class="title-info mb-2"> Thông tin cấu hình SMS </h5>
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12 md:col-4">
+                        <label class="title-info {{ isEdit ? 'hightline-title' : '' }}" > Tên đăng nhập (<span
+                            class="required-field"> * </span>)</label>  
+                        <!-- [disabled]="!isEdit" -->
+                            <input required [disabled]="isEdit == false"
+                            type="text" id="code" name="code" pInputText 
+                            [(ngModel)]="providerConfig.smsConfig.USERNAME" 
+                            [ngClass]="{'ng-invalid ng-dirty' :  fieldErrors?.code} + ' custom-input-disabled'"  
+                            (click)="resetValid('code')"
+                        />
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label class="title-info {{ isEdit ? 'hightline-title' : '' }}"> Mật khẩu (<span
+                            class="required-field"> * </span>)</label>
+                        <input [disabled]="isEdit == false" required type="password" id="taxCode" name="taxCode" pInputText 
+                        [(ngModel)]="providerConfig.smsConfig.PASSWORD"[ngClass]="{'ng-invalid ng-dirty' :  fieldErrors?.taxCode} + ' custom-input-disabled'"  (click)="resetValid('taxCode')"/>
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label class="title-info {{ isEdit ? 'hightline-title' : '' }}"> Tên brandname (<span
+                            class="required-field"> * </span>)</label>
+                        <input required [disabled]="isEdit == false"
+                            type="text" id="code" name="code" pInputText 
+                            [(ngModel)]="providerConfig.smsConfig.BRANDNAME" 
+                            [ngClass]="{'ng-invalid ng-dirty' :  fieldErrors?.code} + ' custom-input-disabled'"  
+                            (click)="resetValid('code')"
+                        />
+                    </div>
+                </div>
+            </div>
+            <div class="card pt-0 pb-0 mb-0">
+                <h5 class="mt-3 mb-2"> Thông tin cấu hình Email </h5>
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12 md:col-4">
+                        <label class="title-info {{ isEdit ? 'hightline-title' : '' }}" > Địa chỉ máy chủ (<span
+                            class="required-field"> * </span>)</label>  
+                        <input required [disabled]="isEdit == false"
+                            type="text" id="code" name="code" pInputText 
+                            [(ngModel)]="providerConfig.stmpConfig.SMTP_HOST" 
+                            [ngClass]="{'ng-invalid ng-dirty' :  fieldErrors?.code} + ' custom-input-disabled'"  
+                            (click)="resetValid('code')"
+                        />
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label class="title-info {{ isEdit ? 'hightline-title' : '' }}"> Cổng máy chủ (<span
+                            class="required-field"> * </span>)</label>
+                        <input 
+                            [disabled]="isEdit == false" required type="text" id="taxCode" name="taxCode" pInputText 
+                            [(ngModel)]="providerConfig.stmpConfig.SMTP_PORT" [ngClass]="{'ng-invalid ng-dirty' :  fieldErrors?.taxCode} + ' custom-input-disabled'"  (click)="resetValid('taxCode')"
+                        />
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label class="title-info {{ isEdit ? 'hightline-title' : '' }}"> Email gửi đi (<span class="required-field"> * </span>)</label>
+                        <input 
+                            [disabled]="isEdit == false" required type="text" id="taxCode" name="taxCode" pInputText
+                            [(ngModel)]="providerConfig.stmpConfig.EMAIL_FROM" [ngClass]="{'ng-invalid ng-dirty' :  fieldErrors?.taxCode} + ' custom-input-disabled'"  (click)="resetValid('taxCode')"
+                        />
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label class="title-info {{ isEdit ? 'hightline-title' : '' }}"> Tên đăng nhập (<span
+                            class="required-field"> * </span>)</label>
+                        <input required [disabled]="isEdit == false"
+                            type="text" id="code" name="code" pInputText 
+                            [(ngModel)]="providerConfig.stmpConfig.SMTP_USERNAME" 
+                            [ngClass]="{'ng-invalid ng-dirty' :  fieldErrors?.code} + ' custom-input-disabled'"  
+                            (click)="resetValid('code')"
+                        />
+                    </div>
+                    <div class="field col-12 md:col-4">
+                        <label class="title-info {{ isEdit ? 'hightline-title' : '' }}" > Mật khẩu (<span
+                            class="required-field"> * </span>)</label>  
+                        <input required type="password" [disabled]="isEdit == false"
+                             id="code" name="code" pInputText 
+                            [(ngModel)]="providerConfig.stmpConfig.SMTP_PASSWORD" 
+                            [ngClass]="{'ng-invalid ng-dirty' :  fieldErrors?.code} + ' custom-input-disabled'"  
+                            (click)="resetValid('code')"
+                        />
+                    </div>
+                    
+                    <div class="field col-12 md:col-4">
+                        <label class="title-info {{ isEdit ? 'hightline-title' : '' }}"> Tên brandname (<span
+                            class="required-field"> * </span>)</label>
+                        <input required [disabled]="isEdit == false"
+                            type="text" id="code" name="code" pInputText 
+                            [(ngModel)]="providerConfig.stmpConfig.EMAIL_BRAND_NAME" 
+                            [ngClass]="{'ng-invalid ng-dirty' :  fieldErrors?.code} + ' custom-input-disabled'"  
+                            (click)="resetValid('code')"
+                        />
+                    </div>
+                </div>
+            </div>
+            <div class="card pt-0 mb-0">
+                <h5 class="title-info mt-3 mb-2"> Thông tin tiêu đề trên app </h5>
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12 md:col-12">
+                        <label class="title-info {{ isEdit ? 'hightline-title' : '' }}"> Tiêu đề thông báo app (<span
+                            class="required-field"> * </span>)</label>
+                        <input 
+                            required [disabled]="isEdit == false"
+                            type="text" id="code" name="code" pInputText 
+                            [(ngModel)]="providerConfig.pushAppTitle" 
+                            [ngClass]="{'ng-invalid ng-dirty' :  fieldErrors?.code} + ' custom-input-disabled'"  
+                            (click)="resetValid('code')"
+                        />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,12 @@
+{
+	"remoteServiceBaseUrl": "http://118.70.215.61:8089",
+	"nodeBaseUrl": "http://118.70.215.61:8089",
+	"rocketchat": {
+		"api": "http://epic-api.stecom.vn:8091",
+		"iframeSrc": "http://epic-rocketchat.stecom.vn:3000/?layout=embedded"
+	},
+	"appBaseUrl": "http://epic-core.stecom.vn:10200",
+	"baseUrlHome": "http://epic-home.stecom.vn:10200",
+	"clientId": "client1",
+	"clientSecret": "secret1"
+}

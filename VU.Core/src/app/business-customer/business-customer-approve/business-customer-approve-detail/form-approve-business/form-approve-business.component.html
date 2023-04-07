@@ -1,0 +1,33 @@
+
+<div class="grid p-fluid">
+    <div class="col-12 md:col-12">
+        <!-- <div class="field mb-0">
+            <label> Chọn người phê duyệt </label>
+            <p-dropdown [options]="[]" [(ngModel)]="dataRequest.userApproveId" optionLabel="name" optionValue="name"></p-dropdown>         
+        </div> -->
+    </div>
+    <div class="col-12 md:col-12">
+        <div class="checkbox_approve mb-4">
+            <p-radioButton style="width: 50%" [(ngModel)]="check_approve" [value]="true" class="approve_button" label="Xác nhận thông tin" name="approve" ></p-radioButton>
+            <p-radioButton [(ngModel)]="check_approve" [value]="false" name="unapprove" label="Từ chối"></p-radioButton>
+            <br>
+        </div>
+        <div class="field">
+            <label> Ghi chú (<span class="required-field"> * </span>) </label>
+            <textarea pInputTextarea [(ngModel)]="dataRequest.requestNote"></textarea>         
+        </div>
+    </div>
+</div>
+
+<div class="flex justify-content-between p-dialog-footer" style="width: 100%; position: fixed; left: 0; bottom: 0;">
+    <div >
+        <p-button id="butionShowChange"(onClick)="showDiffChange()"  styleClass=" p-button-text">
+            <label for="butionShowChange" class=" pt-1">Chi tiết thay đổi</label>
+            <!-- <i class="pi pi-history ml-2 p-text-secondary" pBadge style="font-size: 1.6rem" size="13px"  [value]="count + ( countBankTemp - countBankNull)" severity="danger"></i> -->
+        </p-button>
+    </div> 
+    <div>
+        <button pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject" (click)="cancel()"></button>
+        <button pButton pRipple label="Đồng ý" icon="pi pi-check" class="p-button-text p-confirm-dialog-approve" [disabled]="!validForm() || submitted" (click)="accept()"></button>
+    </div>
+</div>

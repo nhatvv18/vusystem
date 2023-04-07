@@ -36,7 +36,7 @@ export class AppRouteGuard implements CanActivate, CanActivateChild {
 		}
 
 		if (route?.data["permissions"]) {
-			// return Promise.resolve(true);
+			return Promise.resolve(true);
 			return new Promise<boolean>((resolve) => {
 				this._userService.getAllPermission().subscribe(res => {
 						if(res?.data.length && route?.data["permissions"]?.length) {

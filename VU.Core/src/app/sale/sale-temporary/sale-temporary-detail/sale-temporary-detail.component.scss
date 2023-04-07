@@ -1,0 +1,8 @@
+::ng-deep span.p-image-preview-container {
+    width: 100% !important;
+    .image-identification-investor {
+        max-height: 250px !important;
+        min-height: 150px;
+        object-fit: cover !important;
+    }
+}

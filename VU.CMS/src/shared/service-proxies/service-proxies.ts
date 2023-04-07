@@ -139,16 +139,17 @@ export class TokenAuthServiceProxy extends ServiceProxyBase {
 		return _observableOf<AuthenticateResultModel>(<any>null);
 	}
 
-	/**
-     * @param body (optional)
-     * @return Success
+    /**
+     * Hàm mới cho api mới
+     * @param body
+     * @returns 
      */
-	 authenticate(
+    authenticate(
         body: AuthenticateModel | undefined
     ): Observable<AuthenticateResultModel> {
         let url_ = this.baseUrl + "/api/users/login";
         url_ = url_.replace(/[?&]$/, "");
-
+        // alert(1)
         const content_ = JSON.stringify(body);
         const contentParse_ = JSON.parse(content_);
 
@@ -160,7 +161,10 @@ export class TokenAuthServiceProxy extends ServiceProxyBase {
             .set('client_secret', AppConsts.clientSecret);
 
         let options_: any = {
-            body: params.toString(),
+            body: {
+                username: contentParse_.username,
+                password: contentParse_.password,
+            },
             observe: "response",
             responseType: "blob",
             headers: new HttpHeaders({
@@ -168,13 +172,12 @@ export class TokenAuthServiceProxy extends ServiceProxyBase {
                 Accept: "text/plain",
             }),
         };
-
+        console.log("url_",url_);
+        
         return this.http
             .request("post", url_, options_)
             .pipe(
                 _observableMergeMap((response_: any) => {
-                    console.log("response_",response_);
-                    
                     return this.processAuthenticate(response_);
                 })
             ).pipe(
@@ -196,6 +199,64 @@ export class TokenAuthServiceProxy extends ServiceProxyBase {
             );
     }
 }
+
+	/**
+     * @param body (optional)
+     * @return Success
+     */
+// 	 authenticate(
+//         body: AuthenticateModel | undefined
+//     ): Observable<AuthenticateResultModel> {
+//         let url_ = this.baseUrl + "/api/users/login";
+//         url_ = url_.replace(/[?&]$/, "");
+//         // alert(1)
+//         const content_ = JSON.stringify(body);
+//         const contentParse_ = JSON.parse(content_);
+
+//         const params = new HttpParams()
+//             .set('username', contentParse_.username)
+//             .set('password', contentParse_.password)
+//             .set('grant_type', AppConsts.grantType.password)
+//             .set('client_id', AppConsts.clientId)
+//             .set('client_secret', AppConsts.clientSecret);
+
+//         let options_: any = {
+//             body: params.toString(),
+//             observe: "response",
+//             responseType: "blob",
+//             headers: new HttpHeaders({
+//                 "Content-Type": "application/x-www-form-urlencoded",
+//                 Accept: "text/plain",
+//             }),
+//         };
+
+//         return this.http
+//             .request("post", url_, options_)
+//             .pipe(
+//                 _observableMergeMap((response_: any) => {
+//                     alert(2)
+                    
+//                     return this.processAuthenticate(response_);
+//                 })
+//             ).pipe(
+//                 _observableCatch((response_: any) => {
+//                     if (response_ instanceof HttpResponseBase) {
+//                         try {
+//                             return this.processAuthenticate(<any>response_);
+//                         } catch (e) {
+//                             return <Observable<AuthenticateResultModel>>(
+//                                 (<any>_observableThrow(e))
+//                             );
+//                         }
+//                     } else {
+//                         return <Observable<AuthenticateResultModel>>(
+//                             (<any>_observableThrow(response_))
+//                         );
+//                     }
+//                 })
+//             );
+//     }
+// }
 
 @Injectable()
 export class UserServiceProxy extends ServiceProxyBase {
@@ -235,8 +296,8 @@ export class UserServiceProxy extends ServiceProxyBase {
 
     //
     getAllPermission(): Observable<any> {
-        let url_ = "/api/users/get-permission";
-        return this.requestGet(url_);
+        let url_ = "/api/users/login";
+        return this.requestPost("",url_);
     }
 
     getAll(page: Page): Observable<any> {

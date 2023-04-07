@@ -1,0 +1,29 @@
+
+<div class="grid p-fluid">
+    <ng-container>
+        <div class="col-12 md:col-6">
+            <div class="field mb-0">
+                <label htmlFor="ipAddressStart"> Địa chỉ Ip bắt đầu <span class="required-field"> * </span></label>
+                <input type="text"  name="code" id="ipAddressStart" pInputText [(ngModel)]="whileListDetail.ipAddressStart"
+                    [ngClass]="{'ng-invalid ng-dirty' : submitted && !whileListDetail.ipAddressStart}">
+                
+            </div>
+        </div>
+        <div class="col-12 md:col-6">
+            <div class="field mb-0">
+                <label htmlFor="ipAddressEnd"> Địa chỉ Ip kết thúc <span class="required-field"> * </span></label>
+                <input type="text"  name="code" pInputText id="ipAddressEnd" 
+                    [(ngModel)]="whileListDetail.ipAddressEnd"
+                    [ngClass]="{'ng-invalid ng-dirty' : submitted && !whileListDetail.ipAddressEnd}">
+               
+            </div>
+        </div>
+        
+    </ng-container>
+</div>
+<div class="p-dialog-footer" style="width: 100%; position: fixed; left: 0; bottom: 0;">
+    <button pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject" (click)="close()"></button>
+    <button pButton pRipple label="Lưu" icon="pi pi-check" class="p-button-text p-confirm-dialog-approve" [disabled]="submitted || !validForm()" (click)="save()"></button>
+</div>
+
+         

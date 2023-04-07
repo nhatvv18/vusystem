@@ -1,0 +1,606 @@
+<div class="b-progress-spinner" *ngIf="isLoading || isLoadingPage">
+    <p-progressSpinner [style]="{width: '80px', height: '80px'}" styleClass="custom-spinner" strokeWidth="4" animationDuration=".5s"></p-progressSpinner>
+</div>
+<p-toast *ngIf="isToast"></p-toast>
+<p-confirmDialog [style]="{width: 'auto'}" [baseZIndex]="10000"></p-confirmDialog>
+<div class="card b-page-detail {{ isLoading ? 'b-loading' : '' }}" *ngIf="!isLoadingPage">
+	<div class="p-fluid p-formgrid grid b-header">
+		<div class="card col-12 md:col-12 b-actions">
+			<div class="flex justify-content-between flex-wrap card-container purple-container">
+				<!-- <div class="col-12 md:col-8"> -->
+				<h5 class="title-info mb-0 ml-0">Thông tin khách hàng </h5>
+				<div style="margin-bottom: 1rem;">
+                    <ng-container >
+						<p-button *ngIf="(investor?.approve?.status == InvestorConst.STATUS.HUY ) && isGranted([PermissionCoreConst.CoreDuyetKHCN_CapNhat])" styleClass="p-button-sm custom-button"
+									label="Lý do hủy duyệt" icon="pi pi-history"
+									(click)="cancelHistory(investor)">
+						</p-button>
+						<p-button *ngIf="(investor?.approve?.status == InvestorConst.STATUS.TRINH_DUYET ) && isGranted([PermissionCoreConst.CoreQLPD_KHCN_PheDuyetOrHuy])" styleClass="p-button-sm custom-button"
+									label="Xử lý yêu cầu" icon="pi pi-check"
+									(click)="approveSharing(investor)">
+						</p-button>
+						<!-- 6/10/2022 tạm thời ẩn nút này đi theo yêu cầu của epic -->
+                        <!-- <p-button *ngIf="(investor?.approve?.status == 0 || investor?.approve?.status == 2) && isGranted([PermissionCoreConst.CoreDuyetKHCN_CapNhat])" styleClass="p-button-sm custom-button"
+									label="Kiểm tra mặt" icon="pi pi-eye"
+									(click)="showDialogCheckFace()">
+						</p-button> -->
+                        <ng-container >
+							<p-button 
+								*ngIf="(investor?.isCheck != YesNoConst.YES && isTemp == InvestorConst.TEMP.NO)" styleClass="p-button-sm custom-button"
+								label="Xác minh" icon="pi pi-check"
+								(click)="check(investor)">
+							</p-button>
+
+							<p-button *ngIf="(investor?.approve?.status != InvestorConst.STATUS.TRINH_DUYET && isTemp == InvestorConst.TEMP.NO) && isGranted([PermissionCoreConst.CoreKHCN_DoiSDT])" styleClass="p-button-sm custom-button"
+									label="Yêu cầu đổi số điện thoại" icon="pi pi-arrow-up"
+									(click)="requestPhone(investor)">
+							</p-button>
+							<p-button *ngIf="(investor?.approve?.status != InvestorConst.STATUS.TRINH_DUYET && isTemp == InvestorConst.TEMP.NO) && isGranted([PermissionCoreConst.CoreKHCN_DoiEmail])" styleClass="p-button-sm custom-button"
+									label="Yêu cầu đổi Email" icon="pi pi-arrow-up"
+									(click)="requestEmail(investor)">
+							</p-button>
+                            <p-button *ngIf="((investor?.approve?.status == InvestorConst.STATUS.KHOI_TAO || investor?.approve?.status == InvestorConst.STATUS.HUY) && isTemp == InvestorConst.TEMP.YES) && isGranted([PermissionCoreConst.CoreDuyetKHCN_TrinhDuyet])" styleClass="p-button-sm custom-button"
+									label="Trình duyệt" icon="pi pi-arrow-up"
+									(click)="request(investor)">
+							</p-button>
+                            <p-button *ngIf="investor?.approve?.status != InvestorConst.STATUS.TRINH_DUYET && ((isGranted([PermissionCoreConst.CoreDuyetKHCN_CapNhat]) && isTemp == InvestorConst.TEMP.YES) || (isGranted([PermissionCoreConst.CoreKHCN_CapNhat]) && isTemp == InvestorConst.TEMP.NO))" styleClass="p-button-sm custom-button"
+								label="{{ isEdit ? 'Lưu lại' : 'Chỉnh sửa' }}" icon="pi {{ isEdit ? 'pi-save' : 'pi-pencil' }}"
+								(click)="changeEdit()">
+							</p-button>
+                        </ng-container> 
+                    </ng-container>
+                    <p-button styleClass="p-button-sm custom-button"
+							(click)="this.location.back()" label="Quay lại" icon="pi pi-chevron-left">
+					</p-button>
+                </div>
+			</div>
+		</div>
+	</div>
+	<p-tabView styleClass="custom-tabview" [(activeIndex)]="activeIndex" (onChange)="changeTabview($event)">
+		<!-- THÔNG TIN CHUNG -->
+		<p-tabPanel styleClass="pb-0" *ngIf="(isGranted([PermissionCoreConst.CoreDuyetKHCN_ThongTinChung]) && isTemp == InvestorConst.TEMP.YES) || (isGranted([PermissionCoreConst.CoreKHCN_ThongTinChung]) && isTemp == InvestorConst.TEMP.NO)">
+			<ng-template pTemplate="header">
+				<!-- <i class="pi pi-star mr-2"></i> -->
+				<span> Thông tin chung</span>
+			</ng-template>
+			<div class="flex flex-column" *ngIf="(isGranted([PermissionCoreConst.CoreDuyetKHCN_ChiTiet]) && isTemp == InvestorConst.TEMP.YES) || (isGranted([PermissionCoreConst.CoreKHCN_ChiTiet]) && isTemp == InvestorConst.TEMP.NO)">
+				<div class="grid detail">
+					<div class="col-12 md:col-9">
+						<div class="card pt-0 pb-0 mb-0">
+							<!-- THÔNG TIN CHUNG -->
+							<!-- <h5>Thông tin chung</h5> -->
+							<!-- DONG 1 -->
+							<div class="flex flex-row">
+								<!-- AVATAR -->
+								<div class="flex-column flex-1">
+									<div class="field b-field p-2 pb-0 mb-0">
+										<app-investor-image [idInput]="'input-avatar'" [idImage]="'image-avatar'"
+											(onChangeImage)="uploadFaceImage()" imageClass="w-full"
+											[(image)]="faceImage">
+										</app-investor-image>
+									</div>
+								</div>
+								<!-- 3 DONG BEN CANH -->
+								<div class="flex-5">
+									<!-- DONG 1.1 -->
+									<div class="flex flex-row">
+										<div class="flex-1">
+											<div class="field b-field p-1 mb-2">
+												<label class="" htmlFor="name">
+													Mã KH
+												</label>
+												<input [disabled]="true" pInputText maxlength="500" class="custom-input-disabled" [value]="investor?.cifCode" />
+											</div>
+										</div>
+										<div class="flex-2">
+											<div class="field b-field p-1 mb-2">
+												<label class="title-info {{ isEdit ? 'hightline-title' : '' }}" htmlFor="name">
+													Họ tên (<span class="required-field"> * </span>)
+												</label>
+												<input 
+													[disabled]="!isEdit" pInputText maxlength="500" class="custom-input-disabled" 
+													[(ngModel)]="investor.defaultIdentification.fullname" 
+													[pKeyFilter]="KeyFilter.stringOnlyBlockSpecial"
+												/>
+											</div>
+										</div>
+										<div class="flex-1">
+											<div class="field b-field p-1 mb-2">
+												<label class="title-info {{ isEdit ? 'hightline-title' : '' }}" htmlFor="code">
+													Ngày sinh (<span class="required-field"> * </span>)
+												</label>
+												<p-calendar dateMask [disabled]="!isEdit" styleClass="w-full" inputId="dateOfBirth"
+													dateFormat="dd/mm/yy" locale="vi" appendTo="body" utc="false"
+													[(ngModel)]="investor.defaultIdentification.dateOfBirth"
+													[showIcon]="false" class="custom-input-disabled">
+												</p-calendar>				
+											</div>
+										</div>
+										<div class="flex-1 b-w-20">
+											<div class="field b-field p-1 mb-2">
+												<label class="title-info {{ isEdit ? 'hightline-title' : '' }}" htmlFor="sex"> 
+													Giới tính (<span class="required-field"> * </span>)
+												</label>
+												<p-dropdown [disabled]="!isEdit" optionLabel="name" optionValue="code"
+													[autoDisplayFirst]="true" styleClass="w-full" class="custom-input-disabled"
+													[options]="InvestorConst.ListSex" [(ngModel)]="investor.defaultIdentification.sex">
+												</p-dropdown>
+											</div>
+										</div>
+									</div>
+									<!-- DONG 1.2 -->
+									<div class="flex flex-row">
+										<div class="flex-1 b-w-20">
+											<div class="field b-field p-1 mb-2">
+												<label class="title-info {{ isEdit ? 'hightline-title' : '' }}" htmlFor="code">Loại giấy tờ </label>
+												<!-- [autoDisplayFirst]="true" styleClass="w-full" -->
+												<p-dropdown [disabled]="true" optionLabel="name" optionValue="code" 
+													[options]="InvestorConst.IdTypes"
+													appendTo="body" class="custom-input-disabled"
+													[autoDisplayFirst]="false" 
+													[(ngModel)]="investor?.defaultIdentification.idType">
+												</p-dropdown>
+											</div>
+										</div>
+										<div class="flex-1">
+											<div class="field b-field p-1 mb-2">
+												<label class="title-info {{ isEdit ? 'hightline-title' : '' }}" htmlFor="code">
+													Mã số (<span class="required-field"> * </span>)
+												</label>
+												<input 
+													[disabled]="!isEdit" pInputText class="custom-input-disabled" maxlength="50"
+													[(ngModel)]="investor.defaultIdentification.idNo" 
+												/>
+											</div>
+										</div>
+										<div class="flex-1">
+											<div class="field b-field p-1 mb-2">
+												<label class="title-info {{ isEdit ? 'hightline-title' : '' }}" htmlFor="code">
+													Mã giới thiệu
+												</label>
+												<input 
+													pInputText class="custom-input-disabled" maxlength="50"
+													[(ngModel)]="investor.referralCodeSelf" [disabled]="!isEdit"
+												/>
+											</div>
+										</div>
+										<div class="flex-1">
+											<div class="field b-field p-1 mb-2">
+												<label class="title-info {{ isEdit ? 'hightline-title' : '' }}" htmlFor="code">
+													Ngày cấp (<span class="required-field"> * </span>)
+												</label>
+												<p-calendar dateMask [disabled]="!isEdit" styleClass="w-full" inputId="idDate"
+													dateFormat="dd/mm/yy" locale="vi" appendTo="body" utc="false"
+													[(ngModel)]="investor.defaultIdentification.idDate"
+													[showIcon]="false" class="custom-input-disabled">
+												</p-calendar>
+											</div>
+										</div>
+										<div class="flex-1">
+											<div class="field b-field p-1 mb-2">
+												<label class="title-info {{ isEdit ? 'hightline-title' : '' }}" htmlFor="code">Ngày hết hạn </label>
+												<p-calendar dateMask [disabled]="!isEdit" styleClass="w-full" inputId="idExpiredDate"
+													dateFormat="dd/mm/yy" locale="vi" appendTo="body" utc="false"
+													[(ngModel)]="investor.defaultIdentification.idExpiredDate"
+													[showIcon]="false" class="custom-input-disabled">
+												</p-calendar>
+											</div>
+										</div>
+									</div>
+									<!-- DONG 1.3 -->
+									<div class="flex flex-row">
+										<div class="field b-field flex-3 p-1 w-full mb-0">
+											<label class="title-info {{ isEdit ? 'hightline-title' : '' }}" htmlFor="code">Nơi cấp (<span
+													class="required-field"> * </span>)</label>
+											<input [disabled]="!isEdit" pInputText class="w-full custom-input-disabled" maxlength="256"
+												[(ngModel)]="investor.defaultIdentification.idIssuer" />
+										</div>
+										<div class="field b-field p-1 mb-0 b-w-20 flex-2">
+											<label class="title-info {{ isEdit ? 'hightline-title' : '' }}" htmlFor="code"> Quốc tịch (<span class="required-field"> * </span>)
+											</label>
+											<p-dropdown
+												class="custom-input-disabled"
+												[filter]="true" filterLabel="name"
+												[disabled]="!isEdit" optionLabel="name" optionValue="name" 
+												[autoDisplayFirst]="false"
+												[options]="NatinalityList"
+												[(ngModel)]="investor.defaultIdentification.nationality">
+											</p-dropdown>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- DONG 2 -->
+							<div class="flex flex-row">
+								<div class="field b-field w-full flex-1 p-1 mb-2">
+									<label class="title-info {{ isEdit ? 'hightline-title' : '' }}" htmlFor="code">
+										Nguyên quán (<span class="required-field"> * </span>)
+									</label>
+									<input 
+										[disabled]="!isEdit" pInputText class="custom-input-disabled w-full" maxlength="512"
+										[(ngModel)]="investor.defaultIdentification.placeOfOrigin"
+										/>
+								</div>
+								
+							</div>
+							<!-- DONG 3 -->
+							<div class="flex flex-row">
+								<div class="flex-1">
+									<div class="field b-field p-1 mb-2">
+										<label class="title-info {{ isEdit ? 'hightline-title' : '' }}" htmlFor="code">
+											Số điện thoại (<span class="required-field"> * </span>)
+										</label>
+										<input [disabled]="true" pInputText class="custom-input-disabled" maxlength="16" [(ngModel)]="investor.phone" />
+									</div>
+								</div>
+								<div class="flex-1">
+									<div class="field b-field p-1 mb-2">
+										<label class="title-info {{ isEdit ? 'hightline-title' : '' }}" htmlFor="code">Số điện thoại khác</label>
+										<input [disabled]="!isEdit" pInputText class="custom-input-disabled" maxlength="16" [(ngModel)]="investor.mobile" />
+									</div>
+								</div>
+								<div class="flex-1">
+									<div class="field b-field p-1 mb-2">
+										<label class="title-info {{ isEdit ? 'hightline-title' : '' }}" htmlFor="code">
+											Email (<span class="required-field"> * </span>)
+										</label>
+										<input [disabled]="true" pInputText type="email" maxlength="100" class="custom-input-disabled"
+											[(ngModel)]="investor.email" />
+									</div>
+								</div>
+								<div class="flex-1">
+									<div class="field b-field p-1 mb-2">
+										<label class="title-info {{ isEdit ? 'hightline-title' : '' }}" class="" htmlFor="code">Mã số thuế</label>
+										<input [disabled]="!isEdit" pInputText class="custom-input-disabled" maxlength="100"
+											[(ngModel)]="investor.taxCode" />
+									</div>
+								</div>
+							</div>
+							<!-- ĐỊA CHỈ -->
+							<div class="flex flex-row">
+								<div class="field b-field w-full flex-1 p-1 mb-0">
+									<label class="title-info {{ isEdit ? 'hightline-title' : '' }}" htmlFor="address">
+										Địa chỉ thường trú (<span class="required-field"> * </span>)
+									</label>
+									<textarea 
+										[disabled]="!isEdit" pInputTextarea class="custom-input-disabled w-full"
+										[(ngModel)]="investor.defaultIdentification.placeOfResidence"> 
+									</textarea>
+								</div>
+							</div>
+							<div class="flex flex-row">
+								<div class="field b-field w-full flex-1 p-1 mb-0">
+									<label class="title-info {{ isEdit ? 'hightline-title' : '' }}" htmlFor="address">
+										Địa chỉ liên hệ 
+									</label>
+									<textarea 
+										[disabled]="true" pInputTextarea class="custom-input-disabled w-full" [value]="investor?.defaultContactAddress?.contactAddress"> 
+									</textarea>
+								</div>
+							</div>
+							<!-- NGÂN HÀNG -->
+							<div class="flex flex-row">
+								<div class="field b-field w-full flex-1 p-1 mb-0">
+									<ng-container *ngIf="investor.defaultBank != null" >
+										<div class="p-fluid p-formgrid grid">
+											<div class="col-12 md:col-6 field b-field">
+												<label class="" htmlFor="code">
+													Ngân hàng (<span class="required-field"> * </span>) 
+												</label>
+												<p-dropdown
+													class="custom-input-disabled"
+													optionLabel="labelName" optionValue="bankId" inputId="investor.defaultBank.bankId" 
+													appendTo="body" [filter]="true" filterBy="labelName"													
+													[autoDisplayFirst]="false" 
+													[disabled]="true"
+													[options]="banks" placeholder="Chọn ngân hàng"
+													[(ngModel)]="investor.defaultBank.bankId"
+													> 
+												</p-dropdown>
+												<!-- <input type="text"
+												[disabled]="true" pInputText value="{{investor.defaultBank.bankAccount}}"
+												class="custom-input-disabled" 
+												> -->
+										
+											</div>
+											<div class="col-12 md:col-3 field b-field">
+												<label class="" htmlFor="code">
+													Số tài khoản (<span class="required-field"> * </span>)
+												</label>
+												<input 
+													[disabled]="true" pInputText value="{{investor.defaultBank.bankAccount}}"
+													class="custom-input-disabled" 
+												/>
+											</div>
+											<div class="col-12 md:col-3 field b-field">
+												<label class="" htmlFor="code">
+													Tên tài khoản (<span class="required-field"> * </span>)
+												</label>
+												<input [disabled]="true" pInputText value="{{investor.defaultBank.ownerAccount}}" class="custom-input-disabled" />
+											</div>
+										</div>
+									</ng-container>
+								</div>
+							</div>
+
+							<!-- KHỞI TẠO -->
+							<div class="flex flex-row">
+								<div class="field b-field w-full flex-1 p-1 mb-0">
+									<ng-container *ngIf="investor.defaultBank != null" >
+										<div class="p-fluid p-formgrid grid">
+
+											<div class="col-12 md:col-3 field b-field">
+												<label class="" htmlFor="code">
+													Người khởi tạo 
+												</label>
+												<input 
+													[disabled]="true" pInputText value="{{investor.createdBy}}"
+													class="custom-input-disabled" 
+												/>
+											</div>
+											<div class="col-12 md:col-3 field b-field">
+												<label class="" htmlFor="code">
+													Ngày khởi tạo
+												</label>
+												<input [disabled]="true" pInputText value="{{ formatDateTime(investor.createdDate) }}" class="custom-input-disabled" />
+											</div>
+											<div class="col-12 md:col-6 field b-field" *ngIf="isTemp == InvestorConst.TEMP.NO">
+													<label class="title-info {{ isEdit ? 'hightline-title' : '' }}" htmlFor="code">
+														Nguồn khởi tạo 
+													</label>
+													<p-dropdown
+														class="custom-input-disabled"
+														optionLabel="name" optionValue="code" inputId="investor.source" 
+														appendTo="body"													
+														[autoDisplayFirst]="false" 
+														[disabled]="true"
+														[options]="InvestorConst.sourcesCreate" 
+														[(ngModel)]="investor.source"
+														> 
+													</p-dropdown>
+												
+											</div>
+										</div>
+									</ng-container>
+								</div>
+							</div>
+
+							<div class="col-12 md:col-12 title-group-input">
+								<h5>Người đại diện </h5>
+							
+							</div>
+							<div class="flex flex-row">
+								<div class="field b-field w-full flex-1 p-1 mb-0">
+									<ng-container *ngIf="investor.defaultBank != null" >
+										<div class="p-fluid p-formgrid grid">
+											<div class="col-12 md:col-6 field b-field">
+												<label class="b-hightline-title">Số điện thoại </label>
+												<input [disabled]="!isEdit" autofocus required pInputText [(ngModel)]="investor.representativePhone" maxlength="25"  (keypress)="numberOnly($event)"
+													class="custom-input-disabled" />
+										
+											</div>
+											<div class="col-12 md:col-6 field b-field">
+												<label class="b-hightline-title ">Email </label>
+												<input [disabled]="!isEdit" autofocus required pInputText [(ngModel)]="investor.representativeEmail" maxlength="100" 
+													class="custom-input-disabled" />
+											</div>
+											
+										</div>
+									</ng-container>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- COT PHAI -->
+					<div class="col-12 md:col-3">
+						<!-- <h5>Ảnh giấy tờ</h5> -->
+						<div>
+							<h6>Giấy tờ mặt trước</h6>
+							<!-- (click)="openModalViewImage(investor.defaultIdentification.idFrontImageUrl)" -->
+							<p-image [preview]="true"
+								class="w-full" imageClass="w-full cursor-pointer image-identification-investor"
+								
+								[src]="investor.defaultIdentification.idFrontImageUrl | baseapiurl">
+							</p-image>
+						</div>
+						<div>
+							<h6>Giấy tờ mặt sau</h6>
+							<!--(click)="openModalViewImage(investor.defaultIdentification.idBackImageUrl)" -->
+							<p-image [preview]="true"
+								*ngIf="investor.defaultIdentification.idType !== 'PASSPORT'"
+								[src]="investor.defaultIdentification.idBackImageUrl | baseapiurl" class="w-full"
+								imageClass="w-full cursor-pointer image-identification-investor">
+							</p-image>
+						</div>
+					</div>
+				</div>
+				
+				<!-- THÔNG TIN GIẤY TỜ -->
+				<div class="flex flex-row justify-content-between w-full" *ngIf="isGranted([PermissionCoreConst.CoreDuyetKHCN_ChiTiet])">
+					<h5 class="d-inline">Thông tin giấy tờ</h5>
+					<p-button 
+						styleClass="p-button-sm custom-button" label="Thêm giấy tờ" icon="pi pi-plus"
+						(click)="openModalAddIdentification()">
+					</p-button>
+				</div>
+
+			</div>
+			
+			<div>
+				<p-table
+					#listGiayTo	*ngIf="activeIndex == 0 && isGranted([PermissionCoreConst.CoreDuyetKHCN_ChiTiet])"
+					[value]="investor.listIdentification" [rowHover]="true" [paginator]="false" [scrollable]="true"
+					styleClass="p-datatable-gridlines" responsiveLayout="scroll">
+				<ng-template pTemplate="header">
+					<tr>
+						<th style="min-width: 8rem; max-width: 8rem">Loại</th>
+						<th style="min-width: 10rem;">Mã số</th>
+						<th style="min-width: 10rem;">Ngày cấp</th>
+						<th style="min-width: 20rem;">Nơi cấp</th>
+						<th style="min-width: 10rem;">Ngày hết hạn</th>
+						<th style="min-width: 10rem;">Mặt trước</th>
+						<th style="min-width: 10rem;">Mặt sau</th>
+						<th style="min-width: 10rem;">Ekyc xác nhận</th>
+						<th style="min-width: 15rem;">Ekyc không chính xác</th>
+						<th style="min-width: 10rem;">Đang sử dụng</th>
+						<th style="min-width: 5rem; max-width: 5rem" [frozen]="true" pFrozenColumn alignFrozen="right"></th>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+					<tr>
+						<td style="min-width: 8rem; max-width: 8rem;">{{ row.idType }}</td>
+						<td style="min-width: 10rem;">{{ row.idNo }}</td>
+						<td style="min-width: 10rem;">{{ row.idDate | dateview }}</td>
+						<td style="min-width: 20rem;">{{ row.idIssuer }}</td>
+						<td style="min-width: 10rem;">{{ row.idExpiredDate | dateview }}</td>
+						<td style="min-width: 10rem;">
+							<!-- (click)="openModalViewImage(row.idFrontImageUrl)" -->
+							<p-image [preview]="true" [src]="row.idFrontImageUrl | baseapiurl"
+								imageClass="w-8rem h-4rem cursor-pointer"
+								>
+							</p-image>
+						</td>
+						<td style="min-width: 10rem;">
+							<!-- (click)="openModalViewImage(row.idBackImageUrl)" -->
+							<p-image [preview]="true" *ngIf="row.idType !== 'PASSPORT'" [src]="row.idBackImageUrl | baseapiurl"
+								
+								imageClass="w-8rem h-4rem cursor-pointer">
+							</p-image>
+						</td>
+						<td style="min-width: 10rem;" class="text-center justify-content-center">
+							<i class="pi pi-check" *ngIf="row.ekycInfoIsConfirmed == YesNoConst.YES"></i>
+						</td>
+						<td style="min-width: 15rem;">{{ row.ekycIncorrectFields }}</td>
+						<td style="min-width: 10rem; justify-content: center;" class="text-center">
+							<i class="pi pi-check" *ngIf="row.isDefault == YesNoConst.YES"></i>
+						</td>
+		
+						<td style="width: 5rem; max-width: 5rem; justify-content: center;" [frozen]="true" pFrozenColumn alignFrozen="right">
+							<div class="flex" *ngIf="actionsIndetification[rowIndex]?.length">
+								<i class="pi pi-ellipsis-h" (click)="menu.toggle($event)"></i>
+								<p-menu #menu [popup]="true" class="button-actions" [model]="actionsIndetification[rowIndex]"
+									appendTo="body">
+								</p-menu>
+							</div>
+						</td>
+		
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="emptymessage">
+					<tr>
+						<td colspan="8">Không có dữ liệu.</td>
+					</tr>
+				</ng-template>
+				<ng-template pTemplate="loadingbody">
+					<tr>
+						<td colspan="8">Đang tải dữ liệu ...</td>
+					</tr>
+				</ng-template>
+				</p-table>
+			</div>
+		</p-tabPanel>
+		<!-- TÀI KHOẢN NGÂN HÀNG -->
+		<p-tabPanel [header]="'taiKhoanNganHang'" *ngIf="(isGranted([PermissionCoreConst.CoreDuyetKHCN_TKNH]) && isTemp == InvestorConst.TEMP.YES) || (isGranted([PermissionCoreConst.CoreKHCN_TKNH]) && isTemp == InvestorConst.TEMP.NO)">
+			<ng-template pTemplate="header">
+				<i class="pi pi-credit-card mr-2"></i>
+				<span>TK ngân hàng</span>
+			</ng-template>
+			<app-investor-bank [investorDetail]="investor" *ngIf="tabViewActive.taiKhoanNganHang"></app-investor-bank>
+		</p-tabPanel>
+		<p-tabPanel [header]="'taiKhoanChungKhoan'" *ngIf="(isGranted([PermissionCoreConst.CoreDuyetKHCN_TKCK]) && isTemp == InvestorConst.TEMP.YES) || (isGranted([PermissionCoreConst.CoreKHCN_TKCK]) && isTemp == InvestorConst.TEMP.NO)">
+			<ng-template pTemplate="header">
+				<i class="pi pi-credit-card mr-2"></i>
+				<span  pTooltip="Tài khoản chứng khoán">TK chứng khoán</span>
+			</ng-template>
+			<app-investor-stock [investorDetail]="investor" *ngIf="tabViewActive.taiKhoanChungKhoan"></app-investor-stock>
+		</p-tabPanel>
+		<!-- QUẢN LÝ TÀI KHOẢN -->
+		<p-tabPanel [header]="'quanLyTaiKhoan'" *ngIf="(isGranted([PermissionCoreConst.CoreKHCN_Account]) && isTemp == InvestorConst.TEMP.NO)">
+			<ng-template pTemplate="header">
+				<i class="pi pi-user mr-2"></i>
+				<span> Tài khoản </span>
+			</ng-template>
+			<app-investor-account *ngIf="tabViewActive.quanLyTaiKhoan"></app-investor-account>
+		</p-tabPanel>
+		<!-- FILE DINH KEM -->
+		<p-tabPanel [header]="'fileDinhKem'" *ngIf="(isGranted([PermissionCoreConst.CoreDuyetKHCN_GiayTo]) && isTemp == InvestorConst.TEMP.YES) || (isGranted([PermissionCoreConst.CoreKHCN_GiayTo]) && isTemp == InvestorConst.TEMP.NO)">
+			<ng-template pTemplate="header">
+				<i class="pi pi-folder-open mr-2"></i>
+				<span> QL file </span>
+			</ng-template>
+			<app-investor-file [investorFile]="investor" *ngIf="tabViewActive.fileDinhKem"> </app-investor-file>
+		</p-tabPanel>
+		<!-- ĐỊA CHỈ LIÊN HỆ -->
+		<p-tabPanel [header]="'diaChiLienHe'" *ngIf="(isGranted([PermissionCoreConst.CoreDuyetKHCN_DiaChi]) && isTemp == InvestorConst.TEMP.YES) || (isGranted([PermissionCoreConst.CoreKHCN_DiaChi]) && isTemp == InvestorConst.TEMP.NO)">
+			<ng-template pTemplate="header">
+				<i class="pi pi-map-marker mr-2"></i>
+				<span> Đ/c liên hệ </span>
+			</ng-template>
+			<!-- *ngIf="activeIndex == 1" -->
+			<app-investor-contact-address [investorDetail]="investor" *ngIf="tabViewActive.diaChiLienHe"></app-investor-contact-address>
+		</p-tabPanel>
+		<!-- CHỨNG MINH NHÀ ĐẦU TƯ CHUYÊN NGHIỆP -->
+		<p-tabPanel [header]="'chungMinhNDTCN'" *ngIf="isTemp == InvestorConst.TEMP.NO && isGranted([PermissionCoreConst.CoreKHCN_NDTCN])">
+			<ng-template pTemplate="header">
+				<i class="pi pi-id-card mr-2"></i>
+				<span pTooltip="Chứng minh nhà đầu tư chuyên nghiệp"> Chứng minh NĐTCN</span>
+			</ng-template>
+			<!-- *ngIf="activeIndex == 1" -->
+			<app-investor-professional [investorDetail]="investor" *ngIf="tabViewActive.chungMinhNDTCN"></app-investor-professional>
+		</p-tabPanel>
+		<!-- TƯ VẤN VIÊN -->
+		<p-tabPanel [header]="'tuVanVien'" *ngIf="isTemp == InvestorConst.TEMP.NO && isGranted([PermissionCoreConst.CoreKHCN_TuVanVien])">
+			<ng-template pTemplate="header">
+				<i class="pi pi-users mr-2"></i>
+				<span pTooltip=""> Tư vấn viên</span>
+			</ng-template>
+			<!-- *ngIf="activeIndex == 1" -->
+			<app-investor-sale [investorDetail]="investor" *ngIf="tabViewActive.tuVanVien"></app-investor-sale>
+		</p-tabPanel>
+		<!-- NGƯỜI GIỚI THIỆU -->
+		<p-tabPanel [header]="'nguoiGioiThieu'" *ngIf="isTemp == InvestorConst.TEMP.NO && isGranted([PermissionCoreConst.CoreKHCN_NguoiGioiThieu])">
+			<ng-template pTemplate="header">
+				<i class="pi pi-user-plus mr-2"></i>
+				<span pTooltip=""> Người giới thiệu</span>
+			</ng-template>
+			<app-investor-referral [investorDetail]="investor" *ngIf="tabViewActive.nguoiGioiThieu"></app-investor-referral>
+		</p-tabPanel>
+
+		
+	</p-tabView>
+	<!--  -->
+	
+	<!-- EKYC -->
+	<app-create-investor-ekyc *ngIf="modalDialogEkyc" [(visible)]="modalDialogEkyc" [type]="MODAL_EKYC_TYPE.ADD_IDENTIFICATION"
+		[investorGroupId]="investor.investorGroupId" [investorId]="investor.investorId" [isTemp]="isTemp"
+		(onSaveInvestor)="onSaveIdentification()">
+	</app-create-investor-ekyc>
+	<!-- VIEW IMAGE -->
+	<app-invesor-view-image *ngIf="viewImage.modalVisible" [(visible)]="viewImage.modalVisible" [imageUrl]="viewImage.url">
+	</app-invesor-view-image>
+	<!-- CHECK FACE -->
+	<p-dialog 
+		[(visible)]="modalDialog" [style]="{ width: '1000px', height: '600px'}" [header]="'Tải lên gương mặt'" [modal]="true" class="p-fluid z-3"
+	 	(onShow)="resetForm()">
+		<ng-template pTemplate="content">
+			<div class="card pt-0">
+				<!-- ẢNH -->
+				<div id="block-image" class="grid formgrid">
+					<div class="flex flex-row justify-content-center" style="width: 100%">
+						<app-investor-image [idInput]="'input-check-face'" [idImage]="'image-check-face'"
+							[imageHeight]="auto"
+							[(image)]="checkImage">
+						</app-investor-image>
+					</div>
+				</div>
+			</div>
+		</ng-template>
+		<ng-template pTemplate="footer">
+			<button  pButton pRipple label="Làm lại" icon="pi pi-undo"class="p-button-text" (click)="undo()" [disabled]="isLoading"></button>
+			<button 
+				pButton pRipple [label]="saveLabel()" icon="pi pi-check" class="p-button-text" [disabled]="submitted"
+				(click)="onSave()" (onChangeImage)="checkFace()" [disabled]="isLoading">
+			</button>
+		</ng-template>
+	</p-dialog>
+</div>

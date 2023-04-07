@@ -1,0 +1,67 @@
+<div class="grid pt-0">
+    <div class="col-12">
+        <div class="card pt-0">
+            <p-table #contractorTable [value]="rows" [loading]="isLoading" [rowHover]="true" [paginator]="false"
+                responsiveLayout="scroll" dataKey="code" [scrollable]="true"
+                scrollHeight="240px" styleClass="mt-3 custom-table">
+                <ng-template pTemplate="caption">
+                    <div class="">
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input 
+                                pInputText type="text" placeholder="Tìm kiếm..." style="width: 350px;"
+                                [(ngModel)]="keyword" (input)="changeKeyword($event)" 
+                            />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="min-width: 12rem;">Mã doanh nghiệp </th>
+                        <th style="min-width: 20rem;"> Tên doanh nghiệp </th>
+                        <th style="min-width: 12rem;">Tên viết tắt </th>
+                        <th style="min-width: 20rem;">Thư điện tử </th>
+                        <th style="min-width: 12rem;">Số điện thoại </th>
+                        <th style="min-width: 30rem;">Địa chỉ </th>
+                        <th style="min-width: 12rem;">Người đại diện </th>
+                        <th style="min-width: 10rem;">Chức vụ </th>
+                        <th style="width: 8rem;; justify-content: center;" pFrozenColumn alignFrozen="right"> Thao tác
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row let-expanded="expanded">
+                    <tr>
+                        <td style="min-width: 12rem;"> {{ row.code }} </td>
+                        <td style="min-width: 20rem;"> {{ row.name }} </td>
+                        <td style="min-width: 12rem;"> {{ row.shortName }} </td>
+                        <td style="min-width: 20rem;"> {{ row.email }} </td>
+                        <td style="min-width: 12rem;"> {{ row.phone }} </td>
+                        <td style="min-width: 30rem;"> {{ row.address }} </td>
+                        <td style="min-width: 12rem;"> {{ row.repName }} </td>
+                        <td style="min-width: 10rem;"> {{ row.repPosition }} </td>
+                        <td style="width: 8rem; justify-content: center;" pFrozenColumn alignFrozen="right">
+                            <div class="flex">
+                                <button 
+                                    pButton pRipple type="button" icon="pi pi-check"
+                                    class="p-button-rounded mr-2 mb-2"
+                                    (click)="isChoose(row.businessCustomerId)">
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="7">Không có dữ liệu.</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="loadingbody">
+                    <tr>
+                        <td colspan="7"> Đang tải dữ liệu ... </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>

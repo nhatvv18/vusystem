@@ -7,6 +7,7 @@ using System.Text;
 using VU.SeverSystem.Domain.Implements;
 using VU.SeverSystem.Domain.Interfaces;
 using VU.SeverSystem.Entities.MapperProfiles;
+using VU.SeverSystem.Entities.Setting;
 using VU.SeverSystem.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,6 +18,10 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<VUDbContext>(options => {
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+builder.Services.Configure<FileConfig>(builder.Configuration.GetSection("FileConfig:File"));
+builder.Services.Configure<ImageConfig>(builder.Configuration.GetSection("FileConfig:Image"));
+builder.Services.Configure<IdFileConfig>(builder.Configuration.GetSection("FileConfig:IdFile"));
 
 //Config Automapper
 builder.Services.AddAutoMapper(typeof(MapperProfile));
@@ -80,6 +85,10 @@ builder.Services.AddAuthentication(options =>
 
 // Add Scoped
 builder.Services.AddScoped<IUsersServices, UsersServices>();
+builder.Services.AddScoped<IInvestorsServices, InvestorsServices>();
+builder.Services.AddScoped<IBanksServices, BanksServices>();
+builder.Services.AddScoped<IFileServices, FileServices>();
+builder.Services.AddScoped<IInvestorIdentificationServices, InvestorIdentificationServices>();
 
 builder.Services.AddCors(p => p.AddPolicy("MyCors", build =>
 {

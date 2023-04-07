@@ -1,0 +1,27 @@
+<div class="grid p-fluid">
+    <div class="col-12 md:col-12">
+        <div class="field mb-0">
+            <label htmlFor="nation"> Chọn sale (<span class="required-field"> * </span>) </label>
+            <p-dropdown 
+                [filter]="true" [filterBy]="'fullName'" 
+                optionValue="saleId" name="saleId" optionLabel="fullName" appendTo="body"
+                [options]="[]" [autoDisplayFirst]="false"
+                [(ngModel)]="sale.saleId">
+            </p-dropdown>         
+        </div>
+    </div>
+    <div class="col-12 md:col-12">
+        <div class="field mb-0">
+            <label> Chức vụ (<span class="required-field"> * </span>) </label>
+            <p-dropdown 
+                optionValue="code" name="code" optionLabel="name" appendTo="body"
+                [options]="SaleConst.types" [autoDisplayFirst]="true"
+                [(ngModel)]="sale.saleType">
+            </p-dropdown>         
+        </div>
+    </div>
+</div>
+<div class="p-dialog-footer pr-0" style="width: 100%; position: fixed; left: 0; bottom: 0;">
+    <button pButton pRipple label="Hủy bỏ" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject" (click)="close()"></button>
+    <button pButton pRipple label="Thêm vào phòng ban" icon="pi pi-check" class="p-button-text p-confirm-dialog-approve" [disabled]="!validForm() || submitted" (click)="save()"></button>
+</div>

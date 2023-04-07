@@ -1,0 +1,18 @@
+<div class="grid p-fluid">
+    <div class="col-12 md:col-12">
+        <div class="field mb-0">
+            <label htmlFor="nation"> Chọn sale (<span class="required-field"> * </span>) </label>
+            <p-dropdown
+                emptyMessage="Không có dữ liệu" 
+                [filter]="true" [filterBy]="'fullName'" 
+                optionValue="saleId" name="saleId" optionLabel="fullName" appendTo="body"
+                [options]="sales" [autoDisplayFirst]="false"
+                [(ngModel)]="saleManager.saleId">
+            </p-dropdown>         
+        </div>
+    </div>
+</div>
+<div class="p-dialog-footer pr-0" style="width: 100%; position: fixed; left: 0; bottom: 0;">
+    <button pButton pRipple label="Hủy bỏ" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject" (click)="close()"></button>
+    <button pButton pRipple label="Lưu" icon="pi pi-check" class="p-button-text p-confirm-dialog-approve" [disabled]="!validForm() || submitted" (click)="save()"></button>
+</div>

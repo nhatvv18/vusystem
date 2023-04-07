@@ -73,12 +73,12 @@ export class AppMainComponent implements OnInit {
 
     ngOnInit(): void {
         this.isShow = false;
-        this._userService.getAllPermission().subscribe(res => {
-            this.isShow = true;
-            this.permissionsMenu = res.data;
-            // console.log("permissionsMenu=-----",this.permissionsMenu);
+        // this._userService.getAllPermission().subscribe(res => {
+        //     this.isShow = true;
+        //     this.permissionsMenu = res.data;
+        //     // console.log("permissionsMenu=-----",this.permissionsMenu);
             
-        });
+        // });
     }
 
     onLayoutClick() {

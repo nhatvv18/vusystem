@@ -1,0 +1,111 @@
+<app-loading-page *ngIf="isLoading"></app-loading-page>
+
+<div class="grid p-fluid {{ isLoading ? 'b-loading' : '' }}">
+    <div class="pb-0 field col-12 mb-0 md:col-9 mb-0">
+        <label class="title-info">Tên khách hàng</label>
+        <input [disabled]="true" pInputText [value]="(customerInfo?.fullname || customer?.name) ?? null" class="custom-input-disabled"/>
+    </div>
+    <div class="col-12 md:col-3">
+        <div class="field mb-0">
+            <label style="color: white;"> Tìm kiếm </label>
+            <p-button label="Tìm kiếm khách hàng" icon="pi pi-search" (onClick)="filterCustomer()"></p-button>
+        </div>
+    </div>
+    <div class="pb-0 field col-12 mb-0 md:col-3 mb-0">
+        <label class="title-info">Số điện thoại</label>
+        <input [disabled]="true" pInputText [value]="customer?.phone ?? null" class="custom-input-disabled"/>
+    </div>
+    <div class="pb-0 field col-12 mb-0 md:col-6 mb-0">
+        <label class="title-info">Email</label>
+        <input [disabled]="true" pInputText [value]="customer?.email ?? null" class="custom-input-disabled"/>
+    </div>
+
+    <div class="pb-0 field col-12 mb-0 md:col-3 mb-0">
+        <label class="title-info" *ngIf="!customerInfo?.idNo && !customer?.taxCode">Mã số</label>
+        <label class="title-info" *ngIf="customerInfo?.idNo">Số CMND/CCCD</label>
+        <label class="title-info" *ngIf="customer?.taxCode">Mã số thuế</label>
+        <input [disabled]="true" pInputText value="{{ customerInfo?.idNo ?? customer?.taxCode }}" class="custom-input-disabled"/>
+    </div>
+
+    <div class="field mb-0 col-12 md:col-12">
+        <label class="title-info">Địa chỉ</label>
+        <textarea [disabled]="true" pInputText  value="{{ customerInfo?.placeOfResidence ?? customer?.address }}" class="custom-input-disabled" [rows]="2"></textarea>
+    </div>
+    
+    <div class="col-12 md:col-6 mt-3" *ngIf="customerInfo?.idFrontImageUrl">
+        <div class="field mb-0 text-center">
+            <p-image [src]="baseUrlApi + customerInfo?.idFrontImageUrl" alt="Image" [preview]="true" [imageStyle]="{'max-height':'250px','width':'auto', 'padding': '10px', 'border': '2px dashed gray'}"></p-image>
+            <br>
+            <label> Giấy tờ mặt trước </label>
+        </div>
+    </div>
+    <div class="col-12 md:col-6 mt-3" *ngIf="customerInfo?.idBackImageUrl">
+        <div class="field mb-0 text-center">
+            <p-image [src]="baseUrlApi + customerInfo?.idBackImageUrl" alt="Image" [preview]="true" [imageStyle]="{'max-height':'250px','width':'auto', 'padding': '10px', 'border': '2px dashed gray'}"></p-image>
+            <br>   
+            <label> Giấy tờ mặt sau </label>
+        </div>
+    </div>
+    
+    <div class="col-12 md:col-12 title-group-input">
+        <h6 class="mb-0"> Thông tin sale </h6>
+    </div>
+
+    <div class="col-12 md:col-3">
+        <div class="field mb-0">
+            <label> Mã nhân viên <span class="required-field"> * </span> </label>
+            <input pInputText [(ngModel)]="sale.employeeCode"/>         
+        </div>
+    </div>
+    <div class="col-12 md:col-3">
+        <div class="field mb-0">
+            <label> Loại sale <span class="required-field"> * </span> </label>
+            <p-dropdown 
+                optionValue="code" name="saleType" optionLabel="name" appendTo="body"
+                [options]="SaleConst.types" [autoDisplayFirst]="true" (onChange)="changeSaleType($event.value)"
+                [(ngModel)]="sale.saleType">
+            </p-dropdown>         
+        </div>
+    </div>
+    <div class="col-12 md:col-6">
+        <div class="field mb-0">
+            <label> Thuộc phòng ban <span class="required-field"> * </span> </label>
+            <p-dropdown
+                emptyMessage="Không có dữ liệu" 
+                [filter]="true" [filterBy]="'departmentName'" 
+                optionValue="departmentId" name="departmentId" optionLabel="departmentName" appendTo="body"
+                [options]="departments" [autoDisplayFirst]="false"
+                [(ngModel)]="sale.departmentId" (onChange)="changeDepartment($event.value)">
+            </p-dropdown>        
+        </div>
+    </div>
+    
+    <div class="col-12 md:col-6">
+        <div class="field mb-0">
+            <label> Người quản lý </label>
+            <p-dropdown
+                class="custom-input-disabled"
+                emptyMessage="Không có dữ liệu"
+                [filter]="true" [filterBy]="'fullName'"  
+                optionValue="saleId" name="saleParentId" optionLabel="fullName" appendTo="body"
+                [options]="managers" [autoDisplayFirst]="false"
+                [disabled]="sale.saleType !== SaleConst.TYPE_COLLABORATOR"
+                [(ngModel)]="sale.saleParentId">
+            </p-dropdown>         
+        </div>
+    </div>
+    <div class="col-12 md:col-6">
+        <div class="field mb-0">
+            <label> Tài khoản ngân hàng <span class="required-field"> * </span> </label>
+            <p-dropdown
+                optionValue="id" name="id" optionLabel="labelName" appendTo="body"
+                [options]="listBank" [autoDisplayFirst]="true"
+                [(ngModel)]="bankAccId">
+            </p-dropdown>
+        </div>
+    </div>
+</div>
+<div class="p-dialog-footer" style="width: 100%; position: fixed; left: 0; bottom: 0;">
+    <button pButton pRipple label="Hủy bỏ" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject" (click)="close()"></button>
+    <button pButton pRipple label="Lưu" icon="pi pi-check" class="p-button-text p-confirm-dialog-approve" [disabled]="!validForm() || submitted" (click)="save()"></button>
+</div>

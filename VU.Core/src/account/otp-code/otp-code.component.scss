@@ -1,0 +1,228 @@
+Html {
+  font-size: 10px;
+  font-family: "Mulish";
+}
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+.login-content {
+  display: flex;
+}
+.login-content-left {
+  position: relative;
+  background-color: #fff;
+  min-height: 100vh;
+  &-main {
+    display: flex;
+    flex-direction: column;
+    margin-top: 15%;
+    align-items: center;
+  }
+  .logo {
+    margin-bottom: 2rem;
+  }
+  .login-title {
+    h2 {
+      margin-bottom: 2rem;
+    }
+    &-sub {
+      font-family: "Mulish";
+      font-style: normal;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 18px;
+      color: #76809b;
+    }
+  }
+  .login-form {
+    .phone_login,
+    .pass_login {
+      font-family: "Mulish";
+      font-style: normal;
+      font-weight: 600;
+      font-size: 14px;
+      line-height: 20px;
+      display: flex;
+      align-items: center;
+      color: #212633;
+      margin-bottom: 0.5rem;
+    }
+    #username,
+    #password {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding: 8px 8px 8px 16px;
+      gap: 8px;
+      width: 420px;
+      height: 40px;
+      background: #ffffff;
+      border: 1px solid rgba(0, 0, 0, 0.1);
+      border-radius: 8px;
+    }
+    .login-handle {
+      margin-top: 1rem;
+      margin-bottom: 2rem;
+      display: flex;
+      .remember-and-forgetPass {
+        display: flex;
+      }
+      input[type="checkbox"] {
+        background: #ffffff;
+        border-radius: 4px;
+      }
+      .remember_pass {
+        font-family: "Mulish";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+        display: flex;
+        align-items: center;
+        color: rgba(0, 0, 0, 0.7);
+        margin-left: 0.5rem;
+      }
+    }
+    .otp-code {
+      display: flex;
+      flex-direction: row;
+      align-items: flex-start;
+      padding: 0px;
+      gap: 12px;
+      width: 420px;
+      height: 58px;
+      &-number {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 13px 18px;
+        gap: 10px;
+        width: 60px;
+        height: 58px;
+        background: #ffffff;
+        border: 1px solid #dbe0e6;
+        border-radius: 8px;
+        &-is {
+          font-family: "Mulish";
+          font-style: normal;
+          font-weight: 600;
+          font-size: 20px;
+          line-height: 32px;
+          display: flex;
+          align-items: center;
+          text-align: center;
+          color: #0e1c45;
+        }
+      }
+    }
+    .get-code-in-email {
+      font-family: "Mulish";
+      font-style: normal;
+      font-weight: 600;
+      font-size: 16px;
+      line-height: 24px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      text-align: center;
+      text-decoration-line: underline;
+      color: #0e1c45;
+    }
+    .buttons {
+      .login-button {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 8px 16px;
+        gap: 10px;
+        width: 420px;
+        height: 40px;
+        background: #5346e0;
+        border-radius: 8px;
+        border: none;
+        cursor: pointer;
+      }
+      .help-button {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        padding: 8px 7rem 8px 6rem;
+        gap: 8px;
+        width: 420px;
+        height: 40px;
+        background: #ffffff;
+        border: 1px solid rgba(0, 0, 0, 0.1);
+        border-radius: 8px;
+        color: rgba(0, 0, 0, 0.7);
+      }
+      .button-text {
+        font-family: "Mulish";
+        font-style: normal;
+        font-weight: 600;
+        font-size: 14px;
+        line-height: 24px;
+        display: flex;
+        align-items: center;
+        text-align: center;
+        color: #ffffff;
+      }
+      .help-text {
+        font-family: "Mulish";
+        font-style: normal;
+        font-weight: 400;
+        font-size: 14px;
+        line-height: 20px;
+        display: flex;
+        align-items: center;
+        color: rgba(0, 0, 0, 0.7);
+      }
+    }
+  }
+  .no-copy-right-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 4rem;
+  }
+  .no-copy-right {
+    position: absolute;
+    bottom: 1rem;
+    font-family: "Mulish";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    display: flex;
+    align-items: center;
+    color: #525b73;
+  }
+}
+.login-content-right {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f3f5f9;
+  min-height: 100vh;
+  position: relative;
+
+  .ellipse-blur {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 50%;
+    background: radial-gradient(
+      111.89% 213.6% at 24.99% 43.36%,
+      rgba(243, 245, 249, 0.4) 0%,
+      rgba(223, 226, 255, 0.2189) 74.98%,
+      rgba(107, 122, 255, 0.4) 100%
+    );
+    backdrop-filter: blur(15.276px);
+    border-radius: 8px;
+    z-index: 1;
+  }
+}

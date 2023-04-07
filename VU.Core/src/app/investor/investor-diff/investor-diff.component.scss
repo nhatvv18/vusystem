@@ -1,0 +1,13 @@
+
+::ng-deep .p-card.b-custom{
+    box-shadow: none !important;  
+    padding: 0 1rem;
+}
+
+::ng-deep .p-card .p-card-body{
+    padding: 0 !important;
+}
+
+.custom-tabview .p-tabview-panels .p-element:not(:first-child) .p-tabview-panel {
+    min-height: 43vh;
+}

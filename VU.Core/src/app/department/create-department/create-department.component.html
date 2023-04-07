@@ -1,0 +1,34 @@
+<div class="grid p-fluid">
+    <div class="col-12 md:col-12 pd-0" >
+        <div class="field mb-0" *ngIf="department.departmentId">
+            <label> Trực thuộc phòng ban </label>
+            <!-- <input pInputText [value]="parentInfo?.departmentName" [disabled]="true" class="custom-input-disabled"/>     -->
+            <p-dropdown 
+                [(ngModel)]="departmentParentId" [options]="departments" optionLabel="departmentName"
+                [filter]="true" [autoDisplayFirst]="false" optionValue="departmentId"  [showClear]="true">
+            </p-dropdown>    
+        </div>
+    </div>
+    <div class="col-12 md:col-12" *ngIf="department.departmentId">
+        <div class="field mb-0">
+            <label> Quản lý </label>
+            <input [disabled]="true" pInputText value="{{ department?.manager?.investorIdentification?.fullname ?? department?.managerBusinessCustomer?.name }}" class="custom-input-disabled"/>         
+        </div>
+    </div>
+    <div class="col-12 md:col-12">
+        <div class="field mb-0">
+            <label> Tên phòng ban (<span class="required-field"> * </span>) </label>
+            <input pInputText [(ngModel)]="department.departmentName"/>         
+        </div>
+    </div>
+    <div class="col-12 md:col-12">
+        <div class="field mb-0">
+            <label> Địa chỉ </label>
+            <textarea pInputTextarea [(ngModel)]="department.departmentAddress" rows="2"></textarea>         
+        </div>
+    </div>
+</div>
+<div class="p-dialog-footer" style="width: 100%; position: fixed; left: 0; bottom: 0;">
+    <button pButton pRipple label="Hủy bỏ" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject" (click)="close()"></button>
+    <button pButton pRipple label="Lưu" icon="pi pi-check" class="p-button-text p-confirm-dialog-approve" [disabled]="!validForm() || submitted" (click)="save()"></button>
+</div>

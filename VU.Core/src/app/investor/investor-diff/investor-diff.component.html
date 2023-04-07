@@ -1,0 +1,533 @@
+<app-loading-page *ngIf="isLoadingPage"></app-loading-page>
+<p-card styleClass="b-custom">
+    <ng-template pTemplate="content">
+        <div class="{{ isLoadingPage ? 'b-loading' : '' }}">
+            <p-tabView styleClass="custom-tabview" [(activeIndex)]="activeIndex" (onChange)="changeTabview($event.index)">
+                <p-tabPanel>
+                    <ng-template pTemplate="header">
+                        <span> Thông tin chung </span>
+                    </ng-template>
+                    <p-table #userTable [value]="[diffDetail]" [loading]="isLoading" [rowHover]="true" 
+                        [scrollable]="true" [paginator]="false" responsiveLayout="scroll" dataKey="code"
+                        styleClass="custom-table">
+                        <ng-template pTemplate="header" let-row>
+                            <h6 *ngIf="getApprove?.userRequest">Người trình duyệt: {{ getApprove?.userRequest }} </h6>
+                            <h6 *ngIf="getApprove?.userApprove != 'undefined - undefined'">Người duyệt: {{ getApprove?.userApprove }} </h6>
+                            <tr>
+                                <th style="width: 10%;"> # </th>
+                                <th style="width: 40%;">
+                                    <p-tag styleClass="mr-2 text-base" styleClass = "bg-orange-500 text-base">
+                                        Dữ liệu gốc 
+                                    </p-tag>
+                                </th>
+                                <th style="width: 10%;">  </th>
+                                <th style="width: 40%;">
+                                    <p-tag styleClass="mr-2 text-base"  styleClass = "bg-cyan-500 text-base">
+                                        Dữ liệu thay đổi  
+                                    </p-tag> 
+                                </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-row>
+                            <tr *ngIf="diffDetail.investor?.TaxCode?.newValue != null">
+                                <td style="width: 10%;"> Mã số thuế </td>
+                                <td style="width: 40%;">
+                                    <div>
+                                        <div class="b-wrapper-info b-cut-text">
+                                            {{row?.investor?.TaxCode?.oldValue }} 
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="width: 10%;"><i class="pi pi-arrow-circle-right"></i></td>
+                                <td style="width: 40%;">
+                                    <div>
+                                        <div class="b-wrapper-info b-cut-text">
+                                            {{row?.investor?.TaxCode?.newValue }} 
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr *ngIf="diffDetail.investor?.ReferralCodeSelf?.newValue != null">
+                                <td style="width: 10%;"> Mã giới thiệu </td>
+                                <td style="width: 40%;">
+                                    <div>
+                                        <div class="b-wrapper-info b-cut-text">
+                                            {{row?.investor?.ReferralCodeSelf?.oldValue }} 
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="width: 10%;"><i class="pi pi-arrow-circle-right"></i></td>
+                                <td style="width: 40%;">
+                                    <div>
+                                        <div class="b-wrapper-info b-cut-text">
+                                            {{row?.investor?.ReferralCodeSelf?.newValue }} 
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr *ngIf="diffDefaultIdentification?.Fullname?.newValue != null">
+                                <td style="width: 10%;"> Họ tên </td>
+                                <td style="width: 40%;">
+                                    <div>
+                                        <div class="b-wrapper-info b-cut-text">
+                                            {{diffDefaultIdentification?.Fullname?.oldValue }} 
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="width: 10%;"><i class="pi pi-arrow-circle-right"></i></td>
+                                <td style="width: 40%;">
+                                    <div>
+                                        <div class="b-wrapper-info b-cut-text">
+                                            {{diffDefaultIdentification?.Fullname?.newValue }} 
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr *ngIf="diffDefaultIdentification?.DateOfBirth?.newValue != null">
+                                <td style="width: 10%;"> Ngày sinh </td>
+                                <td style="width: 40%;">
+                                    <div>
+                                        <div class="b-wrapper-info b-cut-text">
+                                            {{diffDefaultIdentification?.DateOfBirth?.oldValue | dateview }} 
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="width: 10%;"><i class="pi pi-arrow-circle-right"></i></td>
+                                <td style="width: 40%;">
+                                    <div>
+                                        <div class="b-wrapper-info b-cut-text">
+                                            {{diffDefaultIdentification?.DateOfBirth?.newValue | dateview }}
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr *ngIf="diffDefaultIdentification?.IdDate?.newValue != null">
+                                <td style="width: 10%;"> Ngày cấp </td>
+                                <td style="width: 40%;">
+                                    <div>
+                                        <div class="b-wrapper-info b-cut-text">
+                                            {{diffDefaultIdentification?.IdDate?.oldValue | dateview }} 
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="width: 10%;"><i class="pi pi-arrow-circle-right"></i></td>
+                                <td style="width: 40%;">
+                                    <div>
+                                        <div class="b-wrapper-info b-cut-text">
+                                            {{diffDefaultIdentification?.IdDate?.newValue | dateview }} 
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr *ngIf="diffDefaultIdentification?.IdExpiredDate?.newValue != null">
+                                <td style="width: 10%;"> Ngày hết hạn </td>
+                                <td style="width: 40%;">
+                                    <div>
+                                        <div class="b-wrapper-info b-cut-text">
+                                            {{diffDefaultIdentification?.IdExpiredDate?.oldValue | dateview }} 
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="width: 10%;"><i class="pi pi-arrow-circle-right"></i></td>
+                                <td style="width: 40%;">
+                                    <div>
+                                        <div class="b-wrapper-info b-cut-text">
+                                            {{diffDefaultIdentification?.IdExpiredDate?.newValue | dateview }} 
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr *ngIf="diffDefaultIdentification?.IdIssuer?.newValue != null">
+                                <td style="width: 10%;"> Nơi cấp </td>
+                                <td style="width: 40%;">
+                                    <div>
+                                        <div class="b-wrapper-info b-cut-text">
+                                            {{diffDefaultIdentification?.IdIssuer?.oldValue }} 
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="width: 10%;"><i class="pi pi-arrow-circle-right"></i></td>
+                                <td style="width: 40%;">
+                                    <div>
+                                        <div class="b-wrapper-info b-cut-text">
+                                            {{diffDefaultIdentification?.IdIssuer?.newValue }} 
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr *ngIf="diffDefaultIdentification?.IdNo?.newValue != null">
+                                <td style="width: 10%;"> Mã số </td>
+                                <td style="width: 40%;">
+                                    <div>
+                                        <div class="b-wrapper-info b-cut-text">
+                                            {{diffDefaultIdentification?.IdNo?.oldValue }} 
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="width: 10%;"><i class="pi pi-arrow-circle-right"></i></td>
+                                <td style="width: 40%;">
+                                    <div>
+                                        <div class="b-wrapper-info b-cut-text">
+                                            {{diffDefaultIdentification?.IdNo?.newValue }} 
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr *ngIf="diffDefaultIdentification?.Nationality?.newValue != null">
+                                <td style="width: 10%;"> Quốc gia </td>
+                                <td style="width: 40%;">
+                                    <div>
+                                        <div class="b-wrapper-info b-cut-text">
+                                            {{diffDefaultIdentification?.Nationality?.oldValue }} 
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="width: 10%;"><i class="pi pi-arrow-circle-right"></i></td>
+                                <td style="width: 40%;">
+                                    <div>
+                                        <div class="b-wrapper-info b-cut-text">
+                                            {{diffDefaultIdentification?.Nationality?.newValue }} 
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr *ngIf="diffDefaultIdentification?.PlaceOfOrigin?.newValue != null">
+                                <td style="width: 10%;"> Nguyên quán </td>
+                                <td style="width: 40%;">
+                                    <div>
+                                        <div class="b-wrapper-info b-cut-text">
+                                            {{diffDefaultIdentification?.PlaceOfOrigin?.oldValue }} </div>
+                                    </div>
+                                </td>
+                                <td style="width: 10%;"><i class="pi pi-arrow-circle-right"></i></td>
+                                <td style="width: 40%;">
+                                    <div>
+                                        <div class="b-wrapper-info b-cut-text">
+                                            {{diffDefaultIdentification?.PlaceOfOrigin?.newValue }} </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr *ngIf="diffDefaultIdentification?.PlaceOfResidence?.newValue != null">
+                                <td style="width: 10%;"> Địa chỉ thường trú </td>
+                                <td style="width: 40%;">
+                                    <div>
+                                        <div class="b-wrapper-info b-cut-text">
+                                            {{diffDefaultIdentification?.PlaceOfResidence?.oldValue }} 
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="width: 10%;"><i class="pi pi-arrow-circle-right"></i></td>
+                                <td style="width: 40%;">
+                                    <div>
+                                        <div class="b-wrapper-info b-cut-text">
+                                            {{diffDefaultIdentification?.PlaceOfResidence?.newValue }} 
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr *ngIf="isPhone == true">
+                                <td style="width: 10%;"> Số điện thoại </td>
+                                <td style="width: 40%;">
+                                    <div>
+                                        <div class="b-wrapper-info b-cut-text">
+                                            {{diffDetail?.investor?.Phone?.oldValue }} 
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="width: 10%;"><i class="pi pi-arrow-circle-right"></i></td>
+                                <td style="width: 40%;">
+                                    <div>
+                                        <div class="b-wrapper-info b-cut-text">
+                                            {{diffDetail?.investor?.Phone?.newValue }} 
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+
+                            <tr *ngIf="isEmail == true">
+                                <td style="width: 10%;"> Email </td>
+                                <td style="width: 40%;">
+                                    <div>
+                                        <div class="b-wrapper-info b-cut-text">
+                                            {{diffDetail?.investor?.Email?.oldValue }} 
+                                        </div>
+                                    </div>
+                                </td>
+                                <td style="width: 10%;"><i class="pi pi-arrow-circle-right"></i></td>
+                                <td style="width: 40%;">
+                                    <div>
+                                        <div class="b-wrapper-info b-cut-text">
+                                            {{diffDetail?.investor?.Email?.newValue }} 
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                    
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="6">
+                                    <div>
+                                        <div class="b-wrapper-info b-empty-data"> Không có dữ liệu </div>
+                                    </div>
+
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="loadingbody">
+                            <tr>
+                                <td colspan="7"> Đang tải dữ liệu ... </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                    <div *ngIf="isPhoneEmail != true">
+
+                        <h6 style="padding-top: 2rem;"> Giấy tờ thêm mới </h6>
+    
+                        <p-table #userTable selectionMode="multiple" responsiveLayout="scroll" 
+                            dataKey="id" styleClass="custom-table" [value]="diffListIdentification" [rowHover]="true" [paginator]="false"
+                            [scrollable]="true">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="min-width: 10rem;">Loại</th>
+                                    <th style="min-width: 15rem;">Mã số</th>
+                                    <th style="min-width: 10rem;">Ngày cấp</th>
+                                    <th style="min-width: 10rem;">Nơi cấp</th>
+                                    <th style="min-width: 10rem;">Ngày hết hạn</th>
+                                    <th style="min-width: 10rem;">Mặt trước</th>
+                                    <th style="min-width: 10rem;">Mặt sau</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+                                <tr>
+                                    <td style="min-width: 10rem;">{{ row.idType }}</td>
+                                    <td style="min-width: 15rem;">{{ row.idNo }}</td>
+                                    <td style="min-width: 10rem;">{{ row.idDate | dateview }}</td>
+                                    <td style="min-width: 10rem;">{{ row.idIssuer }}</td>
+                                    <td style="min-width: 10rem;">{{ row.idExpiredDate | dateview }}</td>
+                                    <td style="min-width: 10rem;">
+                                        <p-image [src]="row.idFrontImageUrl | baseapiurl"
+                                            imageClass="w-8rem h-6rem cursor-pointer"
+                                            (click)="openModalViewImage(row.idFrontImageUrl)">
+                                        </p-image>
+                                    </td>
+                                    <td style="min-width: 10rem;">
+                                        <p-image *ngIf="row.idType !== 'PASSPORT'" [src]="row.idBackImageUrl | baseapiurl"
+                                            (click)="openModalViewImage(row.idBackImageUrl)"
+                                            imageClass="w-8rem h-6rem cursor-pointer">
+                                        </p-image>
+                                    </td>
+    
+                                </tr>
+                            </ng-template>
+    
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="7">Không có dữ liệu.</td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="loadingbody">
+                                <tr>
+                                    <td colspan="7"> Đang tải dữ liệu ... </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+
+                    </div>
+                </p-tabPanel>
+
+                <p-tabPanel *ngIf="isPhoneEmail != true && isGranted([PermissionCoreConst.CoreDuyetKHCN_TKNH, PermissionCoreConst.CoreKHCN_TKNH])">
+                    <ng-template pTemplate="header">
+                        <span> Tài khoản ngân hàng </span>
+                    </ng-template>
+                    <div *ngIf="diffListBank.length > 0">
+                        <h6 style="padding-top: 2rem;"> Tài khoản ngân hàng thêm mới </h6>
+                        <p-table #userTable  responsiveLayout="scroll"  dataKey="code" scrollHeight="{{ (diffListBankDelete.length > 0) ? (screenHeight*0.3) : (screenHeight*0.4) + 'px' }}" styleClass="custom-table" [value]="diffListBank" [rowHover]="true" [paginator]="false" [scrollable]="true">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="width:12rem;"> Số tài khoản </th>
+                                    <th style="width:15rem;"> Tên tài khoản </th>
+                                    <th style="width:15rem;"> Tên ngân hàng </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+                                <tr>
+                        
+                                    <td style="width:12rem;"> {{ row.bankAccount }} </td>
+                                    <td style="width:15rem;"> {{ row.ownerAccount }} </td>
+                                    <td style="width:15rem;">{{row.coreFullBankName}}</td>
+                                </tr>
+                            </ng-template>
+    
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="7">Không có dữ liệu.</td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="loadingbody">
+                                <tr>
+                                    <td colspan="7"> Đang tải dữ liệu ... </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                    <div *ngIf="diffListBankDelete.length > 0">
+                        <h6 style="padding-top: 2rem;"> Xóa tài khoản ngân hàng </h6>
+                        <p-table #userTable  responsiveLayout="scroll"  dataKey="code" scrollHeight="{{ diffListBank.length > 0 ? (screenHeight*0.3) : (screenHeight*0.4) + 'px' }}" styleClass="custom-table" [value]="diffListBankDelete" [rowHover]="true" [paginator]="false" [scrollable]="true">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="width:12rem;"> Số tài khoản </th>
+                                    <th style="width:15rem;"> Tên tài khoản </th>
+                                    <th style="width:15rem;"> Tên ngân hàng </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+                                <tr>
+                        
+                                    <td style="width:12rem;"> {{ row.bankAccount }} </td>
+                                    <td style="width:15rem;"> {{ row.ownerAccount }} </td>
+                                    <td style="width:15rem;">{{row.coreFullBankName}}</td>
+                                </tr>
+                            </ng-template>
+    
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="7">Không có dữ liệu.</td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="loadingbody">
+                                <tr>
+                                    <td colspan="7"> Đang tải dữ liệu ... </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                    <div *ngIf="diffListBankUpdate.length > 0">
+                        <h6 style="padding-top: 2rem;"> Cập nhật tài khoản ngân hàng </h6>
+                        <p-table #userTable  responsiveLayout="scroll"  dataKey="code" scrollHeight="{{ diffListBank.length > 0 ? (screenHeight*0.3) : (screenHeight*0.4) + 'px' }}" styleClass="custom-table" [value]="diffListBankUpdate" [rowHover]="true" [paginator]="false" [scrollable]="true">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th style="width:12rem;"> Thay đổi </th>
+                                    <th style="width:15rem;"> Giá trị cũ </th>
+                                    <th style="width:15rem;"> Giá trị mới </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+                                <tr *ngIf="row.BankAccount">
+                                    <td style="width:12rem;"> Số tài khoản </td>
+                                    <td style="width:15rem;">{{ row.BankAccount.oldValue}}</td>
+                                    <td style="width:15rem;"> {{ row.BankAccount.newValue }} </td>
+                                </tr>
+                                <tr *ngIf="row.OwnerAccount">
+                                    <td style="width:12rem;"> Tên tài khoản </td>
+                                    <td style="width:15rem;">{{ row.OwnerAccount.oldValue}}</td>
+                                    <td style="width:15rem;"> {{ row.OwnerAccount.newValue }} </td>
+                                </tr>
+                            </ng-template>
+    
+                            <ng-template pTemplate="emptymessage">
+                                <tr>
+                                    <td colspan="7">Không có dữ liệu.</td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="loadingbody">
+                                <tr>
+                                    <td colspan="7"> Đang tải dữ liệu ... </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+
+                    <div *ngIf="diffListBankDelete.length == 0 && diffListBank.length == 0 && diffListBankUpdate.length == 0">
+                        <h3>Không có dữ liệu thay đổi</h3>
+                    </div>
+                    
+                </p-tabPanel>
+
+
+                <p-tabPanel *ngIf="isPhoneEmail != true && isGranted([PermissionCoreConst.CoreDuyetKHCN_DiaChi, PermissionCoreConst.CoreKHCN_DiaChi])">
+                    <ng-template pTemplate="header">
+                        <span> Địa chỉ liên hệ </span>
+                    </ng-template>
+                    <h6 style="padding-top: 2rem;"> Địa chỉ liên hệ thêm mới </h6>
+                    <p-table #userTable selectionMode="multiple" responsiveLayout="scroll"  dataKey="id" scrollHeight="{{ (screenHeight*0.65) + 'px' }}" styleClass="custom-table" [value]="diffListContactAddress" [rowHover]="true" [paginator]="false" [scrollable]="true">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th style="width:12rem;"> Địa chỉ cụ thể </th>
+                                <th style="width:15rem;"> Địa chỉ liên hệ </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+                            <tr>
+                    
+                                <td style="width:12rem;"> {{ row.detailAddress }} </td>
+                                <td style="width:15rem;"> {{ row.contactAddress }} </td>
+                            
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="7">Không có dữ liệu.</td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="loadingbody">
+                            <tr>
+                                <td colspan="7"> Đang tải dữ liệu ... </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-tabPanel>
+
+                <p-tabPanel *ngIf="isPhoneEmail != true && isGranted([PermissionCoreConst.CoreDuyetKHCN_TKCK, PermissionCoreConst.CoreKHCN_TKCK])"> 
+                    <ng-template pTemplate="header">
+                        <span> Tài khoản chứng khoán </span>
+                    </ng-template>
+                    <h6 style="padding-top: 2rem;"> Chứng khoán thêm mới </h6>
+                    <p-table #userTable selectionMode="multiple" responsiveLayout="scroll"  dataKey="id" scrollHeight="{{ (screenHeight*0.65) + 'px' }}" styleClass="custom-table" [value]="diffListStock" [rowHover]="true" [paginator]="false" [scrollable]="true">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th style="width:12rem;"> Số tài khoản </th>
+                                <!-- <th style="width:15rem;"> Tên tài khoản </th> -->
+                                <th style="width:15rem;"> Tên công ty chứng khoán </th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+                            <tr>
+                    
+                                <td style="width:12rem;"> {{ row.stockTradingAccount }} </td>
+                                <!-- <td style="width:15rem;"> {{ row.ownerAccount }} </td> -->
+                                <td style="width:15rem;">{{InvestorConst.getListStockName(row.securityCompany)}}</td>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="emptymessage">
+                            <tr>
+                                <td colspan="7">Không có dữ liệu.</td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="loadingbody">
+                            <tr>
+                                <td colspan="7"> Đang tải dữ liệu ... </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </p-tabPanel>
+            </p-tabView>
+
+        </div>
+    </ng-template>
+    <ng-template pTemplate="footer">
+    </ng-template>
+</p-card>

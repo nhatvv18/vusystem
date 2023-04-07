@@ -1,0 +1,20 @@
+<div class="grid p-fluid formgrid mt-5">
+	<div class="field col-12">
+		<label for="userName">Tên đăng nhập</label>
+		<input type="text" id="userName" name="userName" pInputText [(ngModel)]="user.userName" required autofocus />
+		<!-- <small class="ng-dirty ng-invalid" *ngIf="submitted && !user.userName"> => Nhập tên hiển thị!</small> -->
+	</div>
+	<div class="field col-12">
+		<label for="password"> Mật khẩu</label>
+		<input type="password" id="password" name="password" pPassword [(ngModel)]="user.password" required autofocus autocomplete="new-password" />
+		<!-- <small class="ng-dirty ng-invalid" *ngIf="submitted && !user.password"> => Nhập tên hiển thị!</small> -->
+	</div>
+	<div class="field col-12">
+		<label for="confirm-password">Nhập lại mật khẩu</label>
+		<input type="password" [class]="'ng-invalid ng-dirty'" id="confirm-password" name="confirmPassword" pPassword [(ngModel)]="user.confirmPassword" autofocus autocomplete="off" />
+	</div>
+</div>
+<div class="p-dialog-footer" style="width: 100%; position: fixed; left: 0; bottom: 0">
+	<button pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject" (click)="cancel()"></button>
+	<button pButton pRipple label="Đồng ý" icon="pi pi-check" class="p-button-text p-confirm-dialog-approve" [disabled]="!validForm()" (click)="save()"></button>
+</div>

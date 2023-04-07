@@ -1,0 +1,70 @@
+<p-toast [baseZIndex]="10000"></p-toast>
+<p-confirmDialog [style]="{width: 'auto'}" [baseZIndex]="10000"></p-confirmDialog>
+<div class="grid p-fluid" >
+    <div class="col-12 md:col-6" >
+        <div class="field">
+            <label htmlFor="code">Tên <span class="required-field"> * </span> </label>
+            <input [disabled]="view" type="text" id="code" name="code" pInputText [(ngModel)]="whiteListIP.name" maxlength="100"
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && !whiteListIP.code}" />
+        </div>
+    </div>
+    <div class="col-12 md:col-6">
+        <div class="field">
+            <label htmlFor="type">Loại <span class="required-field"> * </span> </label>
+            <p-dropdown [disabled]="view" appendTo="body" [options]="types"
+                dataValue="code" optionValue="code" name="type" optionLabel="name"
+                [(ngModel)]="whiteListIP.type" required autofocus
+                
+                (click)="resetValid('type')"></p-dropdown>
+        </div>
+    </div>
+    
+    <div class="col-12 md;col-12">
+        <p-table #pTable [value]="whiteListIP.whiteListIPDetails" dataKey="fakeId" [scrollable]="true" scrollHeight="30vh" styleClass="custom-table-border-none" isLoading="isLoading">
+            <ng-template pTemplate="caption">
+                <div class="flex justify-content-between flex-column sm:flex-row">
+                    <div class="">
+                        <button [disabled]="view" pButton pRipple label="Thêm chi tiết" icon="pi pi-plus"
+                            
+                            class="p-button-success mr-2" (click)="createWhileListDetail()"></button>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="header">
+                <tr>
+                    <th style="min-width: 5rem;"> Địa chỉ Ip bắt đầu </th>
+                    <th style="min-width: 5rem;"> Địa chỉ Ip kết thúc </th>
+                    <th style="min-width: 10rem; justify-content: center;" *ngIf="view != true"> Thao tác</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-whileListDetail let-index="rowIndex">
+                <tr>
+                    <td style="min-width: 5rem;">{{ whileListDetail.ipAddressStart }}</td>
+                    <td style="min-width: 5rem;">
+                        {{ whileListDetail.ipAddressEnd }} 
+                       
+                    </td>
+                    
+                    <td style="min-width: 10rem; justify-content: center;" *ngIf="view != true">
+                        <div class="flex" >
+                            <i  class="pi pi-ellipsis-h" (click)="menu.toggle($event)"></i>
+                            <p-menu  #menu [popup]="true" class="button-actions" [model]="listActionWhileListDetail[index]"
+                                appendTo="body">
+                            </p-menu>
+                        </div>
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+<div class="p-dialog-footer" style="width: 100%; position: fixed; left: 0; bottom: 0;">
+    <button *ngIf="view != true" pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject" (click)="close()"></button>
+    <button *ngIf="view == true" pButton pRipple label="Thoát" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject" (click)="close()"></button>
+    <button 
+    *ngIf="view != true"
+        pButton pRipple label="Lưu" icon="pi pi-check" class="p-button-text p-confirm-dialog-approve" [disabled]="!validForm() || submitted" (click)="save()">
+    </button>
+</div>
+
+         

@@ -1,0 +1,77 @@
+<div>
+    <div class="card b-page-detail" *ngIf="!isLoading">
+        <div class="p-fluid p-formgrid grid b-header">
+            <div class="col-12 md:col-12">
+                <!-- <h5 class="mb-5"> Thông tin cấu hình chữ ký số </h5> -->
+            </div>
+            <div class="col-12 md:col-8">
+                <h5 class="mb-0"> Thông tin cấu hình chữ ký số </h5>
+            </div>
+            <div class="col-12 md:col-4 b-actions">
+                <div class="text-right" *ngIf="!activeIndex">
+                    <p-button 
+                        *ngIf="isGranted([PermissionCoreConst.CoreCauHinhCKS_CapNhat])"
+                        styleClass="p-button custom-button "
+                        label="{{ labelButtonEdit }}" 
+                        icon="pi {{ isEdit ? 'pi-save' : 'pi-pencil' }}" 
+                        (click)="changeEdit()"> 
+                    </p-button>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 md:col-12">
+            <div class="card pt-0 pb-0 mb-0 mt-2 grid">
+                <div class="col-8">
+                    <div class="p-fluid p-formgrid grid">
+                        <div class="field mb-0 col-12 md:col-12">
+                            <label class="title-info {{ isEdit ? 'hightline-title' : '' }}"> Địa chỉ Server
+                            </label>
+                            <input 
+                                [disabled]="!isEdit" type="text" id="server" name="server" pInputText class="custom-input-disabled"
+                                [(ngModel)]="businessCustomerInfo.server"
+                                (click)="changeValue()" (keyup)="changeValue()"
+                            /> 
+                        </div>
+                        <div class="field mb-0 col-12 md:col-12">
+                            <label class="title-info {{ isEdit ? 'hightline-title' : '' }}"> Key </label>
+                            <input 
+                                [disabled]="!isEdit" type="text" id="key" name="key" pInputText class="custom-input-disabled"
+                                [(ngModel)]="businessCustomerInfo.key" maxlength="50"
+                                (click)="changeValue()" (keyup)="changeValue()"
+                            />
+                        </div>
+                        <div class="field mb-0 col-12 md:col-12">
+                            <label class="title-info"> Secret </label>
+                            <input 
+                                [disabled]="!isEdit" type="text" id="licenseIssuer" name="licenseIssuer" class="custom-input-disabled"
+                                maxlength="1024" pInputText [(ngModel)]="businessCustomerInfo.secret"
+                                [title]="businessCustomerInfo.licenseIssuer"
+                                (click)="changeValue()" (keyup)="changeValue()"
+                            />
+                        </div>
+                    </div>
+                </div>
+                <div class="col-4 text-center mt-3">
+                    <!-- <div class="p-fluid p-formgrid grid"> -->
+                        <div class="col-12 wrapper-avatar-issuer">
+                            <p-image
+                                class="custom-input-disabled"
+                                [src]="businessCustomerInfo?.stampImageUrl ? (AppConsts.remoteServiceBaseUrl + '/' + businessCustomerInfo?.stampImageUrl) : imageDefault"
+                                imageClass="b-w-100"
+                                [imageStyle]="{'border-radius':'8px','max-height':'200px','width': '100%', 'min-height':'200px'}"
+                                [preview]="true"
+                                (click)="changeValue()">
+                            </p-image>
+                        </div>
+                        <div class="col-12">
+                            <p-fileUpload [disabled]="!isEdit" name="demo[]" accept=".png,.jpeg,.jpg"
+                                chooseLabel="Chọn ảnh" chooseIcon="pi pi-image" class="custom-file-upload mt-3"
+                                [customUpload]="true" (uploadHandler)="myUploaderStamp($event)" [auto]="true">
+                            </p-fileUpload>
+                        </div>
+                    <!-- </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

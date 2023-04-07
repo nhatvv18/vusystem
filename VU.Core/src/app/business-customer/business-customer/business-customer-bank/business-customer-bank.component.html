@@ -1,0 +1,125 @@
+<div *ngIf="isGranted([PermissionCoreConst.CoreKHDN_TKNH_DanhSach])" class="grid mr-0 ml-0 mt-0">
+    <div class="col-12">
+        <div class="card p-0">
+            <p-toast></p-toast>
+            <p-confirmDialog [style]="{width: 'auto'}" [baseZIndex]="10000"></p-confirmDialog>
+            <p-table 
+                #userTable 
+                selectionMode="multiple" responsiveLayout="scroll" dataKey="id" styleClass="custom-table"
+                [value]="rows" [rowHover]="true" [showCurrentPageReport]="true" [paginator]="false"
+                (onPageChange)="setPage($event)" [scrollable]="true">
+                <ng-template pTemplate="caption">
+					<div class="flex justify-content-between flex-column sm:flex-row">
+                        <div class="flex justify-content-between flex-column sm:flex-row">
+                        </div>
+                        <div class="">
+							<button *ngIf="isGranted([PermissionCoreConst.CoreKHDN_TKNH_ThemMoi])" pButton pRipple label="Thêm tài khoản ngân hàng" icon="pi pi-plus-circle" class="p-button-success mr-2" (click)="create()"></button>
+						</div>
+					</div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="min-width:5rem; max-width:5rem;"> #ID </th>
+                        <th style="width:12rem;"> Số tài khoản </th>
+                        <th style="width:15rem;"> Tên tài khoản </th>
+                        <th style="width:15rem;"> Tên ngân hàng </th>
+                        <th style="width:15rem;"> Tên chi nhánh </th>
+                        <th style="width:10rem; justify-content: center;"> Mặc định </th>
+                        <!-- <th style="min-width: 10rem; justify-content: center;" pFrozenColumn alignFrozen="right">Trạng thái </th> -->
+                        <th style="width: 8rem; justify-content: center;" pFrozenColumn alignFrozen="right"> Thao tác </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+                    <tr>
+                        <td style="min-width:5rem; max-width:5rem;"> {{ row.businessCustomerBankAccId }} </td>
+                        <td style="width:12rem;"> {{ row.bankAccNo }} </td>
+                        <td style="width:15rem;"> {{ row.bankAccName }} </td>
+                        <td style="width:15rem;"> {{ row.bankName }} </td>
+                        <td style="width:15rem;"> {{ row.bankBranchName }} </td>
+                        <td style="width:10rem; justify-content: center;">
+                             <i class="pi pi-check" *ngIf="row.isDefault == YesNoConst.YES"></i> 
+                        </td>
+
+                        <!-- <td style="min-width:10rem;">
+                            <p-tag class="wrapper-status-phsc" severity="{{ DistributionContractConst.getSeverityFileStatus(row.status) }}" value="{{ DistributionContractConst.getNameFileStatus(row.status) }}"></p-tag> 
+                        </td> -->
+                        <td style="width: 8rem; justify-content: center;" pFrozenColumn alignFrozen="right">
+                            <div class="flex"  *ngIf="actions[rowIndex]?.length">
+                                <i class="pi pi-ellipsis-h"  (click)="menu.toggle($event)"></i> 
+                                <p-menu 
+                                    #menu [popup]="true"class="button-actions"
+                                    [model]="actions[rowIndex]" appendTo="body"
+                                    >
+                                </p-menu>
+                                </div>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="7">Không có dữ liệu.</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="loadingbody">
+                    <tr>
+                        <td colspan="7"> Đang tải dữ liệu ... </td>
+                    </tr>
+                </ng-template>
+                </p-table>
+
+            <!-- <p-paginator styleClass="at-paginator-sm" [totalRecords]="page.totalItems" [rows]="page.pageSize" (onPageChange)="setPage($event)"></p-paginator> -->
+        </div>
+		<!-- THEM & SUA-->
+            <p-dialog [(visible)]="modalDialog" [style]="{width: '600px'}" header="Thêm tài khoản ngân hàng" [modal]="true" class="p-fluid">
+                <ng-template pTemplate="content">
+                    <div class="grid formgrid">
+                        <ng-container>
+                            <div class="col-12 md:col-6">
+                                <div class="field b-field">
+                                    <label htmlFor="bankName">Ngân hàng </label>
+                                    <p-dropdown 
+                                        (onChange)="changeBankId($event.value)" appendTo="body" optionLabel="bankName" optionValue="bankId" [autoDisplayFirst]="false" [filter]="true" filterBy="bankName"
+                                        styleClass="w-full" [options]="banks" [(ngModel)]="businessCustomerBank.bankId" [ngClass]="{'ng-invalid ng-dirty' : fieldErrors?.bankName}">
+                                    </p-dropdown>   
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-6">
+                                <div class="field">
+                                    <label htmlFor="bankAccNo">Số tài khoản (<span class="required-field"> * </span>)</label>
+                                    <input type="text" id="bankAccNo" name="bankAccNo" pInputText
+                                        [(ngModel)]="businessCustomerBank.bankAccNo" (keypress)="numberOnly($event)"
+                                        [ngClass]="{'ng-invalid ng-dirty' : fieldErrors?.bankAccNo}"
+                                        (click)="resetValid('bankAccNo')" maxlength="128" (keyup)="changeKeyword($event)" 
+                                    />
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-6">
+                                <div class="field" *ngIf="!isLoadingBank">
+                                    <label htmlFor="bankAccName">Tên tài khoản (<span class="required-field"> * </span>)</label>
+                                    <input style="text-transform: uppercase" type="text" id="bankAccName" AccName="bankAccName" pInputText
+                                        [(ngModel)]="businessCustomerBank.bankAccName" [pKeyFilter]="KeyFilter.stringOnlyBlockSpecial"
+                                        [ngClass]="{'ng-invalid ng-dirty' : fieldErrors?.bankAccName}"
+                                        (click)="resetValid('bankAccName')" maxlength="512"
+                                    />
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-6">
+                                <div class="field">
+                                    <label htmlFor="bankBranchName"> Chi nhánh </label>
+                                    <input type="text" id="bankBranchName" name="bankBranchName" pInputText
+                                        [(ngModel)]="businessCustomerBank.bankBranchName" maxlength="512"
+                                        (click)="resetValid('bankBranchName')" 
+                                    />
+                                </div>     
+                            </div>
+                        </ng-container>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="footer">
+                    <button pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+                    <button pButton pRipple label="Lưu" icon="pi pi-check" class="p-button-text" [disabled]="!validForm() || submitted" (click)="save()"></button>
+                </ng-template>
+            </p-dialog>
+    </div>
+</div>

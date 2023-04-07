@@ -1,0 +1,105 @@
+<p-toast></p-toast>
+<form [formGroup]="postForm" (ngSubmit)="onSubmit()">
+
+    <div class="card">
+        <div class="p-fluid p-formgrid grid">
+            <div class="field col-12">
+                <label htmlFor="title">Tiêu đề hình ảnh</label>
+                <input formControlName="title" pInputText id="title" type="text" [ngClass]="{
+                        'ng-invalid ng-dirty': (postFormControl.title.touched) && postFormControl.title.errors?.required
+                    }" />
+            </div>
+            <div class="field col-12 md:col-3">
+                <label htmlFor="type">Trang hiển thị</label> 
+                <p-dropdown formControlName="type" optionLabel="value" optionValue="key" 
+                    [options]="types" 
+                    (onChange)="changeType()"
+                    [ngClass]="{'ng-invalid ng-dirty': (postFormControl.type.touched) && postFormControl.type.errors?.required }">
+                </p-dropdown>
+            </div>
+            <div class="field col-12 md:col-3" *ngIf="this.postForm.value.type == 'dau_tu'">
+                <label htmlFor="productKey">Sản phẩm</label> 
+                <p-dropdown formControlName="productKey" optionLabel="value" optionValue="key" 
+                    [options]="productKeys" 
+                    [ngClass]="{'ng-invalid ng-dirty': (postFormControl.productKey.touched) && postFormControl.productKey.errors?.required }">
+                </p-dropdown>
+            </div>
+            <div class="field col-12 md:col-3">
+                <label htmlFor="type">Vị trí hình ảnh</label>
+                <p-dropdown formControlName="position" optionLabel="value" optionValue="key" 
+                [options]="positions" 
+                [ngClass]="{ 'ng-invalid ng-dirty': (postFormControl.position.touched) && postFormControl.position.errors?.required }">
+                </p-dropdown>
+            </div>
+            <div class="field col-12 md:col-3">
+                <label htmlFor="status">Trạng thái</label>
+                <p-dropdown formControlName="status" optionLabel="value" optionValue="key" [disabled]="disableStatus"
+                    [options]="statuses" [ngClass]="{
+                            'ng-invalid ng-dirty': (postFormControl.status.touched) && postFormControl.status.errors?.required
+                        }">
+                </p-dropdown>
+            </div>
+            <div class="field col-12 md:col-12">
+                <label htmlFor="displayText">Giới thiệu ngắn gọn</label>
+                <textarea pInputTextarea [rows]="3" formControlName="displayText" id="displayText" type="text" [ngClass]="{
+                        'ng-invalid ng-dirty': (postFormControl.displayText.touched) && postFormControl.displayText.errors?.required
+                    }" class="custom-input"></textarea>
+            </div>
+            <div class="col-12 md:col-12">
+                <label htmlFor="mainImg">Hình ảnh nổi bật</label>
+                <div class="grid">
+                    <div class="col-3">
+                        <div class="img-zone mt-1">
+                            <img class="col-12" *ngIf="mainImg && formatImage" src="{{baseUrl}}/{{ mainImg }}"/>
+                            <video class="col-12" *ngIf="mainImg && formatVideo" src="{{baseUrl}}/{{ mainImg }}" controls></video>
+                        </div>
+                    </div>
+                    <div class="col-6 mt-2">
+                        <button (click)="selectImg()" pButton type="button" label="Chọn ảnh"
+                            class="p-button-primary mb-1">
+                        </button>
+                        <p-message *ngIf="!mainImg" severity="error" text="Chưa chọn ảnh đại diện hoặc chưa tải ảnh">
+                        </p-message>
+                        <p-message *ngIf="mainImg" severity="success" text="Đã chọn ảnh"></p-message>
+    
+                    </div> 
+                    <div class="col-3">
+                        <label htmlFor="title">Thứ tự hiển thị</label>
+                        <input type="number" formControlName="sort" pInputText id="sort" />
+                    </div>
+                </div>
+            </div> 
+
+            <div  class="field col-12"> 
+                <label htmlFor="content">Loại nội dung</label>
+                <p-selectButton  formControlName="contentType"  optionValue="value" class="mb-2 mt-2" [options]="htmlMarkdownOptions" optionLabel="name"></p-selectButton>
+            </div>
+            <div class="field {{ postForm.value.contentType == 'MARKDOWN' ? 'col-6' : 'col-12' }}">
+                <label htmlFor="content">Nội dung</label>
+                <div *ngIf="postForm.value.contentType == 'MARKDOWN'">
+                    <textarea #myTextArea (click)="getCaretPos(myTextArea)" (keyup)="getCaretPos(myTextArea)" pInputTextarea [rows]="11" formControlName="content" id="content"
+                        class="custom-input"></textarea>
+                    <div style="width: 150px;">
+                        <p-button (click)="insertImage()" class="p-button-outlined p-button-info" label="Chèn ảnh"
+                            icon="pi pi-image" iconPos="left"></p-button>
+                    </div>
+                </div>
+
+                <div *ngIf="postForm.value.contentType == 'HTML'">
+                    <angular-editor formControlName="content" id="content" class="custom-input"
+                        [placeholder]="'Nhập nội dung '" [config]="{height: '15rem', editable: true, sanitize: false }">
+                    </angular-editor>
+                </div>
+            </div>
+            <div *ngIf="postForm.value.contentType=='MARKDOWN'"  class=" field col-6 md:col-6 ">
+                <label htmlFor=" content">Nội dung xem trước</label>
+                <markdown class="border-box" [data]="postForm.value.content">
+                </markdown>
+            </div>
+        </div>
+    </div>
+    <div class="p-dialog-footer" style="width: 100%; position: fixed; left: 0; bottom: 0;">
+        <button type="reset" pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text mr-2" (click)="close()"></button>
+        <button [disabled]="!postForm.valid || !mainImg" type="submit" pButton pRipple label="Lưu lại" icon="pi pi-save"></button>
+    </div>
+</form>

@@ -1,0 +1,150 @@
+<div class="grid ml-0 mr-0 mt-0">
+    <div class="col-12">
+        <div class="card">
+            <h5 style="display:inline">Thông tin phê duyệt</h5>
+
+            <p-toast></p-toast>
+            <p-confirmDialog [style]="{width: 'auto'}" [baseZIndex]="10000"></p-confirmDialog>
+            <p-table 
+                #approveTable
+                [value]="rows" 
+                [columns]="_selectedColumns"
+                [loading]="isLoading" [rowHover]="true" [showCurrentPageReport]="true" [paginator]="false"
+                (onPageChange)="setPage($event)" responsiveLayout="scroll" dataKey="code" [expandedRowKeys]="expandedRows"
+                [resizableColumns]="false" [scrollable]="true" scrollHeight="{{ (screenHeight*0.65) + 'px' }}" styleClass="custom-table">
+                <ng-template pTemplate="caption">
+                    <div class="flex">
+                        <div class="flex justify-content-between flex-column sm:flex-row">
+                            <span class="block mt-2 md:mt-0 p-input-icon-left mr-1">
+                                <i class="pi pi-search"></i>
+                                <input class="pr-3" pInputText type="text" placeholder="Tìm kiếm..." [(ngModel)]="keyword"
+                                    (input)="changeKeyword($event)" />
+                            </span>
+                        </div>
+                        <div class="flex justify-content-between flex-column sm:flex-row">
+                            <span class="p-float-label b-custom ml-2 mr-1">
+                                <p-dropdown id="dropdownStatus" [style]="{'width':'14rem'}" [options]="statusSearch" optionLabel="name"
+                                optionValue="code" placeholder="Chọn trạng thái" [(ngModel)]="status"
+                                (onChange)="changeStatus($event.value)">
+                                </p-dropdown>   
+                                <label class="font-normal" for="dropdownStatus">Trạng thái</label>
+                            </span>
+                        </div>
+                        <div class="flex justify-content-between flex-column sm:flex-row">
+                            <span class="p-float-label b-custom ml-2 mr-1">
+                                <p-dropdown id="dropdownStatus" [style]="{'width':'14rem'}" [options]="actionTypeSearch" optionLabel="name"
+                                optionValue="code" placeholder="Lọc theo hành động duyệt " [(ngModel)]="actionType"
+                                (onChange)="changeActionType($event.value)">
+                                </p-dropdown>   
+                                <label class="font-normal" for="dropdownStatus">Hành động duyệt</label>
+                            </span>
+                        </div>
+                        <div class="flex justify-content-between flex-column sm:flex-row">
+                            <span class="p-float-label b-custom ml-2">
+                                <p-calendar
+                                    inputId="issuerDate" showButtonBar="true" dateMask
+                                    [style]="{'width':'11.5rem'}" dateFormat="dd/mm/yy" locale="vi" appendTo="body"
+                                    [(ngModel)]="requestDate"  
+                                    [placeholder]="'dd/mm/yyyy'" 
+                                    showIcon="true" 
+                                    (onClearClick)="changeRequestDate()" 
+                                    (onSelect)="changeRequestDate()">
+                                </p-calendar >
+                                <label class="p-top-label" style=" font-weight: 400;"> Ngày yêu cầu </label>
+                            </span>
+                        </div>
+                        <div class="flex justify-content-between flex-column sm:flex-row">
+                            <span class="p-float-label b-custom ml-2">
+                                <p-calendar
+                                    class="ml-2" dateMask
+                                    inputId="issuerDate" showButtonBar="true"  
+                                    [style]="{'width':'11.5rem'}" dateFormat="dd/mm/yy" locale="vi" appendTo="body"
+                                    [(ngModel)]="approveDate"  
+                                    [placeholder]="'dd/mm/yyyy'" 
+                                    showIcon="true" 
+                                    (onClearClick)="changeRequestDate()" 
+                                    (onSelect)="changeRequestDate()">
+                                </p-calendar >
+                                <label class="p-top-label" style=" font-weight: 400;">Ngày duyệt</label>
+                            </span>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th style="max-width: 6rem; min-width: 6rem; justify-content: center;" pFrozenColumn alignFrozen="left" class="b-border-frozen-left"> #ID </th>
+                        <th style="max-width: 5rem; min-width: 5rem; justify-content: center;" > Action </th>
+                        <th style="max-width: 10rem; min-width: 10rem;"> Ngày yêu cầu </th>
+                        <th *ngFor="let col of columns" [ngStyle]="{'max-width': col?.width, 'min-width': col?.width}" [ngClass]=" col?.class ">
+                            {{ col?.header }}
+                        </th> 
+                        <th style="max-width: 7rem; min-width: 7rem; justify-content: center;" pFrozenColumn alignFrozen="right" [frozen]="true" class="b-border-frozen-right">Trạng thái </th>
+                        <th style="max-width: 3rem; min-width: 3rem; justify-content: center;" pFrozenColumn alignFrozen="right" [frozen]="true"> 
+                            <i class="pi pi-cog" (click)="setColumn(cols, _selectedColumns)"></i>
+                        </th>
+
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="body" let-row let-rowIndex="rowIndex" let-columns="columns">
+                    <tr>
+                        <td style="max-width: 6rem; min-width: 6rem;" pFrozenColumn alignFrozen="left" class="b-border-frozen-left"> {{ row?.approveID }} </td>
+                        <td style="max-width: 5rem; min-width: 5rem; justify-content: center;" > 
+                            <p-tag 
+                                class="wrapper-status-phsc" *ngIf="row.actionType"
+                                value="{{ ApproveConst.getActionTypeName(row.actionType) }}"
+                                severity="{{ ApproveConst.getActionTypeSeverity(row?.actionType) }}">
+                            </p-tag>
+                        </td>
+                        <td style="max-width: 10rem; min-width: 10rem;"> {{ row?.requestDate | datetimeview }} </td>
+                        <td *ngFor="let col of columns" [ngStyle]="{'max-width': col?.width, 'min-width': col?.width}" [ngClass]=" col?.class">
+                            <div *ngIf="col?.field === 'isCheck'">
+                                <p-checkbox [(ngModel)]="row.isCheck" [binary]="true" inputId="binary" [readonly]="true"></p-checkbox>
+                            </div>
+                            <div *ngIf="col?.field !== 'isCheck'" [ngClass]="col?.cutText">
+                                {{ row[col?.field]}}
+                            </div>
+                        </td>
+                        <td style="max-width: 7rem; min-width: 7rem;" pFrozenColumn alignFrozen="right" [frozen]="true"
+                            class="b-border-frozen-right">
+                            <p-tag class="wrapper-status-phsc" *ngIf="row?.status"
+                                styleClass="p-tag-{{ApproveConst.getStatusSeverity(row?.status)}}"
+
+                                severity="{{ ApproveConst.getStatusSeverity(row?.status) }}"
+                                value="{{ ApproveConst.getStatusName(row.status) }}"></p-tag>
+                        </td>
+                        <td style="max-width: 3rem; min-width: 3rem;" pFrozenColumn alignFrozen="right" [frozen]="true"
+                            class="b-table-actions">
+                            <div class="flex" *ngIf="listAction[rowIndex]?.length">
+                                <i class="pi pi-ellipsis-h" (click)="menu.toggle($event); clickDropdown(row)">
+                                </i>
+                                <p-menu #menu [popup]="true" class="button-actions" [model]="listAction[rowIndex]" appendTo="body">
+                                </p-menu>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="7">Không có dữ liệu.</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="loadingbody">
+                    <tr>
+                        <td colspan="7"> Đang tải dữ liệu ... </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <p-paginator                 
+                [rows]="page.pageSize" 
+                [totalRecords]="page.totalItems" 
+                [rowsPerPageOptions]="[25, 50, 100, 200]" 
+                currentPageReportTemplate="Tất cả {{ page.totalItems }} dòng" 
+                showCurrentPageReport="true"
+                (onPageChange)="setPage($event)">
+            </p-paginator>
+        </div>
+
+    </div>
+</div>

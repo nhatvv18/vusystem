@@ -1,0 +1,37 @@
+<div class="grid ml-0 mr-0 mt-0">
+    <div class="col-12">
+        <div class="card p-0">
+            <p-toast></p-toast>
+            <p-confirmDialog [style]="{width: 'auto'}" [baseZIndex]="10000"></p-confirmDialog>
+            <p-table *ngIf="isGranted([PermissionCoreConst.CoreKHCN_NguoiGioiThieu_DanhSach])" #userTable
+                selectionMode="multiple" responsiveLayout="scroll" dataKey="id" styleClass="custom-table"
+                [rowHover]="true" [paginator]="false" [scrollable]="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="min-width:5rem; max-width:5rem;" pFrozenColumn alignFrozen="left"> # ID </th>
+                        <th style="width:10rem;"> Mã giới thiệu</th>
+                        <th style="width:12rem;"> Họ tên </th>
+                        <th style="width:15rem;"> Điện thoại </th>
+                        <th style="width:10rem;justify-content: center;" pFrozenColumn alignFrozen="right"> Ngày giới
+                            thiệu </th>
+
+                    </tr>
+                    <tr>
+                        <th style="width:5rem; max-width:5rem;" pFrozenColumn alignFrozen="left"> {{
+                            rows?.referralInvestor?.investorId || rows?.referralBusinessCustomer?.businessCustomerId }}
+                        </th>
+                        <th style="width:10rem;">{{rows?.referralInvestor?.cifCode ||
+                            rows?.referralBusinessCustomer?.cifCode}} </th>
+                        <th style="width:12rem;"> {{ rows?.referralInvestor?.defaultIdentification?.fullname ||
+                            rows?.referralBusinessCustomer?.name }} </th>
+                        <th style="width:15rem;"> {{ rows?.referralInvestor?.phone ||
+                            rows?.referralBusinessCustomer?.phone}} </th>
+                        <th style="width:10rem;justify-content: center;" pFrozenColumn alignFrozen="right">
+                            {{rows?.referralDate | dateview}} </th>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+    </div>
+</div>

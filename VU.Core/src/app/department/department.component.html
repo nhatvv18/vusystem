@@ -1,0 +1,207 @@
+<p-toast></p-toast>
+<div class="grid ml-0 mr-0 mt-0">
+    <div class="col-12">
+        <div class="card b-list" style="height: auto;">
+            <div class="p-fluid p-formgrid grid b-header">
+                <div class="col-12 md:col-7 b-title">
+                    <h4 style="display:inline"> Quản lý phòng ban </h4>
+                </div>
+                <div class="col-12 md:col-5 b-action">
+                    <button *ngIf="isGranted([PermissionCoreConst.CorePhongBan_ThemMoi])" pButton pRipple label="Thêm phòng ban" icon="pi pi-plus" class="p-button-success mr-2" (click)="create()"></button>
+                </div>
+            </div>
+            <div class="{{ isLoadingPage ? 'b-loading' : '' }}" #divTreeDepartment [ngStyle]="{'zoom': valueZoomDivTreeDepart}">
+                <p-tree 
+                    [value]="dataTree" layout="horizontal" selectionMode="multiple" styleClass="department-tree"
+                    (onNodeExpand)="showNode($event.originalEvent, $event.node)" 
+                    (onNodeContextMenuSelect)="genListActionInDepartment($event.node)" 
+                    [loading]="isLoading">
+                    <ng-template let-node pTemplate="default">
+                        <div class="node-manager text-center {{ !node?.children?.length ? 'button-show-node' : '' }}" pTooltip="{{ node?.data?.departmentAddress }}" tooltipPosition="top" tooltipStyleClass="b-tooltip" (click)="getSales(node)" [ngClass]="node?.key == null ? 'node-0' : ''">
+                            <!-- IMAGE -->
+                            <div class="text-center">
+                                <img 
+                                    [src]="node?.data?.manager?.avatarImageUrl ? (baseUrlApi + node?.data?.manager?.avatarImageUrl) 
+                                    : (node?.data?.managerBusinessCustomer?.avatarImageUrl ? (baseUrlApi + node?.data?.managerBusinessCustomer?.avatarImageUrl) 
+                                    : avatarDefault)" class="avatar" *ngIf="node?.key != null"
+                                >
+                                <img 
+                                    [src]="node?.data?.manager2?.avatarImageUrl ? (baseUrlApi + node?.data?.manager2?.avatarImageUrl) 
+                                    : avatarDefault" class="avatar ml-3" *ngIf="node?.data?.manager2 && node?.key != null"
+                                >
+                            </div>
+                            <!-- THÔNG TIN PHÒNG BAN -->
+                            <div class="mb-1 wrapper-text-node">
+                                <div class="department-name">
+                                    <b>
+                                        {{ node?.data?.departmentName ?? node?.label }}
+                                    </b>
+                                </div>
+                                <ng-container *ngIf="node?.key != null">
+                                    <i class="pi pi-chevron-down ml-2 px-2 icon-option" (click)="menu.toggle($event); genListActionInDepartment(node); $event.stopPropagation();"></i>
+                                    <p-menu #menu [popup]="true" class="button-actions" [model]="actions" appendTo="body"></p-menu>
+                                </ng-container>
+                                <div class="manager-name">
+                                    {{ node?.data?.manager?.investorIdentification?.fullname ?? ( node?.data?.managerBusinessCustomer?.name ? (node?.data?.managerBusinessCustomer?.name + " (DN)") : null )  }}
+                                </div>
+                                <div *ngIf="node?.data?.manager2" class="manager-name mt-1">
+                                    {{ node?.data?.manager2?.investorIdentification?.fullname}}
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                </p-tree>
+            </div>
+
+            <!--  -->
+            <div class="p-fluid p-formgrid grid b-header mt-2">
+                <div class="col-12 md:col-7 b-title">
+                    <h4 style="display:inline"> Danh sách sale {{ departmentName ? ' - ' + departmentName : null }} </h4>
+                </div>
+            </div>
+            <!--  -->
+            <p-table 
+                #businessCustomerTable 
+                *ngIf="isGranted([PermissionCoreConst.CoreSaleActive_DanhSach])"
+                [value]="rows" 
+                [columns]="_selectedColumns"
+                [loading]="isLoading" [rowHover]="true" [showCurrentPageReport]="true" [paginator]="false"
+                (onPageChange)="setPage($event)" responsiveLayout="scroll" dataKey="code"
+                [resizableColumns]="false" [scrollable]="true" scrollHeight="600px" styleClass="custom-table b-sale-table">
+                <!--  -->
+                <ng-template pTemplate="caption">
+                    <div class="grid">
+                        <div class="col-4 md:col-12 lg:col-12 grid">
+                            <div class="col-4 md:col-2 lg:col-2">
+                                <span class="block mt-2 md:mt-0 p-input-icon-left">
+                                    <i class="pi pi-search"></i>
+                                    <input 
+                                        pInputText type="text" placeholder="{{ SaleConst.getInfoFieldFilter(dataFilter.field, 'placeholder') }}" 
+                                        [(ngModel)]="keyword" (keyup)="changeKeyword($event)" class="w-full"
+                                    />
+                                </span>
+                            </div>
+                            <div class="grid col-12 md:col-8 lg:col-10">
+                                <div class="col-4 md:col-2 lg:col-2 pl-0">
+                                    <span class="p-float-label b-custom ml-1">
+                                        <p-dropdown 
+                                            id="fieldFilter" [options]="SaleConst.fieldFilters"
+                                            name="fieldFilter" optionLabel="name" optionValue="field" styleClass="w-full"
+                                            [(ngModel)]="dataFilter.field" [autoDisplayFirst]="true" (onChange)="changeFieldFilter()">
+                                        </p-dropdown>
+                                        <label class="font-normal" for="fieldFilter">Tìm kiếm theo</label>
+                                    </span>
+                                </div>
+                                <div class="col-4 md:col-2 lg:col-2 pl-0">
+                                    <span class="p-float-label b-custom ml-1">
+                                        <p-dropdown 
+                                            id="departmentId" [options]="departments" styleClass="w-full"
+                                            name="departmentId" optionLabel="departmentName" optionValue="departmentId"
+                                            [(ngModel)]="dataFilter.departmentId" [autoDisplayFirst]="false" (onChange)="setPage(null, false)"
+                                            emptyMessage="Không có dữ liệu">
+                                        </p-dropdown>
+                                        <label class="font-normal" for="departmentId"> Phòng ban </label>
+                                    </span>
+                                </div>
+                                <div class="col-4 md:col-2 lg:col-2 pl-0">
+                                    <span class="p-float-label b-custom ml-1">
+                                        <p-dropdown 
+                                            id="customerType" [options]="customerType" styleClass="w-full"
+                                            name="customerType" optionLabel="name" optionValue="code"
+                                            [(ngModel)]="dataFilter.customerType" [autoDisplayFirst]="true" (onChange)="setPage()">
+                                        </p-dropdown>
+                                        <label class="font-normal" for="customerType">Loại khách hàng</label>
+                                    </span>
+                                </div>
+                                <div class="col-4 md:col-2 lg:col-2 pl-0">
+                                    <span class="p-float-label b-custom ml-1">
+                                        <p-dropdown 
+                                            id="saleType" [options]="saleTypes" styleClass="w-full"
+                                            name="saleType" optionLabel="name" optionValue="code"
+                                            [(ngModel)]="dataFilter.saleType" [autoDisplayFirst]="true" (onChange)="setPage()">
+                                        </p-dropdown>
+                                        <label class="font-normal" for="saleType">Loại Sale</label>
+                                    </span>
+                                </div>
+                                <div class="col-4 md:col-2 lg:col-2 pl-0">
+                                    <span class="p-float-label b-custom ml-1">
+                                        <p-dropdown 
+                                            id="status" [options]="statuses" styleClass="w-full"
+                                            name="status" optionLabel="name" optionValue="code"
+                                            [(ngModel)]="dataFilter.status" [autoDisplayFirst]="true" (onChange)="setPage()">
+                                        </p-dropdown>
+                                        <label class="font-normal" for="dropdownStatus">Trạng thái</label>
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th style="max-width: 5rem; min-width: 5rem;" pFrozenColumn alignFrozen="left" class="b-border-frozen-left"> #ID </th>
+                        <th *ngFor="let col of columns" [ngStyle]="{'max-width': col?.width, 'min-width': col?.width}" [ngClass]=" col?.class ">
+                            {{ col?.header }}
+                        </th> 
+                        <th style="max-width: 7rem; min-width: 7rem;" pFrozenColumn alignFrozen="right" [frozen]="true" class="b-border-frozen-right">Trạng thái </th>
+                        <th style="max-width: 3rem; min-width: 3rem; justify-content: center;" pFrozenColumn alignFrozen="right" [frozen]="true">
+                            <i class="pi pi-cog" (click)="setColumn(cols, _selectedColumns)"></i>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row let-rowIndex="rowIndex" let-columns="columns">
+                    <tr>
+                        <td style="max-width: 5rem; min-width: 5rem;" pFrozenColumn alignFrozen="left" class="b-border-frozen-left"> {{ row.saleId }} </td>
+                        <td *ngFor="let col of columns" [ngStyle]="{'max-width': col?.width, 'min-width': col?.width}" [ngClass]=" col?.class">
+                            <div [ngClass]="col?.cutText" [title]="row[col?.field]" *ngIf="col?.field !== 'source'">
+                                {{ row[col?.field]}}
+                            </div>
+                            <p-tag
+                                *ngIf="col?.field == 'source'" 
+                                styleClass="p-tag-{{ SaleConst.getInfoSource(row.source, 'severity') }}" 
+                                severity="{{ SaleConst.getInfoSource(row.source, 'severity') }}" 
+                                value="{{ SaleConst.getInfoSource(row.source, 'name') }}">
+                            </p-tag> 
+                        </td>
+                        <td style="max-width: 7rem; min-width: 7rem;" pFrozenColumn alignFrozen="right" [frozen]="true" class="b-border-frozen-right"> 
+                            <p-tag 
+                                styleClass="p-tag-{{ SaleConst.getInfoStatus(row.status, 'severity') }}" 
+                                severity="{{ SaleConst.getInfoStatus(row.status, 'severity') }}" 
+                                value="{{ SaleConst.getInfoStatus(row.status, 'name') }}">
+                            </p-tag> 
+                        </td>
+                        <td style="max-width: 3rem; min-width: 3rem" pFrozenColumn alignFrozen="right" [frozen]="true" class="b-table-actions">
+                            <div class="flex">
+                                <i class="pi pi-ellipsis-h" (click)="menu.toggle($event)"></i>
+                                <p-menu 
+                                    #menu [popup]="true"class="button-actions"
+                                    [model]="listActionSale[rowIndex]" appendTo="body">
+                                </p-menu>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="7">Không có dữ liệu.</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="loadingbody">
+                    <tr>
+                        <td colspan="7"> Đang tải dữ liệu ... </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <p-paginator 
+                [rows]="page.pageSize" 
+                [totalRecords]="page.totalItems" 
+                [rowsPerPageOptions]="[25, 50, 100, 200]" 
+                currentPageReportTemplate="Tất cả {{ page.totalItems }} dòng" 
+                showCurrentPageReport="true"
+                (onPageChange)="setPage($event)">
+            </p-paginator>
+            <!-- <p-contextMenu #cm [model]="items"></p-contextMenu> -->
+        </div>
+    </div>
+</div>

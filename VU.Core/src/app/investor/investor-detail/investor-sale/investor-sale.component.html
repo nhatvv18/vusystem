@@ -1,0 +1,76 @@
+<div class="grid ml-0 mr-0 mt-0">
+    <div class="col-12">
+        <div class="card p-0">
+            <p-toast></p-toast>
+            <p-confirmDialog [style]="{width: 'auto'}" [baseZIndex]="10000"></p-confirmDialog>
+            <p-table *ngIf="isGranted([PermissionCoreConst.CoreKHCN_TuVanVien_DanhSach])" #userTable selectionMode="multiple" responsiveLayout="scroll" dataKey="id"
+                styleClass="custom-table" [value]="rows" [rowHover]="true" [paginator]="false" [scrollable]="true">
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <div class="flex justify-content-between flex-column sm:flex-row">
+                        </div>
+                        <div class="">
+                            <button *ngIf="isGranted([PermissionCoreConst.CoreKHCN_TuVanVien_ThemMoi])" pButton pRipple label="Thêm mới tư vấn viên" icon="pi pi-plus-circle" class="p-button-success" (click)="createSale()"></button>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="min-width:5rem; max-width:5rem;" pFrozenColumn alignFrozen="left"> # ID </th>
+                        <th style="width:10rem;"> Mã giới thiệu </th>
+                        <th style="width:12rem;"> Họ tên </th>
+                        <th style="width:15rem;"> Điện thoại </th>
+                        <th style="width:10rem;"> Phòng giao dịch </th>
+                        <th style="width:10rem;"> Ngày bắt đầu </th>
+                        <th style="width:10rem;"> Ngày kết thúc </th>
+                        <th style="min-width:5rem; justify-content: center;"> Mặc định </th>
+                        <th style="width:10rem;justify-content: center;" pFrozenColumn alignFrozen="right"> Trạng thái </th>
+                        <th style="min-width: 8rem; max-width:8rem; justify-content: center;" pFrozenColumn alignFrozen="right" [frozen]="true"> Thao tác </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+                    <tr>
+                        <td style="width:5rem; max-width:5rem;" pFrozenColumn alignFrozen="left"> {{ row?.saleId }} </td>
+                        <td style="width:10rem;">{{row?.investorSale?.referralCode}} </td> 
+                        <td style="width:12rem;"> {{ (row?.investorSale?.fullname ) ?? null}} </td>
+                        <td style="width:15rem;"> {{ row?.phone  || row?.businessCustomer?.phone}} </td>
+                        <td style="width:10rem;">{{row?.sale?.departmentName}} </td> 
+                        <td style="width:10rem;">{{row?.sale?.saleTradingCreatedDate | dateview}} </td> 
+                        <td style="width:10rem;">{{row?.sale?.deactiveDate | dateview }} </td> 
+                        <td style="min-width:5rem; justify-content: center;">
+                            <i class="pi pi-check" *ngIf="row.investorSale?.isDefault == YesNoConst.YES"></i>
+                        </td>
+                        <td style="width:10rem; justify-content: center;" pFrozenColumn alignFrozen="right">
+                            <p-tag 
+                                styleClass="p-tag-{{ SaleConst.getInfoStatus(row?.sale?.saleTradingStatus, 'severity') }}" 
+                                severity="{{ SaleConst.getInfoStatus(row?.sale?.saleTradingStatus, 'severity') }}" 
+                                value="{{ SaleConst.getInfoStatus(row?.sale?.saleTradingStatus, 'name') }}">
+                            </p-tag> 
+ 
+                        </td>
+                        <td style="min-width: 8rem; max-width:8rem; justify-content: center;" pFrozenColumn alignFrozen="right" [frozen]="true">
+                            <div class="flex" *ngIf="actions[rowIndex]?.length">
+                                <i class="pi pi-ellipsis-h" (click)="menu.toggle($event)"></i>
+                                <p-menu #menu [popup]="true" class="button-actions" [model]="actions[rowIndex]"
+                                    appendTo="body">
+                                </p-menu>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="7">Không có dữ liệu.</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="loadingbody">
+                    <tr>
+                        <td colspan="7"> Đang tải dữ liệu ... </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+    </div>
+</div>

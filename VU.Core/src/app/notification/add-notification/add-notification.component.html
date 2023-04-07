@@ -1,0 +1,135 @@
+<form [formGroup]="postForm" (ngSubmit)="onSubmit()">
+
+    <div class="card">
+        <div class="p-fluid p-formgrid grid">
+            <div class="field col-4">
+                <label htmlFor="title">Mã thông báo</label>
+                <input formControlName="code" pInputText id="code" type="text" [ngClass]="{
+                        'ng-invalid ng-dirty': (postFormControl.code.touched) && postFormControl.code.errors?.required
+                    }" />
+            </div>
+            <div class="field col-8">
+                <label htmlFor="title">Tiêu đề thông báo</label>
+                <input formControlName="title" pInputText id="title" type="text" [ngClass]="{
+                        'ng-invalid ng-dirty': (postFormControl.title.touched) && postFormControl.title.errors?.required
+                    }" />
+            </div>
+            <div class="field col-4">
+                <label htmlFor="title">Trạng thái</label> 
+                <p-dropdown formControlName="status" optionLabel="name" optionValue="value" [options]="statuses" [ngClass]="{
+                        'ng-invalid ng-dirty': (postFormControl.status.touched) && postFormControl.status.errors?.required
+                    }">
+                </p-dropdown>
+            </div>
+            <div class="field col-8">
+                <label htmlFor="title">Chủ đề</label>
+                <input formControlName="description" pInputText id="description" type="text" [ngClass]="{
+                    'ng-invalid ng-dirty': (postFormControl.description.touched) && postFormControl.description.errors?.required }" />
+            </div>
+           
+            <div class="field col-4">
+                <label htmlFor="title">Hành động</label> 
+                <p-multiSelect formControlName="actions" optionLabel="value" optionValue="key" [options]="actions" [ngClass]="{
+                        'ng-invalid ng-dirty': (postFormControl.actions.touched) && postFormControl.actions.errors?.required
+                    }">
+                </p-multiSelect>
+            </div> 
+            <div class="field col-8 md:col-8">
+                <label htmlFor="isFeatured">Nổi bật</label>
+                <div class="mt-1">
+                    <p-inputSwitch formControlName="isFeatured"></p-inputSwitch>
+                </div>
+            </div>
+            <!-- <div *ngIf="postForm.value.actions.includes('PUSH_NOTIFICATION')" class="field col-6">
+                <label htmlFor="content">Nội dung thông báo APP </label>
+                <textarea #myTextArea (click)="getCaretPos(myTextArea)" (keyup)="getCaretPos(myTextArea)" pInputTextarea [rows]="5" formControlName="notificationContent" id="notificationContent" class="custom-input"> </textarea>
+
+            </div>
+            <div *ngIf="postForm.value.actions.includes('PUSH_NOTIFICATION')"  class="field col-6">
+                <label htmlFor="content">Nội dung xem trước</label>  
+                <markdown class="border-box" [data]="postForm.value.notificationContent">
+                </markdown> 
+            </div> -->
+            <!-- . -->
+            <div  class="field col-12" *ngIf="postForm.value.actions.includes('PUSH_NOTIFICATION')"> 
+                <label htmlFor="content">Loại nội dung thông báo app</label>
+                <p-selectButton  formControlName="appNotifContentType" [ngModelOptions]="{standalone: true}" optionValue="value" class="mb-2 mt-2" [options]="htmlMarkdownOptions" optionLabel="name"></p-selectButton>
+            </div>
+            <div *ngIf="postForm.value.actions.includes('PUSH_NOTIFICATION')" class="field {{ postForm.value.appNotifContentType == 'MARKDOWN' ? 'col-6' : 'col-12' }}">
+                <label htmlFor="content">Nội dung thông báo app</label>
+                <div *ngIf="postForm.value.appNotifContentType == 'MARKDOWN'">
+                    <textarea #myTextArea (click)="getCaretPos(myTextArea)" (keyup)="getCaretPos(myTextArea)" pInputTextarea [rows]="11" formControlName="notificationContent" id="notificationContent" class="custom-input"></textarea>
+                    <div style="width: 150px;">
+                        <p-button (click)="insertImage()" class="p-button-outlined p-button-info" label="Chèn ảnh" icon="pi pi-image" iconPos="left"></p-button>
+                    </div> 
+                </div>
+                
+                <div *ngIf="postForm.value.appNotifContentType == 'HTML'">
+                    <angular-editor formControlName="notificationContent" id="content" class="custom-input"  [placeholder]="'Nhập nội dung '" [config]="{height: '15rem', editable: true, sanitize: false }">
+                </angular-editor>
+                </div>
+            </div>
+            <div *ngIf="postForm.value.actions.includes('PUSH_NOTIFICATION') && postForm.value.appNotifContentType == 'MARKDOWN'"  class="field col-6 md:col-6 ">
+                <label htmlFor="content">Nội dung xem trước</label>  
+                <markdown class="border-box" [data]="postForm.value.notificationContent">
+                </markdown> 
+            </div>
+            <!-- . -->
+            <div *ngIf="postForm.value.actions.includes('SEND_SMS')"  class="field col-12 md:col-12">
+                <label htmlFor="content">Nội dung SMS</label>
+                <textarea  pInputTextarea [rows]="5" formControlName="smsContent" id="smsContent" class="custom-input"> </textarea>
+            </div>
+            <div  class="field col-12" *ngIf="postForm.value.actions.includes('SEND_EMAIL')"> 
+                <label htmlFor="content">Loại nội dung email</label>
+                <p-selectButton  formControlName="contentType" [ngModelOptions]="{standalone: true}" optionValue="value" class="mb-2 mt-2" [options]="htmlMarkdownOptions" optionLabel="name"></p-selectButton>
+            </div>
+            <div *ngIf="postForm.value.actions.includes('SEND_EMAIL')" class="field {{ postForm.value.contentType == 'MARKDOWN' ? 'col-6' : 'col-12' }}">
+                <label htmlFor="content">Nội dung email</label>
+                <div *ngIf="postForm.value.contentType == 'MARKDOWN'">
+                    <textarea #myTextArea (click)="getCaretPos(myTextArea)" (keyup)="getCaretPos(myTextArea)" pInputTextarea [rows]="11" formControlName="emailContent" id="emailContent" class="custom-input"></textarea>
+                    <div style="width: 150px;">
+                        <p-button (click)="insertImage()" class="p-button-outlined p-button-info" label="Chèn ảnh" icon="pi pi-image" iconPos="left"></p-button>
+                    </div> 
+                </div>
+                
+                <div *ngIf="postForm.value.contentType == 'HTML'">
+                    <angular-editor formControlName="emailContent" id="content" class="custom-input"  [placeholder]="'Nhập nội dung '" [config]="{height: '15rem', editable: true, sanitize: false }">
+                </angular-editor>
+                </div>
+            </div>
+            <div *ngIf="postForm.value.actions.includes('SEND_EMAIL') && postForm.value.contentType == 'MARKDOWN'"  class="field col-6 md:col-6 ">
+                <label htmlFor="content">Nội dung xem trước</label>  
+                <markdown class="border-box" [data]="postForm.value.emailContent">
+                </markdown> 
+            </div>
+            <div class="col-4">
+                <div>
+                    <label htmlFor="mainImg">Ảnh đại diện</label> 
+                </div>
+                <div *ngIf="mainImg" class="gallery-media">
+                    <div class="gallery-image" style="background: url({{baseUrl}}/{{mainImg}});" >
+                    </div>
+                    <div class="desc" >
+                        <i (click)="removeFile(img)" class="remove-img pi pi-trash"></i>
+                    </div>
+                </div>
+                <div *ngIf="!mainImg || mainImg.length == 0" class="grid"> 
+                    <div class="col-12 mt-2">
+                        <button (click)="selectImg()" pButton type="button" label="Thêm ảnh"
+                            class="p-button-primary mb-1">
+                        </button> 
+                    </div> 
+                </div>
+            </div>
+            <div class="field col-8">
+                <label htmlFor="content">Action view</label>
+                <input pInputTextarea cols="5" formControlName="actionView" id="actionView" class="custom-input" />
+                <label htmlFor="content">External Event</label>
+                <input pInputTextarea cols="5" formControlName="externalEvent" id="actionView" class="custom-input" />
+                <label htmlFor="content">External Params</label>
+                <input pInputTextarea cols="5" formControlName="externalParams" id="actionView" class="custom-input" />
+            </div> 
+        </div>
+    </div> 
+    
+</form>

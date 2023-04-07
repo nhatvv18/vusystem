@@ -59,7 +59,7 @@ namespace VU.SeverSystem.Domain.Implements
         {
             while (true)
             {
-                var numberRandom = RandomNumberUtils.RandomNumber(10);
+                var numberRandom = RandomNumberUtils.RandomNumber(6);
                 var checkDeliveryCodeOrder = _dbContext.Users.Where(o => o.IdentifierCode == numberRandom);
                 if (!checkDeliveryCodeOrder.Any())
                 {
@@ -161,7 +161,7 @@ namespace VU.SeverSystem.Domain.Implements
                 var claims = new List<Claim>
                 {
                     new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                    new Claim(ClaimTypes.Phone, user.Phone),
+                    new Claim(ClaimTypes.Username, user.Username),
                     //new Claim(CustomClaimTypes.UserType, user.UserType.ToString())
                 };
 
@@ -183,8 +183,12 @@ namespace VU.SeverSystem.Domain.Implements
                 //}
                 return new LoginResultDto()
                 {
-                    Token = new JwtSecurityTokenHandler().WriteToken(token),
-                    UserData = userData
+                    access_token = new JwtSecurityTokenHandler().WriteToken(token),
+                    expires_in = 7200,
+                    refresh_token = "E34D9D799DFCCBF92783FD866F560893CC0A333C3AF9675B28012537FE008D15",
+                    scope = "API offline_access",
+                    token_type = "Bearer",
+                    UserData = userData,
                 };
             }
             else

@@ -1,0 +1,102 @@
+<div *ngIf="isGranted([PermissionCoreConst.CoreSaleActive_HDCT_DanhSach])" class="grid m-0">
+    <div class="col-12 p-0">
+        <div class="card p-0">
+            <p-toast></p-toast>
+            <p-confirmDialog [style]="{width: 'auto'}" [baseZIndex]="10000"></p-confirmDialog>
+            <p-table 
+                #contractTable 
+                selectionMode="multiple" [loading]="isLoading" responsiveLayout="scroll" scrollHeight="{{(screenHeight*0.56) + 'px'}}" dataKey="id" styleClass="custom-table"
+                [value]="rows" [rowHover]="true" [showCurrentPageReport]="true"  [rows]="page.pageSize" totalRecords="{{ page.totalItems }}" currentPageReportTemplate="Tất cả {totalRecords} dòng" [rowsPerPageOptions]="[25, 50, 100, 200]"
+                (onPageChange)="setPage()" [scrollable]="true">
+                <ng-template pTemplate="caption">
+					<div class="flex justify-content-between flex-column sm:flex-row">
+                        <div class="flex justify-content-between flex-column sm:flex-row">    
+                        </div>
+                        <div class="col-12 md:col-5 text-right b-actions b-order-contract">
+                                <ng-container>
+                                    <p-button
+                                        *ngIf="isGranted([PermissionCoreConst.CoreSaleActive_HDCT_UpdateFile])"
+                                        styleClass="p-button-sm custom-button"
+                                        label="Cập nhật hồ sơ" 
+                                        (click)="updateSaleCollabContract()">
+                                    </p-button> 
+                                    <p-button
+                                        *ngIf="isGranted([PermissionCoreConst.CoreSaleActive_HDCT_Sign])"
+                                        styleClass="p-button-sm custom-button"
+                                        label="Ký điện tử" 
+                                        (click)="signSaleCollabContract()">
+                                    </p-button>
+    
+                                </ng-container> 
+                        </div>
+					</div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th pFrozenColumn alignFrozen="left">#ID</th>
+                        <th style="min-width:25rem;" pFrozenColumn alignFrozen="left">Tên hợp đồng</th>
+                        <th class="justify-content-center"> Lưu trữ </th>
+                        <th class="justify-content-center"> Đã ký </th>
+                        <th style="min-width:11rem; max-width: 11rem;" class="justify-content-center">Tải hợp đồng mẫu</th>
+                        <th style="min-width:15rem; max-width: 15rem;" class="justify-content-center">Tải hợp đồng chữ ký điện tử</th>
+                        <th style="min-width:14rem; max-width: 14rem;" class="justify-content-center">Tải lên hợp đồng lưu trữ</th>
+                        <th class="justify-content-center" pFrozenColumn alignFrozen="right">Xem hồ sơ tải lên</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row>
+                    <tr>
+                        <td pFrozenColumn alignFrozen="left"> {{ row.id }} </td>
+                        <td style="min-width:25rem;" pFrozenColumn alignFrozen="left"> {{ row.title }} </td>
+                        <td class="justify-content-center"> 
+                            <p-checkbox [(ngModel)]="row.isFileUrl" [binary]="true" inputId="binary" [readonly]="true"></p-checkbox>
+                        </td>
+                        <td class="justify-content-center"> 
+                            <p-checkbox [(ngModel)]="row.isSign" [binary]="true" inputId="binary" [readonly]="true"></p-checkbox>
+                        </td>
+                        <td style="min-width:11rem; max-width: 11rem;" class="justify-content-center">
+                            <i *ngIf="isGranted([PermissionCoreConst.CoreSaleActive_HDCT_Download])" class="pi pi-download b-icon" (click)="downloadFileTempContract(row)"></i>
+                        </td> 
+                        <td style="min-width:15rem; max-width: 15rem;" class="justify-content-center">
+                            <i *ngIf="isGranted([PermissionCoreConst.CoreSaleActive_HDCT_Download_Sign])" class="pi pi-download b-icon" (click)="downloadFileSignatureContract(row)"></i>
+                        </td> 
+                        <td style="min-width:14rem; max-width: 14rem;" class="justify-content-center">
+                            <i *ngIf="isGranted([PermissionCoreConst.CoreSaleActive_HDCT_UploadFile])" class="pi pi-upload b-icon" (click)="saveFile(row)"></i>
+                        </td>       
+                        <td class="justify-content-center">
+                            <i *ngIf="isGranted([PermissionCoreConst.CoreSaleActive_HDCT_Preview])" class="pi pi-eye b-icon" (click)="viewFile(row.fileScanUrl)"></i>
+                        </td>
+                       
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+         <!-- THEM & SUA-->
+         <p-dialog [(visible)]="modalDialog" [style]="{width: '40%'}" header="Lưu trữ hợp đồng" [modal]="true" class="p-fluid">
+            <ng-template pTemplate="content">
+                <div class="grid formgrid">
+                    <div class="field col-12">
+                        <p-fileUpload 
+                            name="demo[]" accept=".pdf" [customUpload]="true" class="custom-file-upload"
+                            chooseIcon="pi pi-cloud-upload" 
+                            (uploadHandler)="myUploader($event)"
+                            [auto]="true"
+                            chooseLabel="Chọn file upload">
+                        </p-fileUpload>
+                    </div>
+                    <div class="field col-12">
+                            <input placeholder="Đường dẫn file" type="text" id="fileScanUrl" name="fileScanUrl" disabled pInputText [value]="saleCollabContract.fileScanUrl || ''" required autofocus/>
+                            <!-- <label for="fileScanUrl">Đường dẫn file</label> -->
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+                <button pButton pRipple label="Lưu" icon="pi pi-check" class="p-button-text" [disabled]="!validForm() || submitted" (click)="saveCollabContractFile()"></button>
+            </ng-template>
+        </p-dialog>
+           <!-- Xem hồ sơ tải lên -->
+           <app-form-view-pdf-file *ngIf="modalDialogPDF" (onClose)="hideDialog()" [modalDialogPDF]="modalDialogPDF" [urlfilePDF]="urlfilePDF"></app-form-view-pdf-file>
+    </div>
+</div>
+

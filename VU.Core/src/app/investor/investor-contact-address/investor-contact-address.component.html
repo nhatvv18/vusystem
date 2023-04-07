@@ -1,0 +1,146 @@
+<div class="grid ml-0 mr-0 mt-0">
+    <div class="col-12">
+        <div class="card p-0">
+            <p-toast></p-toast>
+            <p-confirmDialog [style]="{width: 'auto'}" [baseZIndex]="10000"></p-confirmDialog>
+            <p-table *ngIf="(isGranted([PermissionCoreConst.CoreDuyetKHCN_DiaChi_DanhSach]) && isTemp == InvestorConst.TEMP.YES) || (isGranted([PermissionCoreConst.CoreKHCN_DiaChi_DanhSach]) && isTemp == InvestorConst.TEMP.NO)" #userTable selectionMode="multiple" responsiveLayout="scroll" dataKey="id"
+                styleClass="custom-table" [value]="rows" [rowHover]="true" [paginator]="false" [scrollable]="true">
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <div class="flex justify-content-between flex-column sm:flex-row">
+                        </div>
+                        <div class="">
+                            <button *ngIf="((isGranted([PermissionCoreConst.CoreDuyetKHCN_DiaChi_ThemMoi]) && isTemp == InvestorConst.TEMP.YES) || (isGranted([PermissionCoreConst.CoreKHCN_DiaChi_ThemMoi]) && isTemp == InvestorConst.TEMP.NO)) && investorDetail?.approve?.status != 2" pButton pRipple label="Thêm địa chỉ liên hệ" icon="pi pi-plus-circle" class="p-button-success" (click)="createContactAddress()"></button>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="min-width:5rem; max-width:5rem;" pFrozenColumn alignFrozen="left"> # ID </th>
+                        <!-- <th style="min-width:20rem;"> Tỉnh/Thành phố </th>  
+                        <th style="min-width:10rem;"> Huyện/Quận </th>  
+                        <th style="min-width:10rem;"> Xã/Phường </th>   -->
+                        <th style="min-width:25rem;"> Địa chỉ liên hệ </th>
+                        <th style="min-width:15rem;"> Địa chỉ cụ thể </th>
+                        <th style="min-width:5rem; justify-content: center;"> Mặc định </th>
+                        <th style="min-width: 8rem; max-width:8rem; justify-content: center;" pFrozenColumn alignFrozen="right" [frozen]="true"> Thao tác </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+                    <tr>
+                        <td style="min-width:5rem; max-width:5rem;" pFrozenColumn
+                            alignFrozen="left"> {{ row.contactAddressId }} </td>
+                        <!-- <td style="min-width:20rem;"> {{ row.provinceName }} </td>
+                        <td style="min-width:10rem;"> {{ row.districtName }} </td>
+                        <td style="min-width:10rem;"> {{ row.wardName }} </td> -->
+                        <td style="min-width:25rem;"> {{ row.contactAddress }} </td>   
+                        <td style="min-width:15rem;"> {{ row.detailAddress }}</td>
+                        <td style="min-width:5rem; justify-content: center;">
+                            <i class="pi pi-check" *ngIf="row.isDefault == YesNoConst.YES"></i>
+                        </td>
+                        <td style="min-width: 8rem; max-width:8rem; justify-content: center;" pFrozenColumn alignFrozen="right" [frozen]="true">
+                            <div class="flex" *ngIf="actions[rowIndex]?.length">
+                                <i class="pi pi-ellipsis-h" (click)="menu.toggle($event)"></i>
+                                <p-menu #menu [popup]="true" class="button-actions" [model]="actions[rowIndex]"
+                                    appendTo="body">
+                                </p-menu>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="7">Không có dữ liệu.</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="loadingbody">
+                    <tr>
+                        <td colspan="7"> Đang tải dữ liệu ... </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+            <!-- <p-paginator styleClass="at-paginator-sm" [totalRecords]="page.totalItems" [rows]="page.pageSize"
+                (onPageChange)="setPage($event)"></p-paginator> -->
+        </div>
+        <!-- THEM & SUA-->
+        <p-dialog [(visible)]="modalDialog" [style]="{width: '600px', height: 'auto'}" header="Thêm địa chỉ liên hệ" [modal]="true"
+            class="p-fluid">
+            <ng-template pTemplate="content">
+                <div class="grid formgrid">
+                    <ng-container>
+                        <div class="col-12 md:col-4 field b-field">
+							<div class="field b-field mb-0">
+								<label class="b-hightline-title">Tỉnh / Thành phố <span class="required-field"> * </span> </label>
+								<p-dropdown appendTo="body" optionLabel="fullName" optionValue="code" 
+                                    [autoDisplayFirst]="false"
+									styleClass="w-full" [options]="provinces" 
+                                    (onChange)="selectProvinces($event.value)" 
+                                    [(ngModel)]="investorContactAddress.provinceCode">
+                                    (click)="resetValid('investorContactAddress.provinceCode')"
+								</p-dropdown>
+							</div>
+						</div>
+
+                        <div class="col-12 md:col-4 field b-field">
+							<div class="field b-field mb-0">
+								<label class="b-hightline-title">Huyện / Quận <span class="required-field"> * </span> </label>
+								<p-dropdown optionLabel="fullName" optionValue="code" [autoDisplayFirst]="false" emptyMessage="Không có dữ liệu"
+									styleClass="w-full" [options]="districts" (onChange)="selectDisTricts($event.value)" [(ngModel)]="investorContactAddress.districtCode">
+                                    (click)="resetValid('investorContactAddress.districtCode')"
+                                </p-dropdown>
+							</div>
+						</div>
+
+                        <div class="col-12 md:col-4 field b-field">
+							<div class="field b-field mb-0">
+								<label class="b-hightline-title">Xã / Phường <span class="required-field"> * </span> </label>
+								<p-dropdown 
+                                    optionLabel="fullName" optionValue="code" [autoDisplayFirst]="false" emptyMessage="Không có dữ liệu"
+									styleClass="w-full" [options]="wards" (onChange)="selectWards($event.value)" [(ngModel)]="investorContactAddress.wardCode">
+                                    (click)="resetValid('investorContactAddress.wardCode')"
+                                </p-dropdown>
+							</div>
+						</div>
+
+                        <div class="col-12 md:col-12 field b-field">
+                            <div class="field mb-0">
+                                <label htmlFor="detailAddress"> 
+                                    Địa chỉ cụ thể <span class="required-field"> * </span>
+                                </label>
+                                <!-- <textarea pInputTextarea [(ngModel)]="investorContactAddress.detailAddress" [disabled]="true" class="custom-input-disabled"></textarea> -->
+                                <input type="text" id="detailAddress" AccName="detailAddress" pInputText
+                                    [(ngModel)]="investorContactAddress.detailAddress" maxlength="1024"
+                                    [ngClass]="{'ng-invalid ng-dirty' : fieldErrors?.detailAddress}"
+                                    (keyup)="setDetailAddress()"
+                                    (click)="resetValid('investorContactAddress.detailAddress')">
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-12 field b-field">
+                            <div class="field">
+                                <label htmlFor="contactAddress"> 
+                                    Địa chỉ liên hệ <span class="required-field"> * </span>
+                                </label>
+                                <textarea pInputTextarea [(ngModel)]="investorContactAddress.contactAddress" [disabled]="true" class="custom-input-disabled">{{investorContactAddress.detailAddress}}</textarea>
+
+                                <!-- <input 
+                                    type="text" id="contactAddress" AccName="contactAddress" pInputText
+                                    [(ngModel)]="investorContactAddress.contactAddress" maxlength="1024"
+                                    [ngClass]="{'ng-invalid ng-dirty' : fieldErrors?.contactAddress}"
+                                    (click)="resetValid('contactAddress')" 
+                                /> -->
+                            </div>
+                        </div>
+                    </ng-container>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text"
+                    (click)="hideDialog()"></button>
+                <button pButton pRipple label="Lưu" icon="pi pi-check" class="p-button-text"
+                    [disabled]="!validForm() || submitted" (click)="save()"></button>
+            </ng-template>
+        </p-dialog>
+    </div>
+</div>

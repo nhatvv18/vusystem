@@ -1,0 +1,12 @@
+{
+	"remoteServiceBaseUrl": "https://api-staging.epicpartner.vn",
+	"nodeBaseUrl": "https://api-staging.epicpartner.vn", 
+	  "rocketchat": {
+		  "api": "http://api-staging.epicpartner.vn:8091",
+		  "iframeSrc": "http://epic-rocketchat.stecom.vn:3000/?layout=embedded"
+	  },
+	"appBaseUrl": "https://ecore-staging.epicpartner.vn",
+	"baseUrlHome": "https://home-staging.epicpartner.vn",
+	"clientId": "client1",
+	"clientSecret": "secret1"
+}

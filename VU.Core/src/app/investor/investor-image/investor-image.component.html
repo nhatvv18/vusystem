@@ -1,0 +1,9 @@
+<label [for]="idInput">
+	<input type="file" [id]="idInput" style="display: none" 
+			[disabled]="isDisable"
+			(change)="changeImage($event)" />
+	<p-image [id]="idImage" [src]="image" 
+			alt="Image" [width]="imageWidth" [height]="imageHeight" 
+			[imageClass]="imageClass"
+			[imageStyle]="imageStyle" class="cursor-pointer"></p-image>
+</label>

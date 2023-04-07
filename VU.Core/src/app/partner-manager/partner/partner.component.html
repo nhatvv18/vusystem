@@ -1,0 +1,320 @@
+<div class="grid ml-0 mr-0 mt-0">
+    <div class="col-12">
+        <div class="card b-list">
+            <div class="p-fluid p-formgrid grid b-header">
+                <div class="col-12 md:col-7 b-title">
+                    <h4 style="display:inline"> Đối tác </h4>
+                </div>
+                <div class="col-12 md:col-5 b-action">
+                    <button *ngIf="isGranted([PermissionCoreConst.CoreDoiTac_ThemMoi])" pButton pRipple label="Thêm mới" icon="pi pi-plus" class="p-button-success mr-2" (click)="create()"></button>
+                </div>
+            </div>
+            <p-toast *ngIf="isToast"></p-toast>
+            <p-confirmDialog [style]="{width: 'auto'}" [baseZIndex]="10000"></p-confirmDialog>
+            <p-table 
+                #partnerTable 
+                [value]="rows" 
+                [columns]="_selectedColumns"
+                [loading]="isLoading" [rowHover]="true" [showCurrentPageReport]="true" [paginator]="false" 
+                (onPageChange)="setPage($event)" responsiveLayout="scroll" dataKey="code" [expandedRowKeys]="expandedRows"
+                [resizableColumns]="false" [scrollable]="true" scrollHeight="{{ (screenHeight*0.65) + 'px' }}" styleClass="custom-table">
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" placeholder="Tìm kiếm..." [(ngModel)]="keyword"
+                                    style="min-width: 300px" (keyup)="changeKeyword($event)" />
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th style="max-width: 5rem; min-width: 5rem;" pFrozenColumn alignFrozen="left" class="b-border-frozen-left"> STT </th>
+                        <th *ngFor="let col of columns" [ngStyle]="{'max-width': !col?.isPin ? col?.width : '', 'min-width': col?.width}" [ngClass]=" col?.class ">
+                            {{ col?.header }}
+                        </th> 
+                        <th style="max-width: 7rem; min-width: 7rem;" pFrozenColumn alignFrozen="right" [frozen]="true" class="b-border-frozen-right">Trạng thái </th>
+                        <th style="max-width: 3rem; min-width: 3rem; justify-content: center;" pFrozenColumn alignFrozen="right" [frozen]="true">
+                            <i class="pi pi-cog" (click)="setColumn(cols, _selectedColumns)"></i>
+                        </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row let-rowIndex="rowIndex" let-columns="columns">
+                    <tr>
+                        <td style="max-width: 5rem; min-width: 5rem;" pFrozenColumn alignFrozen="left" class="b-border-frozen-left"> {{ row.partnerId }} </td>
+                        <td *ngFor="let col of columns" [ngStyle]="{'max-width': !col?.isPin ? col?.width : '', 'min-width': col?.width}" [ngClass]=" col?.class">
+                            <div [ngClass]="col?.cutText" [title]="row[col?.field]">
+                                {{ row[col?.field]}}
+                            </div>
+                        </td>
+                        <td style="max-width: 7rem; min-width: 7rem;" pFrozenColumn alignFrozen="right" [frozen]="true" class="b-border-frozen-right"> 
+                            <p-tag 
+                                styleClass="p-tag-{{ PartnerConst.getStatusInfo(row.status, 'severity') }}" 
+                                severity="{{ PartnerConst.getStatusInfo(row.status, 'severity') }}" 
+                                value="{{ PartnerConst.getStatusInfo(row.status, 'name') }}">
+                            </p-tag> 
+                        </td>
+                        <td style="max-width: 3rem; min-width: 3rem; justify-content: center;" pFrozenColumn alignFrozen="right" [frozen]="true" class="b-table-actions">
+                            <div class="flex">
+                                <!-- <button type="button" pButton icon="pi pi-ellipsis-h" (click)="menu.toggle($event)"></button> -->
+                                <i class="pi pi-ellipsis-h"  (click)="menu.toggle($event)"></i>
+                                <p-menu 
+                                    #menu [popup]="true"class="button-actions"
+                                    [model]="listAction[rowIndex]" appendTo="body"
+                                    >
+                                </p-menu>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="7">Không có dữ liệu.</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="loadingbody">
+                    <tr>
+                        <td colspan="7"> Đang tải dữ liệu ... </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <p-paginator 
+                [rows]="page.pageSize" 
+                [totalRecords]="page.totalItems" 
+                [rowsPerPageOptions]="[25, 50, 100, 200]" 
+                currentPageReportTemplate="Tất cả {{ page.totalItems }} dòng" 
+                showCurrentPageReport="true"
+                (onPageChange)="setPage($event)">
+        </p-paginator>
+        </div>
+        <!-- THEM & SUA-->
+        <!-- <p-dialog [(visible)]="modalDialog" [style]="{width: '1000px'}" [header]="header()" [modal]="true"
+            class="p-fluid">
+            <ng-template pTemplate="content">
+                <div class="card pt-0">
+                    <div class="grid formgrid">
+                        <ng-container>
+                            <div class="col-12 md:col-12 title-group-input">
+                                <h6> Thông tin đối tác </h6>
+                            </div>
+                            <div class="col-12 md:col-3">
+                                <div class="field">
+                                    <label htmlFor="code">Mã doanh nghiệp (<span class="required-field"> *
+                                        </span>)</label>
+                                    <input type="text" id="code" name="code" pInputText maxlength="10"
+                                        [(ngModel)]="partner.code"
+                                        [ngClass]="{'ng-invalid ng-dirty' : (submitted && !partner.code) || fieldErrors?.code}"
+                                        (click)="resetValid('code')" />
+                                </div>
+                            </div>
+
+                            <div class="col-12 md:col-3">
+                                <div class="field">
+                                    <label htmlFor="taxCode">Mã số thuế (<span class="required-field"> * </span>) </label>
+                                    <input type="text" id="taxCode" name="taxCode" pInputText maxlength="50"
+                                        [(ngModel)]="partner.taxCode" (keypress)="numberOnly($event, [45])"
+                                        [ngClass]="{'ng-invalid ng-dirty' : (submitted && !partner.taxCode) || fieldErrors?.taxCode}"
+                                        (click)="resetValid('taxCode')" />
+                                </div>
+                            </div>
+
+                            <div class="col-12 md:col-6">
+                                <div class="field">
+                                    <label htmlFor="licenseIssuer">Nơi cấp (<span class="required-field"> * </span>)</label>
+                                    <input type="text" id="licenseIssuer" name="licenseIssuer" pInputText maxlength="512"
+                                        [(ngModel)]="partner.licenseIssuer"
+                                        [ngClass]="{'ng-invalid ng-dirty' : (submitted && !partner.licenseIssuer) || fieldErrors?.licenseIssuer}"
+                                        (click)="resetValid('licenseIssuer')" />
+                                </div>
+                            </div>
+
+                            <div class="col-12 md:col-3">
+                                <div class="field">
+                                    <label for="licenseDate">Ngày cấp (<span class="required-field"> * </span>)</label>
+                                    <p-calendar inputId="licenseDate" dateFormat="dd/mm/yy" locale="vi" appendTo="body"
+                                        utc="true" placeholder="dd/mm/yyyy" [(ngModel)]="partner.licenseDate"
+                                        [ngClass]="{'ng-invalid ng-dirty' : (submitted && !partner.licenseDate) || fieldErrors?.licenseDate}"
+                                        (click)="resetValid('licenseDate')" [showIcon]="true">
+                                    </p-calendar>
+                                </div>
+                            </div>
+
+                            <div class="col-12 md:col-3">
+                                <div class="field">
+                                    <label htmlFor="numberModified">Số lần thay đổi </label>
+                                    <input type="text" id="numberModified" name="numberModified" pInputText
+                                        [(ngModel)]="partner.numberModified" (keypress)="phoneNumber($event)"
+                                        (click)="resetValid('numberModified')" />
+                                </div>
+                            </div>
+
+                            <div class="col-12 md:col-3">
+                                <div class="field">
+                                    <label for="dateModified">Ngày thay đổi</label>
+                                    <p-calendar inputId="dateModified" dateFormat="dd/mm/yy" locale="vi"
+                                        appendTo="body" utc="true" placeholder="dd/mm/yyyy"
+                                        [(ngModel)]="partner.dateModified"
+                                        (click)="resetValid('dateModified')" [showIcon]="true">
+                                    </p-calendar>
+                                </div>
+                            </div>
+
+                            <div class="col-12 md:col-6">
+                                <div class="field">
+                                    <label htmlFor="name">Tên Doanh nghiệp (<span class="required-field"> * </span>)</label>
+                                    <input type="text" row="2" id="name" name="name" pInputText maxlength="256"
+                                        [(ngModel)]="partner.name"
+                                        [ngClass]="{'ng-invalid ng-dirty' : (submitted && !partner.name) || fieldErrors?.name}"
+                                        (click)="resetValid('name')" />
+                                </div>
+                            </div>
+
+                            <div class="col-12 md:col-6">
+                                <div class="field">
+                                    <label htmlFor="shortName">Tên viết tắt (<span class="required-field"> * </span>)</label>
+                                    <input type="text" id="shortName" name="shortName" pInputText maxlength="128"
+                                        [(ngModel)]="partner.shortName"
+                                        [ngClass]="{'ng-invalid ng-dirty' : (submitted && !partner.shortName) || fieldErrors?.shortName}"
+                                        (click)="resetValid('shortName')" />
+                                </div>
+                            </div>
+
+                            <div class="col-12 md:col-3">
+                                <div class="field">Vốn điều 
+                                    <label htmlFor="capital">lệ (<span class="required-field"> * </span>)</label>
+                                    <p-inputNumber autofocus id="capital" [ngClass]="{'ng-invalid ng-dirty' : (submitted && !partner.capital) || fieldErrors?.capital}"
+                                    (click)="resetValid('capital')"  [(ngModel)]="partner.capital" locale="vi"
+                                        locale="de-DE"></p-inputNumber>
+                                </div>
+                            </div>
+
+                            <div class="col-12 md:col-3">
+                                <div class="field">
+                                    <label htmlFor="email">Thư điện tử (<span class="required-field"> * </span>)</label>
+                                    <input type="text" id="email" name="email" pInputText maxlength="128"
+                                        [(ngModel)]="partner.email"
+                                        [ngClass]="{'ng-invalid ng-dirty' : (submitted && !partner.email) || fieldErrors?.email}"
+                                        (click)="resetValid('email')" />
+                                </div>
+                            </div>
+
+                            <div class="col-12 md:col-3">
+                                <div class="field">
+                                    <label htmlFor="phone">Điện thoại (<span class="required-field"> * </span>) </label>
+                                    <input type="text" id="phone" name="phone" pInputText maxlength="16"
+                                        [(ngModel)]="partner.phone" (keypress)="phoneNumber($event)"
+                                        [ngClass]="{'ng-invalid ng-dirty' : (submitted && !partner.phone) || fieldErrors?.phone}"
+                                        (click)="resetValid('phone')" />
+                                </div>
+                            </div>
+
+                            <div class="col-12 md:col-3">
+                                <div class="field">
+                                    <label htmlFor="mobile">Điện thoại khác</label>
+                                    <input type="text" id="mobile" name="mobile" pInputText maxlength="16"
+                                        [(ngModel)]="partner.mobile" (keypress)="phoneNumber($event)"
+                                        (click)="resetValid('mobile')" />
+                                </div>
+                            </div>
+                        </ng-container>
+
+                        <ng-container>
+                            <div class="col-12 md:col-12 title-group-input">
+                                <h6> Địa chỉ </h6>
+                            </div>
+                            <div class="col-12 md:col-6">
+                                <div class="field">
+                                    <label htmlFor="address">Địa chỉ đăng ký (<span class="required-field"> * </span>)</label>
+                                    <textarea inputId="address" rows="1" cols="30"
+                                        [(ngModel)]="partner.address" pInputTextarea maxlength="512"
+                                        [ngClass]="{'ng-invalid ng-dirty' : (submitted && !partner.address) || fieldErrors?.address}"
+                                        (click)="resetValid('address')"></textarea>
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-3">
+                                <div class="field">
+                                    <label htmlFor="nation">Quốc gia (<span class="required-field"> * </span>)</label>
+                                    <p-dropdown [filter]="true" [filterBy]="'name'" 
+                                        optionValue="code" name="code" optionLabel="name" appendTo="body"
+                                        [options]="NationalityConst.List" [autoDisplayFirst]="false"
+                                        [(ngModel)]="partner.nation" 
+                                        [ngClass]="{'ng-invalid ng-dirty' : (submitted && !partner.nation) || fieldErrors?.nation }"
+                                        (click)="resetValid('nation')">
+                                    </p-dropdown>
+                                </div>
+                            </div>
+
+                            <div class="col-12 md:col-6">
+                                <div class="field">
+                                    <label htmlFor="tradingAddress">Địa chỉ giao dịch </label>
+                                    <textarea inputId="tradingAddress" rows="1" cols="30"
+                                        [(ngModel)]="partner.tradingAddress" pInputTextarea maxlength="512"
+                                        ngClass="{{ fieldErrors?.tradingAddress ? 'ng-invalid ng-dirty' : '' }}"
+                                        (click)="resetValid('tradingAddress')"></textarea>
+                                </div>
+                            </div>
+                        </ng-container>
+
+                        <ng-container>
+                            <div class="col-12 md:col-12 title-group-input">
+                                <h6> Người đại diện </h6>
+                            </div>
+                            <div class="col-12 md:col-3">
+                                <div class="field">
+                                    <label htmlFor="repName">Tên người đại diện (<span class="required-field"> * </span>)</label>
+                                    <input type="text" id="repName" name="repName" pInputText maxlength="128"
+                                        [(ngModel)]="partner.repName"
+                                        [ngClass]="{'ng-invalid ng-dirty' : (submitted && !partner.repName) || fieldErrors?.repName}"
+                                        (click)="resetValid('repName')" />
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-3">
+                                <div class="field">
+                                    <label htmlFor="repPosition">Chức vụ (<span class="required-field"> * </span>)</label>
+                                    <input type="text" id="repPosition" name="repPosition" pInputText maxlength="128"
+                                        [(ngModel)]="partner.repPosition"
+                                        [ngClass]="{'ng-invalid ng-dirty' : (submitted && !partner.repPosition) || fieldErrors?.repPosition}"
+                                        (click)="resetValid('repPosition')" />
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-3">
+                                <div class="field">
+                                    <label htmlFor="decisionNo">Quyết định số </label>
+                                    <input type="text" id="decisionNo" name="decisionNo" pInputText maxlength="20"
+                                        [(ngModel)]="partner.decisionNo"  (click)="resetValid('decisionNo')"
+                                         />
+                                </div>
+                            </div>
+                            <div class="col-12 md:col-3">
+                                <div class="field">
+                                    <label for="decisionDate">Ngày quyết định</label>
+                                    <p-calendar inputId="decisionDate" dateFormat="dd/mm/yy" locale="vi" appendTo="body"
+                                        utc="true" placeholder="dd/mm/yyyy" [(ngModel)]="partner.decisionDate"
+                                        (click)="resetValid('decisionDate')"  >
+                                    </p-calendar>
+                                </div>
+                            </div>
+                        </ng-container>
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+                <button pButton pRipple label="Lưu" icon="pi pi-check" class="p-button-text" [disabled]="submitted" (click)="save()"></button>
+            </ng-template>
+        </p-dialog> -->
+
+        <!-- <p-dialog [(visible)]="deleteItemDialog" header="Xóa khách hàng doanh nghiệp" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span *ngIf="partner">Bạn có chắc chắn xóa khách hàng doanh nghiệp {{ partner.name }} ?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Huỷ" (click)="deleteItemDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Chắc chắn" (click)="confirmDelete()"></button>
+            </ng-template>
+        </p-dialog> -->
+    </div>
+</div>

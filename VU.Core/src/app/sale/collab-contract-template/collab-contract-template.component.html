@@ -1,0 +1,141 @@
+<app-loading-page *ngIf="isLoadingPage"></app-loading-page>
+<div class="grid ml-0 mr-0 mt-0">
+    <div class="col-12">
+        <div class="card b-list">
+            <div class="p-fluid p-formgrid grid b-header">
+                <div class="col-12 md:col-7 b-title">
+                    <h4 style="display:inline"> Mẫu hợp đồng cộng tác </h4>
+                </div>
+                <div class="col-12 md:col-5 b-action">
+                    <button *ngIf="isGranted([PermissionCoreConst.CoreHDCT_Template_ThemMoi])" pButton pRipple label="Upload file hồ sơ" icon="pi pi-cloud-upload" 
+                        class="p-button-success mr-2" (click)="create()"></button>
+                </div>
+            </div>
+            <p-toast></p-toast>
+            <p-confirmDialog [style]="{width: 'auto'}" [baseZIndex]="10000"></p-confirmDialog>
+            <p-table 
+                #collabContractTable 
+                [value]="rows" 
+                [columns]="_selectedColumns"
+                [loading]="isLoading" [rowHover]="true" [showCurrentPageReport]="true" [paginator]="false"
+                (onPageChange)="setPage($event)" responsiveLayout="scroll" dataKey="id"
+                [resizableColumns]="false" [scrollable]="true" [scrollHeight]="(screenHeight*0.65) + 'px'" styleClass="custom-table" 
+                selectionMode="multiple">
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <div class="flex justify-content-between flex-column sm:flex-row">
+                            <span class="block mt-2 md:mt-0 p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" placeholder="Tìm kiếm..." [(ngModel)]="keyword"
+                                    (input)="changeKeyword($event)" style="min-width: 20rem;"/>
+                            </span>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="max-width:3rem; min-width:3rem;"> #ID </th>
+                        <th style="max-width:25rem; min-width:30rem"> Tên hợp đồng </th>
+                        <th style="max-width:12rem; min-width:12rem"> Dành cho nhà đầu tư </th>
+                        <th style="max-width:12rem; min-width:12rem; justify-content: center;"> Xem hợp đồng </th>
+                        <th style="max-width:12rem; min-width:12rem; justify-content: center;"> Tải hợp đồng </th>
+                        <th></th>
+                        <th style="max-width:5rem; min-width:5rem; justify-content: center;" pFrozenColumn alignFrozen="right"> </th>
+                        <!-- <th style="max-width:10rem; min-width:10rem; justify-content: center;"> Thao tác</th> -->
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row let-rowIndex="rowIndex" let-columns="columns">
+                    <tr>
+                        <td style="max-width:3rem; min-width:3rem;"> {{ row?.id }} </td>
+                        <td style="max-width:25rem; min-width:30rem; justify-content: left;"> {{ row?.title }} </td>
+                        <td style="max-width:12rem; min-width:12rem; justify-content: left;"> 
+                            {{ CollabContractConst.getType(row.type) }}  
+                        </td>
+                        <td style="max-width:12rem; min-width:12rem;justify-content: center;" pFrozenColumn alignFrozen="right">
+                            <i *ngIf="isGranted([PermissionCoreConst.CoreHDCT_Template_Preview])" class="pi pi-eye mr-4" (click)="viewFile(row.fileUrl)" style="cursor:pointer ;" pTooltip="Xem file"></i>
+                        </td>
+                        <td style="max-width:12rem; min-width:12rem;justify-content: center;" pFrozenColumn alignFrozen="right">
+                            <i *ngIf="isGranted([PermissionCoreConst.CoreHDCT_Template_Download])" class="pi pi-download mr-4" (click)="downloadFile(row.fileUrl)" style="cursor:pointer;" pTooltip="Tải file"></i>
+                        </td>
+                        <td></td>
+                        <td style="max-width: 5rem; min-width:5rem; justify-content: center;" pFrozenColumn alignFrozen="right">
+                            <div class="flex">
+                                <i class="pi pi-ellipsis-h" style="cursor:pointer;" (click)="menu.toggle($event)"></i>
+                                <p-menu 
+                                    #menu [popup]="true"class="button-actions"
+                                    [model]="listAction[rowIndex]" appendTo="body"
+                                    >
+                                </p-menu>
+
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+
+            </p-table>
+            <p-paginator 
+                [rows]="page.pageSize" 
+                [totalRecords]="page.totalItems" 
+                [rowsPerPageOptions]="[25, 50, 100, 200]" 
+                currentPageReportTemplate="Tất cả {{ page.totalItems }} dòng" 
+                showCurrentPageReport="true"
+                (onPageChange)="setPage($event)">
+            </p-paginator>
+        </div>
+        <!-- THEM & SUA-->
+        <p-dialog [(visible)]="modalDialog" [style]="{width: '600px'}" [header]="headerTitle" [modal]="true"
+            class="p-fluid">
+            <ng-template pTemplate="content">
+                <div class="grid formgrid">
+                    <div class="field col-6">
+                        <span class="p-float-label">
+                            <input type="text" id="title" name="title" pInputText maxlength="100"[(ngModel)]="collabContract.title"
+                                [ngClass]="{'ng-invalid ng-dirty' : submitted && !collabContract.title}" />
+                            <label for="name">Tên hợp đồng <span class="required-field"> * </span> </label>
+                        </span>
+                    </div>
+                    <div style="margin-bottom: 0" class="field col-6">
+                        <div class="field">
+                            <p-dropdown [ngClass]="{'ng-invalid ng-dirty' : submitted && !collabContract.type}" id="type" name="type" [options]="types" optionLabel="name" optionValue="code" placeholder="Dành cho nhà đầu tư*" [(ngModel)]="collabContract.type"></p-dropdown>
+                        </div>
+                    </div>
+                    <div class="field col-12">
+                        <p-fileUpload name="demo[]" customUpload="true" class="wrapper-files-upload" accept=".docx,.pdf,.doc"
+                            (onSelect)="myUploader($event)" [showUploadButton]="false" [showCancelButton]="false"
+                            chooseLabel="Chọn" invalidFileSizeMessageDetail="Kích thước file tối đa 8MB"
+                            maxFileSize="80000000000">
+                        </p-fileUpload>
+                    </div>
+                    <div class="field col-12" style="display: none;">
+                            <input placeholder="Đường dẫn file" type="text" id="fileUrl" maxlength="256" name="fileUrl" disabled 
+                                    pInputText [value]="collabContract.fileUrl || ''" required autofocus />
+                            <!-- <label for="url">Đường dẫn file</label> -->
+                    </div>
+                </div>
+            </ng-template>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text"
+                    (click)="hideDialog()"></button>
+                <button pButton pRipple label="Lưu" icon="pi pi-check" class="p-button-text"
+                    [disabled]="!validForm() || submitted" (click)="save()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <!-- XOA -->
+        <p-dialog [(visible)]="deleteItemDialog" header="Xóa hợp đồng" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span *ngIf="collabContract">Bạn có chắc chắn xóa mẫu hợp đồng {{ collabContract.title }} ?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Hủy"
+                    (click)="deleteItemDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Đồng ý"
+                    (click)="confirmDelete()"></button>
+            </ng-template>
+        </p-dialog>
+
+         <!-- Xem hồ sơ tải lên -->
+         <app-form-view-pdf-file *ngIf="modalDialogPDF" (onClose)="hideDialog()" [modalDialogPDF]="modalDialogPDF" [urlfilePDF]="urlfilePDF"></app-form-view-pdf-file>
+    </div>
+</div>

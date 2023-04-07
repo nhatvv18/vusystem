@@ -1,0 +1,37 @@
+<div class="grid p-fluid">
+    <div class="col-12 md:col-12">
+        <div class="checkbox_approve mb-4">
+            <p-radioButton style="width: 50%" [(ngModel)]="check_approve"   [value]="true" class="approve_button" label="Xác nhận thông tin" name="approve" ></p-radioButton>
+            <p-radioButton  [(ngModel)]="check_approve"  [value]="false" name="unapprove" label="Từ chối"></p-radioButton>
+            <br>
+        </div>
+        <div class="field">
+            <label> Ghi chú (<span class="required-field"> * </span>)</label>
+            <textarea pInputTextarea [(ngModel)]="dataApprove.approveNote"></textarea>         
+        </div>
+    </div>
+    <ng-container *ngIf="isInvestorProf">
+        <div class="col-12 md:col-6"  disabled = "check_approve == true">
+            <div class="field">
+                <label for="date1"> Ngày bắt đầu chuyên nghiệp (<span class="required-field"> * </span>)</label>
+                <p-calendar [disabled]="!validDate()" inputId="date1" dateFormat="dd/mm/yy" locale="vi" appendTo="body"
+                    utc="true" placeholder="dd/mm/yyyy" [(ngModel)]="dataApprove.date1"
+                    [showIcon]="true">
+                </p-calendar>
+            </div>
+        </div>
+        <div class="col-12 md:col-6"  aria-disabled="check_approve == true">
+            <div class="field">
+                <label for="date2"> Ngày đáo hạn chuyên nghiệp (<span class="required-field"> * </span>)</label>
+                <p-calendar [disabled]="!validDate()" inputId="date2" dateFormat="dd/mm/yy" locale="vi" appendTo="body"
+                    utc="true" placeholder="dd/mm/yyyy" [(ngModel)]="dataApprove.date2"
+                    [showIcon]="true">
+                </p-calendar>
+            </div>
+        </div>
+    </ng-container>
+</div>
+<div class="p-dialog-footer" style="width: 100%; position: fixed; left: 0; bottom: 0;">
+    <button pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject" (click)="cancel()"></button>
+    <button pButton pRipple label="Đồng ý" icon="pi pi-check" class="p-button-text p-confirm-dialog-approve" [disabled]="!validForm() || submitted " (click)="accept()"></button>
+</div>

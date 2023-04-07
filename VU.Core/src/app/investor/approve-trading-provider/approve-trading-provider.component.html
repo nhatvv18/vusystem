@@ -1,0 +1,49 @@
+<div class="card pt-0">
+    <div class="grid detail">
+        <div class="p-fluid p-formgrid grid">
+			<div class="col-12 md:col-6">
+				<div class="field">
+					<h5>Ảnh giấy tờ</h5>
+					<app-investor-image [idInput]="'input-front'"
+										[idImage]="'image-front'"
+										[(image)]="ekycMatch.idCardImage">
+					</app-investor-image>
+				</div>
+			</div>
+			<div class="col-12 md:col-6">
+				<div class="field">
+					<h5>Mặt khách hàng</h5>
+					<app-investor-image [idInput]="'input-face'"
+										[idImage]="'image-face'"
+										[(image)]="ekycMatch.faceImage">
+					</app-investor-image>
+				</div>
+			</div>
+            <!-- <div class="col-12">
+                <label htmlFor="isVerifiedFace" class="cursor-pointer">
+                    <p-checkbox id="isVerifiedFace" value="Y" [binary]="true" [(ngModel)]="model.isVerifiedFace"></p-checkbox>
+                    <span class="ml-2">Nhận diện </span>
+                </label>
+            </div> -->
+            <div class="col-12">
+                <label htmlFor="isVerifiedIdentification" class="cursor-pointer">
+                    <p-checkbox id="isVerifiedIdentification" value="Y" [binary]="true" [(ngModel)]="model.isVerifiedIdentification">
+                    </p-checkbox>
+                    <span class="ml-2">Xác nhận thông tin</span>
+                </label>
+                <!-- <p-inputSwitch [(ngModel)]="model.isVerifiedIdentification"></p-inputSwitch> -->
+            </div>
+            <div class="col-12">
+                <div class="field b-field">
+                    <label>Ghi chú </label>
+                    <textarea pInputTextarea [(ngModel)]="model.notice" class="custom-input-disabled"></textarea>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" pButton pRipple 
+				[disabled]="isLoading"
+				label="Duyệt" icon="pi pi-save" (click)="approve()"></button>
+    </div>
+</div>

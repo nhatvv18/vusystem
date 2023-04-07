@@ -38,8 +38,13 @@ export class AppMenuComponent extends CrudComponentBase implements OnInit {
     
     ngOnInit() {
         this.model = [
-            { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'], isShow: this.isPermission(PermissionLoyaltyConst.GarnerPageDashboard) },
-            ...menus
+            { label: 'Dashboard', icon: 'pi pi-fw pi-home', routerLink: ['/'], isShow: true },
+            {
+                label: 'Cài đặt', icon: 'pi pi-fw pi-cog', routerLink: ['/setting'], isShow: true,
+                items: [
+                    {label: 'Chủ đầu tư', icon: '', routerLink:['/setting/owner'], isShow:true },
+                ]
+            },
         ];
     }
 
@@ -59,7 +64,7 @@ export class AppMenuComponent extends CrudComponentBase implements OnInit {
     }
 
     isPermission(keyName) {
-        // return true;
+        return true;
         return this.permissionsMenu.includes(keyName);
     }
 }

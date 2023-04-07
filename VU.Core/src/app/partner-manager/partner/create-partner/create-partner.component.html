@@ -1,0 +1,209 @@
+
+    <div class="grid p-fluid">
+        <ng-container>
+            <div class="col-12 md:col-12 title-group-input">
+                <h6> Thông tin đối tác </h6>
+            </div>
+            <p-toast></p-toast>
+            <p-confirmDialog [style]="{width: 'auto'}" [baseZIndex]="10000"></p-confirmDialog>
+            <div class="col-12 md:col-3">
+                <div class="field">
+                    <label htmlFor="code">Mã doanh nghiệp (<span class="required-field"> * </span>)</label>
+                    <input 
+                        type="text" id="code" name="code" pInputText maxlength="10"
+                        [(ngModel)]="partner.code"
+                        (click)="resetValid('code')" 
+                    />
+                </div>
+            </div>
+
+            <div class="col-12 md:col-3">
+                <div class="field">
+                    <label htmlFor="taxCode">Mã số thuế (<span class="required-field"> * </span>) </label>
+                    <input type="text" id="taxCode" name="taxCode" pInputText maxlength="50"
+                        [(ngModel)]="partner.taxCode" (keypress)="numberOnly($event, [45])"
+                        (click)="resetValid('taxCode')" />
+                </div>
+            </div>
+
+            <div class="col-12 md:col-6">
+                <div class="field">
+
+                    <label htmlFor="licenseIssuer">Nơi cấp (<span class="required-field"> * </span>)</label>
+                    <input style="width: 100%" type="text" id="licenseIssuer" name="licenseIssuer" pInputText maxlength="512"
+                            [(ngModel)]="partner.licenseIssuer"
+                            (click)="resetValid('licenseIssuer')" />
+                </div>
+                <!-- <div class="field">
+                    <label htmlFor="licenseIssuer">Nơi cấp (<span class="required-field"> * </span>)</label>
+                    <input type="text" id="licenseIssuer" name="licenseIssuer" pInputText maxlength="512"
+                        [(ngModel)]="partner.licenseIssuer"
+                        (click)="resetValid('licenseIssuer')" />
+                </div> -->
+            </div>
+
+            <div class="col-12 md:col-3">
+                <div class="field">
+                    <label for="licenseDate">Ngày cấp (<span class="required-field"> * </span>)</label>
+                    <p-calendar inputId="licenseDate" dateFormat="dd/mm/yy" locale="vi" appendTo="body"
+                        utc="true" placeholder="dd/mm/yyyy" [(ngModel)]="partner.licenseDate"
+                        (click)="resetValid('licenseDate')" [showIcon]="true">
+                    </p-calendar>
+                </div>
+            </div>
+
+            <div class="col-12 md:col-3">
+                <div class="field">
+                    <label htmlFor="numberModified">Số lần thay đổi </label>
+                    <input type="text" id="numberModified" name="numberModified" pInputText
+                        [(ngModel)]="partner.numberModified" (keypress)="phoneNumber($event)"
+                        (click)="resetValid('numberModified')" />
+                </div>
+            </div>
+
+            <div class="col-12 md:col-3">
+                <div class="field">
+                    <label for="dateModified">Ngày thay đổi</label>
+                    <p-calendar inputId="dateModified" dateFormat="dd/mm/yy" locale="vi"
+                        appendTo="body" utc="true" placeholder="dd/mm/yyyy"
+                        [(ngModel)]="partner.dateModified"
+                        (click)="resetValid('dateModified')" [showIcon]="true">
+                    </p-calendar>
+                </div>
+            </div>
+
+            <div class="col-12 md:col-6">
+                <div class="field">
+                    <label htmlFor="name">Tên Doanh nghiệp (<span class="required-field"> * </span>)</label>
+                    <input style="width: 100%" type="text" row="2" id="name" name="name" pInputText maxlength="256"
+                        [(ngModel)]="partner.name"
+                        (click)="resetValid('name')" />
+                </div>
+            </div>
+
+            <div class="col-12 md:col-6">
+                <div class="field">
+                    <label htmlFor="shortName">Tên viết tắt (<span class="required-field"> * </span>)</label>
+                    <input style="width: 100%" type="text" id="shortName" name="shortName" pInputText maxlength="128"
+                        [(ngModel)]="partner.shortName"
+                        (click)="resetValid('shortName')" />
+                </div>
+            </div>
+
+            <div class="col-12 md:col-3">
+                <div class="field">Vốn điều 
+                    <label htmlFor="capital">lệ (<span class="required-field"> * </span>)</label>
+                    <p-inputNumber autofocus id="capital"
+                    (click)="resetValid('capital')"  [(ngModel)]="partner.capital" locale="vi"
+                        locale="de-DE"></p-inputNumber>
+                </div>
+            </div>
+
+            <div class="col-12 md:col-3">
+                <div class="field">
+                    <label htmlFor="email">Thư điện tử (<span class="required-field"> * </span>)</label>
+                    <input type="text" id="email" name="email" pInputText maxlength="128"
+                        [(ngModel)]="partner.email"
+                        (click)="resetValid('email')" />
+                </div>
+            </div>
+
+            <div class="col-12 md:col-3">
+                <div class="field">
+                    <label htmlFor="phone">Điện thoại (<span class="required-field"> * </span>) </label>
+                    <input type="text" id="phone" name="phone" pInputText maxlength="16"
+                        [(ngModel)]="partner.phone" (keypress)="phoneNumber($event)"
+                        (click)="resetValid('phone')" />
+                </div>
+            </div>
+
+            <div class="col-12 md:col-3">
+                <div class="field">
+                    <label htmlFor="mobile">Điện thoại khác</label>
+                    <input type="text" id="mobile" name="mobile" pInputText maxlength="16"
+                        [(ngModel)]="partner.mobile" (keypress)="phoneNumber($event)"
+                        (click)="resetValid('mobile')" />
+                </div>
+            </div>
+        </ng-container>
+
+        <ng-container>
+            <div class="col-12 md:col-12 title-group-input">
+                <h6> Địa chỉ </h6>
+            </div>
+            <div class="col-12 md:col-6">
+                <div class="field">
+                    <label htmlFor="address">Địa chỉ đăng ký (<span class="required-field"> * </span>)</label>
+                    <textarea 
+                        inputId="address" rows="1" cols="30"
+                        [(ngModel)]="partner.address" pInputTextarea maxlength="512"
+                        (click)="resetValid('address')">
+                    </textarea>
+                </div>
+            </div>
+            <div class="col-12 md:col-6">
+                <div class="field">
+                    <label htmlFor="nation">Quốc gia (<span class="required-field"> * </span>)</label>
+                    <p-dropdown  
+                        [filter]="true" [filterBy]="'name'" 
+                        optionValue="code" name="code" optionLabel="name" appendTo="body"
+                        [options]="NationalityConst.List" [autoDisplayFirst]="false"
+                        [(ngModel)]="partner.nation" 
+                        (click)="resetValid('nation')">
+                    </p-dropdown>
+                </div>
+            </div>
+        </ng-container>
+        <div class="col-12 md:col-6">
+            <div class="field">
+                <label htmlFor="tradingAddress">Địa chỉ giao dịch </label>
+                <textarea inputId="tradingAddress" rows="1" cols="30"
+                    [(ngModel)]="partner.tradingAddress" pInputTextarea maxlength="512"
+                    (click)="resetValid('tradingAddress')"></textarea>
+            </div>
+        </div>
+
+        <ng-container>
+            <div class="col-12 md:col-12 title-group-input">
+                <h6> Người đại diện </h6>
+            </div>
+            <div class="col-12 md:col-3 div-repName">
+                <div class="field">
+                    <label htmlFor="repName">Tên người đại diện (<span class="required-field"> * </span>)</label>
+                    <input type="text" id="repName" name="repName" pInputText maxlength="128"
+                        [(ngModel)]="partner.repName"
+                        (click)="resetValid('repName')" />
+                </div>
+            </div>
+            <div class="col-12 md:col-3 div-repName">
+                <div class="field">
+                    <label htmlFor="repPosition">Chức vụ (<span class="required-field"> * </span>)</label>
+                    <input type="text" id="repPosition" name="repPosition" pInputText maxlength="128"
+                        [(ngModel)]="partner.repPosition"
+                        (click)="resetValid('repPosition')" />
+                </div>
+            </div>
+            <div class="col-12 md:col-3 div-repName">
+                <div class="field">
+                    <label htmlFor="decisionNo">Quyết định số </label>
+                    <input type="text" id="decisionNo" name="decisionNo" pInputText maxlength="20"
+                        [(ngModel)]="partner.decisionNo"  (click)="resetValid('decisionNo')"
+                            />
+                </div>
+            </div>
+            <div class="col-12 md:col-3 div-repName">
+                <div class="field">
+                    <label for="decisionDate">Ngày quyết định</label>
+                    <p-calendar inputId="decisionDate" dateFormat="dd/mm/yy" locale="vi" appendTo="body"
+                        utc="true" placeholder="dd/mm/yyyy" [(ngModel)]="partner.decisionDate"
+                        (click)="resetValid('decisionDate')"  >
+                    </p-calendar>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+
+    <div class="p-dialog-footer" style="width: 100%; position: fixed; left: 0; bottom: 0;">
+        <button pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject" (click)="close()"></button>
+        <button pButton pRipple label="Lưu" icon="pi pi-check" class="p-button-text p-confirm-dialog-approve" [disabled]="submitted" (click)="save()"></button>
+    </div>

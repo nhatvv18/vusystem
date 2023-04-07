@@ -1,0 +1,163 @@
+$gutter: .5rem; //for primeflex grid system
+
+@import "../node_modules/primeng/resources/primeng.min.css";
+@import "../node_modules/primeflex/primeflex.scss";
+@import "../node_modules/primeicons/primeicons.css";
+@import "../src/assets/pages/fonts.css";
+@import "../node_modules/prismjs/themes/prism-coy.css";
+@import "../node_modules/@fullcalendar/daygrid/main.min.css";
+@import "../node_modules/@fullcalendar/timegrid/main.min.css";
+
+
+// @import "assets/demo/flags/flags.css";
+// @import "assets/demo/documentation.scss";
+
+  $_opacity: .4;
+  $_gutter-s: 8px;
+  $_gutter-m: 16px;
+  $_constant-border: 1px solid #cecece;
+
+  .modal {
+    background-color: rgba(#000000, $_opacity);
+    bottom: 0;
+    height: 100%;
+    left: 0;
+    outline: 0;
+    overflow: auto;
+    padding: 0 $_gutter-m;
+    position: fixed;
+    right: 0;
+    text-align: center;
+    top: 100;
+    z-index: 99999;
+    /* Adjust according to your needs */
+
+    &.fade-anim {
+      opacity: 0;
+      will-change: opacity;
+
+      .modal-content {
+        transform: translate(0, -25%);
+        will-change: transform;
+      }
+    }
+
+    &.in {
+      .modal-content {
+        transform: translate(0, 0);
+      }
+    }
+
+    &.fade-anim.in {
+      opacity: 1;
+    }
+
+    .draggable {
+      display: block;
+      position: relative;
+
+      .handle {
+        cursor: move;
+      }
+    }
+  }
+
+  .modal-open {
+    overflow: hidden;
+  }
+
+  .modal-content {
+    background-color: #FFFFFF;
+    border-radius: 4px;
+    margin: $_gutter-m auto;
+    position: relative;
+    will-change: opacity;
+    display: inline-block;
+    text-align: left;
+
+    &-size-m {
+      max-width: 992px;
+    }
+
+    &-size-l {
+      max-width: 1200px;
+    }
+  }
+
+  .modal-header,
+  .modal-footer {
+    align-items: center;
+    display: flex;
+    height: 56px;
+    padding: 0 $_gutter-m;
+  }
+
+  .modal-header {
+    border-bottom: $_constant-border;
+
+    h3 {
+      color: inherit;
+      font-weight: 600;
+      font-size: 1.25rem;
+      padding: 0px;
+      margin: 0px;
+      color: #212529;
+    }
+
+    .close-btn {
+      position: absolute;
+      right: 0px;
+    }
+  }
+
+  .modal-body {
+    padding: $_gutter-m;
+  }
+
+  .modal-footer {
+    border-top: $_constant-border;
+    justify-content: flex-end;
+
+    .btn {
+      margin: 0 0 0 $_gutter-s;
+    }
+  }
+   
+.dropbtn {
+  padding: 0px;
+}
+.dropdown {
+  position: relative;
+  display: inline-block;
+  float: right;
+}
+
+.dropdown-content {
+  min-width: 190px; 
+  padding: 5px;
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 99999;
+  right: 0;
+  button {
+    width: 100%;
+  }
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {background-color: #f1f1f1}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+} 
+markdown img {
+  width: 100%;
+}

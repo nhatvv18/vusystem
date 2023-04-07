@@ -1,0 +1,62 @@
+<div *ngIf="isGranted(PermissionCoreConst.CoreKHDN_ChiTiet)" class="grid detail business-customer">
+    <div class="col-12">
+        <div class="card pt-0 pb-0 mb-0 mt-5 grid">
+            <div class="col-9">
+                <h5 class="mb-2"> Thông tin cấu hình chữ ký số </h5>
+                <div class="p-fluid p-formgrid grid">
+                    <div class="field col-12 md:col-12">
+                        <label class="title-info {{ isEdit ? 'hightline-title' : '' }}"> Địa chỉ Server </label>
+                        <input 
+                            [disabled]="!isEdit" type="text" id="server" name="server" pInputText 
+                            [(ngModel)]="digitalSign.server"
+                            [ngClass]="{'ng-invalid ng-dirty' :  fieldErrors?.server} + ' custom-input-disabled'"
+                            (click)="resetValid('code')" 
+                        />
+                    </div>
+                    <div class="field col-12 md:col-12">
+                        <label class="title-info {{ isEdit ? 'hightline-title' : '' }}"> Key </label>
+                        <input 
+                            [disabled]="!isEdit" type="text" id="key" name="key" pInputText
+                            [(ngModel)]="digitalSign.key" 
+                            [ngClass]="{'ng-invalid ng-dirty' :  fieldErrors?.key} + ' custom-input-disabled'"
+                            (click)="resetValid('taxCode')" 
+                        />
+                    </div>
+                    <div class="field col-12 md:col-12">
+                        <label class="title-info"> Secret </label>
+                        <input 
+                            [disabled]="!isEdit" type="text" id="licenseIssuer" name="licenseIssuer" maxlength="1024"
+                            pInputText [(ngModel)]="digitalSign.secret" 
+                            [ngClass]="{'ng-invalid ng-dirty' :  fieldErrors?.secret} + ' custom-input-disabled'"
+                            (click)="resetValid('licenseIssuer')" 
+                        />
+                    </div>
+                </div>
+            </div>
+            <div class="col-3 text-center mt-3">
+                <div class="p-fluid p-formgrid grid">
+                    <div class="col-12 wrapper-avatar-issuer">
+                        <p-image
+                            [src]="digitalSign?.stampImageUrl ? (AppConsts.remoteServiceBaseUrl + '/' + digitalSign?.stampImageUrl) : imageDefault" 
+                            imageClass="b-w-100"
+                            [imageStyle]="{'border-radius':'8px','max-height':'240px','width': '100%'}" 
+                            [preview]="true">
+                        </p-image>
+                    </div>
+                    <div class="col-12">
+                        <p-fileUpload
+                            [disabled]="!isEdit"
+                            name="demo[]" accept=".png,.jpeg,.jpg" 
+                            chooseLabel="Chọn ảnh"
+                            chooseIcon="pi pi-image"
+                            class="custom-file-upload mt-3"  
+                            [customUpload]="true" 
+                            (uploadHandler)="myUploaderStamp($event)"
+                            [auto]="true" >
+                        </p-fileUpload>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

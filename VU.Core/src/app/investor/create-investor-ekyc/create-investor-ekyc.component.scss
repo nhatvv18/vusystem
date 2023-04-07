@@ -1,0 +1,27 @@
+.card {
+    position: relative;
+    min-height: 330px;
+}
+
+::ng-deep .custom-fixed{
+    position: fixed;
+    top: 9%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 96%;
+    padding: 24px 0 0;
+    background: #fff;
+    z-index: 10;
+}
+
+.block-detail {
+    margin-top: 280px;
+}
+
+.image-left-custom{
+    margin-left: 5rem;
+}
+
+.content-padding{
+    padding-bottom: 3rem ;
+}

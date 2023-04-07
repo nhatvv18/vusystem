@@ -1,0 +1,84 @@
+<app-loading-page *ngIf="isLoadingPage"></app-loading-page>
+<div class="grid ml-0 mr-0 mt-0" >
+    <div class="col-12">
+        <div class="card b-list mt-0 pt-0">
+            <div class="p-fluid p-formgrid grid b-header">
+                <div class="col-12 md:col-5 b-title">
+                    <h4 style="display:inline">Báo cáo thống kê</h4>
+                </div>
+                <!-- <div class="col-12 md:col-7 b-action">
+                    <button *ngIf="isGranted([PermissionCoreConst.Core_BaoCao_KinhDoanh])" pButton pRipple label="Xem trước" icon="pi pi-file-o" class="p-button-success mr-2" ></button>
+                    <button *ngIf="isGranted([PermissionCoreConst.Core_BaoCao_KinhDoanh])" pButton pRipple label="Xuất file PDF" icon="pi pi-file-o" class="p-button-success mr-2" ></button>
+                    <button *ngIf="isGranted([PermissionCoreConst.Core_BaoCao_KinhDoanh])" pButton pRipple label="Xuất file Excel" icon="pi pi-file-o" class="p-button-success mr-2" (click)="onAccept()"></button>
+                </div> -->
+            </div>
+
+            <p-toast></p-toast>
+            <p-confirmDialog [style]="{width: 'auto'}" [baseZIndex]="10000"></p-confirmDialog>
+
+            <div class="grid p-fluid border-div" style="margin-top: 5rem;width: 90%;">
+                <ng-container>
+                        <div class="col-12 md:col-3" > 
+                        </div>  
+                        <div class="col-12 md:col-6" style="padding-top: 2rem;"> 
+                            <div class="field">
+                                <label for="startDate"> Loại hình báo cáo (<span class="required-field"> * </span>)</label>
+                                <p-dropdown id="dropdownStatus" [options]="statusSearch" [autoDisplayFirst]="true"
+                                optionLabel="name" optionValue="code" 
+                                [(ngModel)]="status" class=" ml-2">
+                                </p-dropdown>
+                            </div>
+                        </div> 
+                        <div class="col-12 md:col-3" > 
+                        </div>  
+                        <div class="col-12 md:col-3" > 
+                        </div>  
+                        <div class="col-12 md:col-3" >
+                            <div class="field">
+                                <label for="startDate"> Thời gian bắt đầu (<span class="required-field"> * </span>)</label>
+                                <p-calendar inputId="startDate" dateFormat="dd/mm/yy" locale="vi" appendTo="body"
+                                    utc="true" placeholder="dd/mm/yyyy" [(ngModel)]="startDate"
+                                    [showIcon]="true">
+                                </p-calendar>
+                            </div>
+                        </div>
+                        <div class="col-12 md:col-3" >
+                            <div class="field">
+                                <label for="endDate"> Thời gian kết thúc (<span class="required-field"> * </span>)</label>
+                                <p-calendar inputId="endDate" dateFormat="dd/mm/yy" locale="vi" appendTo="body"
+                                    utc="true" placeholder="dd/mm/yyyy" [(ngModel)]="endDate"
+                                    [showIcon]="true">
+                                </p-calendar>
+                            </div>
+                        </div>
+                        
+                        <div class="col-12 md:col-3" >                     
+                        </div>
+                        <div class="col-12 md:col-3" >    
+                        </div>
+                        
+                        <!-- <div class="col-12 md:col-2 b-action" >  
+                            <button [disabled]="true" *ngIf="isGranted([PermissionCoreConst.Core_BaoCao_KinhDoanh])" pButton pRipple label="Xem trước" icon="pi pi-file-o" class="p-button-success mr-2" ></button>  
+                        </div>
+                        <div class="col-12 md:col-2 b-action" >  
+                            <button [disabled]="true" *ngIf="isGranted([PermissionCoreConst.Core_BaoCao_KinhDoanh])" pButton pRipple label="Xuất file PDF" icon="pi pi-file-o" class="p-button-success mr-2" ></button>
+  
+                        </div> -->
+                        <div class="col-12 md:col-6 b-action">
+                            <button [disabled]="!validForm()" *ngIf="isGranted([PermissionCoreConst.Core_BaoCao_KinhDoanh])" pButton pRipple label="Xuất file Excel" icon="pi pi-file-o" class="p-button-success mr-2" (click)="onAccept()"></button>
+                        </div>
+                        <div class="col-12 md:col-3" >    
+                        </div>
+                        <div class="col-12 md:col-3" >    
+                        </div>
+                        <div class="col-12 md:col-6" style="padding-top: 2rem;"> 
+                            <div class="field">
+                                <p-progressBar *ngIf="isSend" mode="indeterminate" [style]="{'height': '6px'}"></p-progressBar>
+                            </div>
+                        </div>
+                       
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</div>

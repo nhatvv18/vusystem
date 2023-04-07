@@ -1,0 +1,77 @@
+<div class="grid ml-0 mr-0 mt-0">
+    <div class="col-12 p-0">
+        <div class="card b-page-detail p-0">
+            <p-toast></p-toast>
+            <p-table 
+                #userTable 
+                [value]="rows" [loading]="isLoading" [rowHover]="true" 
+                [paginator]="false" responsiveLayout="scroll" [scrollable]="true" 
+                styleClass="mt-3 custom-table">
+
+                <ng-template pTemplate="caption">
+                    <div class="grid">
+                        <div class="col-6 flex flex-row flex-wrap">
+                            <span class="block mt-2 md:mt-0 p-input-icon-left">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" placeholder="Tìm kiếm..."
+                                    [(ngModel)]="keyword" (keyup)="changeKeyword()" style="width: 300px;"
+                                    (input)="setPage($event)"/>
+                            </span>
+                        </div>
+                        <div class="col-6 flex flex-row-reverse flex-wrap">
+                            <button *ngIf="isGranted([PermissionCoreConst.CoreDoiTac_Account_ThemMoi])" pButton pRipple label="Thêm mới" icon="pi pi-plus" class="p-button-success" (click)="create()"></button>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="min-width: 5rem; max-width: 5rem;"> # ID </th>
+                        <th style="min-width:10rem">Tên đăng nhập </th>
+                        <th style="min-width:15rem"> Tên hiển thị </th>
+                        <th style="min-width:22rem; max-width:22rem;">Email </th>
+                        <th style="min-width:10rem; max-width:10rem">Loại tài khoản </th>
+                        <th style="min-width:8rem; max-width: 8rem;">Trạng thái</th>
+                        <th style="min-width:8rem; max-width:8rem; justify-content: center;"> Thao tác</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row let-rowIndex="rowIndex">
+                    <tr>
+                        <!-- <td>
+                            <p-tableCheckbox [value]="user"></p-tableCheckbox>
+                        </td> -->
+                        <td style="min-width: 5rem; max-width: 5rem;"> {{ row.userId }} </td>
+                        <td style="min-width:10rem; font-weight: 500;"> {{ row.userName }} </td>
+                        <td style="min-width:15rem; font-weight: 500;"> {{ row.displayName }} </td>
+                        <td style="min-width:22rem; max-width:22rem;"> 
+                            {{ row.email }} 
+                        </td>
+
+                        <td style="min-width:10rem; max-width:10rem;"> {{ row.userType }} </td>
+                        <td style="min-width:8rem; max-width:8rem;">
+                            <p-tag 
+                                styleClass="p-tag-{{ InvestorAccountConst.statusName[row.status].color }}" 
+                                severity="{{ InvestorAccountConst.statusName[row.status].color }}" 
+                                value="{{ InvestorAccountConst.statusName[row.status].name }}">
+                            </p-tag> 
+                         </td>
+                        <td style="min-width:8rem; max-width:8rem;" class="b-table-actions">
+                         
+                            <div class="flex" *ngIf="listAction[rowIndex].length">
+                                <!-- <button type="button" pButton icon="pi pi-ellipsis-h" (click)="menu.toggle($event)"></button> -->
+                                <i class="pi pi-ellipsis-h"  (click)="menu.toggle($event)"></i>
+                                <p-menu 
+                                    #menu [popup]="true"class="button-actions"
+                                    [model]="listAction[rowIndex]" appendTo="body"
+                                    >
+                                </p-menu>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</div>
+
+
+

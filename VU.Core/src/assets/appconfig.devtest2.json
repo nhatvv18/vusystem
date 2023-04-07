@@ -1,0 +1,12 @@
+{
+	"remoteServiceBaseUrl": "https://api-dev.epicpartner.vn",
+	"nodeBaseUrl": "https://api-dev.epicpartner.vn",
+	"rocketchat": {
+		"api": "https://api-dev.epicpartner.vn",
+		"iframeSrc": "http://epic-rocketchat.stecom.vn:3000/?layout=embedded"
+	},
+	"appBaseUrl": "https://ecore-dev.epicpartner.vn",
+	"baseUrlHome": "https://home-dev.epicpartner.vn",
+	"clientId": "client1",
+	"clientSecret": "secret1"
+}

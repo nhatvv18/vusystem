@@ -1,0 +1,345 @@
+<app-loading-page *ngIf="isLoading"></app-loading-page>
+<div class="card b-page-detail" *ngIf="!isLoading">
+    <div class="p-fluid p-formgrid grid b-header">
+        <div class="col-12 md:col-7">
+            <h5 class="mb-0"> {{ businessCustomerDetail.name }} </h5>
+        </div>
+        <div class="col-12 md:col-5 text-right b-actions">
+            <div class="text-right"> 
+                <p-button 
+                    *ngIf="isGranted([PermissionCoreConst.CoreKHDN_CapNhat]) && tabActive == 'thongTinChung'"
+                    styleClass="p-button-sm custom-button" [label]="isEdit ? 'Lưu lại' : 'Chỉnh sửa'"
+                    icon="pi {{ isEdit ? 'pi-save' : 'pi-pencil' }}" (click)="changeEdit()">
+                </p-button>
+                <p-button *ngIf="isGranted([PermissionCoreConst.CoreKHDN_CauHinhChuKySo]) && tabActive == 'cauHinhChuKySo'"
+                    styleClass="p-button-sm custom-button" [label]="isEdit ? 'Lưu lại' : 'Chỉnh sửa'"
+                    icon="pi {{ isEdit ? 'pi-save' : 'pi-pencil' }}" (click)="changeEditDigitalSign();">
+                </p-button>
+                <p-button 
+                    styleClass="p-button-sm custom-button b-button-back"
+                    [routerLink]="'/customer/business-customer/business-customer'" 
+                    label="Quay lại" icon="pi pi-chevron-left">
+                </p-button>
+            </div>
+        </div>
+    </div>
+    <p-tabView styleClass="custom-tabview" [(activeIndex)]="activeIndex" (onChange)="changeTabView($event)">
+        <p-tabPanel [header]="'thongTinChung'" *ngIf="isGranted([PermissionCoreConst.CoreKHDN_ThongTinChung]) && activeFirstTabDefault(isGranted([PermissionCoreConst.CoreKHDN_ThongTinChung]), 'thongTinChung')">
+            <ng-template pTemplate = "header">
+                <span> Thông tin chung </span>
+            </ng-template>
+            <div *ngIf="isGranted([PermissionCoreConst.CoreKHDN_ChiTiet])" class="grid detail business-customer">
+                <div class="col-12">
+                    <div class="card pt-0 pb-0 mb-0 grid">
+                        <div class="col-9">
+                            <h5 class="mb-2"> Thông tin doanh nghiệp </h5>
+                            <div class="p-fluid p-formgrid grid">
+                                <div class="field col-12 md:col-2">
+                                    <label class="title-info {{ isEdit ? 'hightline-title' : '' }}" > Mã doanh nghiệp</label>  
+                  
+                                    <input 
+                                        [disabled]="!isEdit" maxlength="10"
+                                        type="text" id="code" name="code" pInputText 
+                                        [(ngModel)]="businessCustomerDetail.code" 
+                                        [ngClass]="{'ng-invalid ng-dirty' :  fieldErrors?.code} + ' custom-input-disabled'"  
+                                        (click)="resetValid('code')"
+                                    />
+                                </div>
+                                <div class="field col-12 md:col-2">
+                                    <label class="title-info {{ isEdit ? 'hightline-title' : '' }}"> Mã số thuế </label>
+                                    <input [disabled]="!isEdit" type="text" id="taxCode" name="taxCode" pInputText maxlength="50"
+                                    [(ngModel)]="businessCustomerDetail.taxCode"[ngClass]="{'ng-invalid ng-dirty' :  fieldErrors?.taxCode} + ' custom-input-disabled'"  (click)="resetValid('taxCode')"/>
+                                </div>
+                                <div class="field col-12 md:col-2">
+                                    <label class="title-info {{ isEdit ? 'hightline-title' : '' }}"> Ngày cấp </label>
+                                    <p-calendar
+                                    inputId="licenseDate" dateFormat="dd/mm/yy" locale="vi" appendTo="body" utc="true" placeholder="dd/mm/yyyy"
+                                    [autoDisplayFirst]="true" [disabled]="!isEdit"
+                                    [(ngModel)]="businessCustomerDetail.licenseDate" 
+                                    [ngClass]="{'ng-invalid ng-dirty' : fieldErrors?.licenseDate} + ' custom-input-disabled'" 
+                                    (click)="resetValid('licenseDate')"
+                                    [showIcon]="true">
+                                    </p-calendar>
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label class="title-info {{ isEdit ? 'hightline-title' : '' }}"> Nơi cấp </label>
+                                    <input [disabled]="!isEdit" type="text" id="licenseIssuer" name="licenseIssuer" pInputText [title]="businessCustomerDetail.licenseIssuer" maxlength="1024"
+                                    [(ngModel)]="businessCustomerDetail.licenseIssuer"[ngClass]="{'ng-invalid ng-dirty' :  fieldErrors?.licenseIssuer} + ' custom-input-disabled'"  (click)="resetValid('licenseIssuer')"/>
+                                </div>
+                                <div class="field col-12 md:col-12">
+                                    <label class="title-info {{ isEdit ? 'hightline-title' : '' }} "> Tên doanh nghiệp </label>
+                                    <input 
+                                        [disabled]="!isEdit"
+                                        type="text" id="name" name="name" pInputText 
+                                        [(ngModel)]="businessCustomerDetail.name" maxlength="200"
+                                        [ngClass]="{'ng-invalid ng-dirty' : fieldErrors?.name} + ' custom-input-disabled'" 
+                                        (click)="resetValid('name')"
+                                    />
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label class="title-info {{ isEdit ? 'hightline-title' : '' }}"> Tên viết tắt </label>
+                                    <input 
+                                        [disabled]="!isEdit"
+                                        type="text" id="shortName" name="shortName" pInputText 
+                                        [(ngModel)]="businessCustomerDetail.shortName" maxlength="100"
+                                        [ngClass]="{'ng-invalid ng-dirty' : fieldErrors?.shortName} + ' custom-input-disabled'" 
+                                        (click)="resetValid('shortName')"
+                                    />
+                                </div>
+                                <div class="field col-12 md:col-3">
+                                    <label class="title-info {{ isEdit ? 'hightline-title' : '' }}"> Số lần thay đổi </label>
+                                    <p-inputNumber 
+                                    type="text" id="numberModified" name="numberModified"
+                                    [disabled]="!isEdit"
+                                    [(ngModel)]="businessCustomerDetail.numberModified" 
+                                    [ngClass]="{'ng-invalid ng-dirty' :  fieldErrors?.numberModified} + ' custom-input-disabled'" 
+                                    (click)="resetValid('numberModified')">
+                                    </p-inputNumber>
+                                </div>
+                                <div class="field col-12 md:col-3">
+                                    <label class="title-info {{ isEdit ? 'hightline-title' : '' }}"> Ngày thay đổi</label>
+                                    <p-calendar
+                                    inputId="dateModified" dateFormat="dd/mm/yy" locale="vi" appendTo="body" utc="true" placeholder="dd/mm/yyyy"
+                                    [autoDisplayFirst]="true" [disabled]="!isEdit"
+                                    [(ngModel)]="businessCustomerDetail.dateModified" 
+                                    [ngClass]="{'ng-invalid ng-dirty' : fieldErrors?.dateModified} + ' custom-input-disabled'" 
+                                    (click)="resetValid('dateModified')"
+                                    [showIcon]="true">
+                                    </p-calendar>
+                                </div>
+
+                                <div class="field col-12 md:col-2">
+                                    <label class="title-info {{ isEdit ? 'hightline-title' : '' }}"> Mã khách hàng </label>
+                                    <input 
+                                    [disabled]="true" maxlength="128"
+                                    type="text" id="cifCode" name="cifCode" pInputText 
+                                    [(ngModel)]="businessCustomerDetail.cifCode" 
+                                    [ngClass]="{'ng-invalid ng-dirty' : fieldErrors?.cifCode} + ' custom-input-disabled'" 
+                                    (click)="resetValid('cifCode')"
+                                />
+                                </div>
+    
+                                <div class="field col-12 md:col-4">
+                                    <label class="title-info {{ isEdit ? 'hightline-title' : '' }}"> Vốn điều lệ </label>
+                                    <p-inputNumber 
+                                        type="text" id="capital" name="capital" min="0" 
+                                        [disabled]="!isEdit"
+                                        [(ngModel)]="businessCustomerDetail.capital" locale="de-DE"
+                                        [ngClass]="{'ng-invalid ng-dirty' : fieldErrors?.capital} + ' custom-input-disabled'">
+                                    </p-inputNumber>
+                                </div>
+
+                                <div class="field col-12 md:col-6">
+                                    <label class="title-info {{ isEdit ? 'hightline-title' : '' }}"> Thư điện tử </label>
+                                    <input 
+                                    [disabled]="!isEdit" maxlength="128"
+                                    type="text" id="email" name="email" pInputText 
+                                    [(ngModel)]="businessCustomerDetail.email" 
+                                    [ngClass]="{'ng-invalid ng-dirty' : fieldErrors?.email} + ' custom-input-disabled'" 
+                                    (click)="resetValid('email')"
+                                />
+                                </div>
+                                <div class="field col-12 md:col-3">
+                                    <label class="title-info {{ isEdit ? 'hightline-title' : '' }}"> Điện thoại </label>
+                                    <input 
+                                        [disabled]="!isEdit"
+                                        type="text" id="phone" name="phone" pInputText 
+                                        [(ngModel)]="businessCustomerDetail.phone" maxlength="16"
+                                        [ngClass]="{'ng-invalid ng-dirty' : fieldErrors?.phone} + ' custom-input-disabled'" 
+                                        (click)="resetValid('phone')"
+                                        (keypress)="phoneNumber($event)"
+                                    />
+                                </div>
+                                <div class="field col-12 md:col-3">
+                                    <label class="title-info {{ isEdit ? 'hightline-title' : '' }}"> Điện thoại khác </label>
+                                    <input 
+                                        [disabled]="!isEdit"
+                                        type="text" id="mobile" name="mobile" pInputText 
+                                        [(ngModel)]="businessCustomerDetail.mobile" maxlength="16"
+                                        [ngClass]="{'ng-invalid ng-dirty' : fieldErrors?.mobile} + ' custom-input-disabled'" 
+                                        (click)="resetValid('mobile')"
+                                        (keypress)="phoneNumber($event)"
+                                    />
+                                </div>
+                                <div class="field col-12 md:col-6">
+                                    <label class="title-info {{ isEdit ? 'hightline-title' : '' }}"> Website </label>
+                                    <input 
+                                    [disabled]="!isEdit"
+                                    type="text" id="website" name="website" pInputText 
+                                    [(ngModel)]="businessCustomerDetail.website" maxlength="256"
+                                    [ngClass]="{'ng-invalid ng-dirty' : fieldErrors?.website} + ' custom-input-disabled'" 
+                                    (click)="resetValid('website')"
+                                />
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-3 text-center mt-3">
+                            <div class="p-fluid p-formgrid grid">
+                                <div class="col-12 wrapper-avatar-issuer">
+                                    <p-image
+                                        [src]="businessCustomerDetail?.avatarImageUrl ? (AppConsts.remoteServiceBaseUrl + '/' + businessCustomerDetail?.avatarImageUrl) : imageDefault" 
+                                        imageClass="b-w-100"
+                                        [imageStyle]="{'border-radius':'8px','max-height':'240px', 'width': '100%'}" 
+                                        [preview]="true">
+                                    </p-image>
+                                </div>
+                                <div class="col-12">
+                                    <p-fileUpload
+                                        [disabled]="!isEdit"
+                                        name="demo[]" accept=".png,.jpeg,.jpg" 
+                                        chooseLabel="Chọn ảnh đại diện"
+                                        chooseIcon="pi pi-image"
+                                        class="custom-file-upload mt-3"  
+                                        [customUpload]="true" 
+                                        (uploadHandler)="myUploader($event)"
+                                        [auto]="true" >
+                                    </p-fileUpload>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card pt-0 pb-0 mb-0">
+                        <h5 class="mt-3 mb-2"> Thông tin địa chỉ </h5>
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="field col-12 md:col-10">
+                                <label class="title-info {{ isEdit ? 'hightline-title' : '' }}"> Địa chỉ đăng ký</label>
+                                <input 
+                                    [disabled]="!isEdit"
+                                    type="text" id="address" name="address" pInputText maxlength="1024"
+                                    [(ngModel)]="businessCustomerDetail.address" [title]="businessCustomerDetail.address"
+                                    [ngClass]="{'ng-invalid ng-dirty' : fieldErrors?.address} + ' custom-input-disabled'" 
+                                    (click)="resetValid('address')"
+                                />
+                            </div>
+                            <div class="field col-12 md:col-2">
+                                <label class="title-info {{ isEdit ? 'hightline-title' : '' }}">Quốc gia</label>
+                                <p-dropdown 
+                                    optionValue="code" name="nation" optionLabel="name"
+                                    [autoDisplayFirst]="true" [disabled]="!isEdit"
+                                    [options]="NationalityConst.List" 
+                                    [(ngModel)]="businessCustomerDetail.nation" 
+                                    [ngClass]="{'ng-invalid ng-dirty' : (submitted && !businessCustomer.nation) || fieldErrors?.nation } + ' custom-input-disabled'" 
+                                    (click)="resetValid('nation')">
+                                </p-dropdown>
+                            </div>
+                            <div class="field col-12 md:col-12">
+                                <label class="title-info {{ isEdit ? 'hightline-title' : '' }}">Địa chỉ giao dịch</label>
+                                <input
+                                    [disabled]="!isEdit" maxlength="1024"
+                                    type="text" id="tradingAddress" name="tradingAddress" pInputText 
+                                    [(ngModel)]="businessCustomerDetail.tradingAddress" [title]="businessCustomerDetail.tradingAddress"
+                                    [ngClass]="{'ng-invalid ng-dirty' : fieldErrors?.tradingAddress} + ' custom-input-disabled'" 
+                                    (click)="resetValid('tradingAddress')"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card pt-0 pb-0 mb-0">
+                        <h5 class="mt-3 mb-2"> Tài khoản ngân hàng mặc định </h5>
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="field col-12 md:col-6">
+                                <label class="title-info"> Số tài khoản </label>
+                                <input 
+                                    [disabled]="true" type="text" id="bankAccNo" name="bankAccNo" pInputText
+                                    [value]="businessCustomerDetail?.businessCustomerBank?.bankAccNo"
+                                    [ngClass]="'custom-input-disabled'" maxlength="128"
+                                />
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label class="title-info"> Tên tài khoản </label>
+                                <input 
+                                    [disabled]="true" type="text" id="bankAccName" name="bankAccName" pInputText
+                                    [value]="businessCustomerDetail?.businessCustomerBank?.bankAccName"
+                                    [ngClass]="'custom-input-disabled'" maxlength="512"
+                                />
+                            </div>
+
+                            <div class="field col-12 md:col-6">
+                                <label class="title-info" htmlFor="code">Ngân hàng</label>
+                                <input 
+                                    [disabled]="true" type="text" id="bankName" name="bankName" pInputText
+                                    [autoDisplayFirst]="false"
+                                    [value]="businessCustomerDetail?.businessCustomerBank?.bankName"
+                                    [ngClass]="'custom-input-disabled'"
+                                />
+                            </div>
+                            <div class="field col-12 md:col-6">
+                                <label class="title-info">Chi nhánh</label>
+                                <input  
+                                    [disabled]="!isEdit" type="text" id="bankBranchName" name="bankBranchName" pInputText
+                                    [value]="businessCustomerDetail?.businessCustomerBank?.bankBranchName"
+                                    [ngClass]="'custom-input-disabled'" maxlength="512"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card pt-0 mb-0">
+                        <h5 class="mt-3 mb-2"> Thông tin người đại diện </h5>
+                        <div class="p-fluid p-formgrid grid">
+                            <div class="field col-12 md:col-4">
+                                <label class="title-info {{ isEdit ? 'hightline-title' : '' }}"> Tên người đại diện </label>
+                                <input 
+                                    [disabled]="!isEdit" maxlength="256"
+                                    type="text" id="repName" name="repName" pInputText 
+                                    [(ngModel)]="businessCustomerDetail.repName" 
+                                    [ngClass]="{'ng-invalid ng-dirty' : fieldErrors?.repName} + ' custom-input-disabled'" 
+                                    (click)="resetValid('repName')"
+                                />
+                            </div>
+                                <div class="field col-12 md:col-3">
+                                <label class="title-info {{ isEdit ? 'hightline-title' : '' }}"> Chức vụ </label>
+                                <input 
+                                    [disabled]="!isEdit"
+                                    type="text" id="repPosition" name="repPosition" pInputText 
+                                    [(ngModel)]="businessCustomerDetail.repPosition" maxlength="256"
+                                    [ngClass]="{'ng-invalid ng-dirty' : fieldErrors?.repPosition} + ' custom-input-disabled'" 
+                                    (click)="resetValid('repPosition')"
+                                />
+                            </div>
+                            <div class="field col-12 md:col-3">
+                                <label class="title-info {{ isEdit ? 'hightline-title' : '' }}"> Quyết định số </label>
+                                <input 
+                                    [disabled]="!isEdit" maxlength="20"
+                                    type="text" id="decisionNo" name="decisionNo" pInputText 
+                                    [(ngModel)]="businessCustomerDetail.decisionNo" 
+                                    [ngClass]="{'ng-invalid ng-dirty' : fieldErrors?.decisionNo} + ' custom-input-disabled'" 
+                                    (click)="resetValid('decisionNo')"
+                                />
+                            </div>
+                            <div class="field col-12 md:col-2">
+                                <label class="title-info {{ isEdit ? 'hightline-title' : '' }}"> Ngày quyết định</label>
+                                <p-calendar
+                                    inputId="decisionDate" dateFormat="dd/mm/yy" locale="vi" appendTo="body" utc="true" placeholder="dd/mm/yyyy"
+                                    [autoDisplayFirst]="true" [disabled]="!isEdit"
+                                    [(ngModel)]="businessCustomerDetail.decisionDate" 
+                                    [ngClass]="{'ng-invalid ng-dirty' : fieldErrors?.decisionDate} + ' custom-input-disabled'" 
+                                    (click)="resetValid('decisionDate')"
+                                    [showIcon]="true">
+                                </p-calendar>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </p-tabPanel>
+        <p-tabPanel [header]="'taiKhoanNganHang'" *ngIf="isGranted([PermissionCoreConst.CoreKHDN_TKNH]) && activeFirstTabDefault(isGranted([PermissionCoreConst.CoreKHDN_TKNH]), 'taiKhoanNganHang')">
+            <ng-template pTemplate = "header">
+                <i class="pi pi-credit-card mr-2"></i>
+                <span>Tài khoản ngân hàng</span>
+            </ng-template>
+            <app-business-customer-bank [businessCustomerDetail]="businessCustomerDetail" *ngIf="tabViewActive.taiKhoanNganHang"></app-business-customer-bank>     
+        </p-tabPanel>
+        <p-tabPanel [header]="'giayPhepDKKD'" *ngIf="isGranted([PermissionCoreConst.CoreKHDN_DKKD])">
+            <ng-template pTemplate = "header">
+                <i class="pi pi-credit-card mr-2"></i>
+                <span>Giấy phép ĐKKD</span>
+            </ng-template>
+            <app-business-license-file *ngIf="tabViewActive.giayPhepDKKD" ></app-business-license-file>     
+        </p-tabPanel>
+    </p-tabView>
+    
+</div>

@@ -1,0 +1,28 @@
+<div>
+    <div class="grid p-fluid">
+        <div class="col-12 md:col-12">
+                <div class="field col-12">
+                    <label> Chọn đại lý (<span class="required-field"> * </span>)</label>
+                    <p-multiSelect 
+                    id="SaleTypes" name="tradingProviderId" 
+                    [options]="tradingProviders" 
+                    optionLabel="labelName" optionValue="tradingProviderId" placeholder="" [(ngModel)]="directionalBody.tradingProviders" appendTo="body"></p-multiSelect>
+                </div>
+                <div class="field col-12">
+                    <label> Loại sale <span class="required-field"> * </span> </label>
+                    <p-dropdown 
+                        optionValue="code" name="saleType" optionLabel="name" appendTo="body"
+                        [options]="SaleConst.types" [autoDisplayFirst]="true" 
+                        [(ngModel)]="directionalBody.saleType">
+                    </p-dropdown> 
+                </div>
+                
+        </div>
+        
+        
+    </div>
+    <div class="p-dialog-footer" style="width: 100%; position: fixed; left: 0; bottom: 0;">
+        <button pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text p-confirm-dialog-reject" (click)="cancel()"></button>
+        <button pButton pRipple label="Đồng ý" icon="pi pi-check" class="p-button-text p-confirm-dialog-approve" [disabled]="!validate || submitted" (click)="accept()"></button>
+    </div>
+</div>

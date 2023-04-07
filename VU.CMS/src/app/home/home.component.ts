@@ -457,20 +457,20 @@ export class HomeComponent extends CrudComponentBase {
         this.reportTradingProviderOptions.scales.x.min = 0;
         this.reportTradingProviderOptions.scales.x.max = 9;
         
-        this._dashBoardService.getInfoDashBoard(this.dataFilter).subscribe((res) => {
-            this.isLoading = false;
-            if (this.handleResponseInterceptor(res, '')) {
-                this.cashFlowInfo = res.data;
+        // this._dashBoardService.getInfoDashBoard(this.dataFilter).subscribe((res) => {
+        //     this.isLoading = false;
+        //     if (this.handleResponseInterceptor(res, '')) {
+        //         this.cashFlowInfo = res.data;
                 
-                // this.UpdateCashFlowByDayInfo();
-                // this.UpdateDanhSachTheoKyHanSP();
-                // this.UpdatedoanhSoVaSLBan();
-                // this.initChart();
-            }
+        //         // this.UpdateCashFlowByDayInfo();
+        //         // this.UpdateDanhSachTheoKyHanSP();
+        //         // this.UpdatedoanhSoVaSLBan();
+        //         // this.initChart();
+        //     }
 
-        }, (err) => {
-            this.isLoading = false;
-            console.log('Error-------', err);
-        });
+        // }, (err) => {
+        //     this.isLoading = false;
+        //     console.log('Error-------', err);
+        // });
     }
 }

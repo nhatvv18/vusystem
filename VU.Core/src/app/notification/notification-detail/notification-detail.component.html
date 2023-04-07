@@ -1,0 +1,317 @@
+<div class="card" *ngIf="!initLoading">
+    <h5>Chi tiết thông báo</h5>
+    <p-tabView>
+        <p-tabPanel header="Thông tin chung">
+            <form [formGroup]="postForm" (ngSubmit)="onSubmit()">  
+                <div class="button-action">
+                    <button 
+                        type="reset" pButton pRipple label="Hủy" icon="pi pi-times" class="p-button-text mr-2"
+                        (click)="close()">
+                    </button>
+                    <button 
+                        [disabled]="!postForm?.valid" type="submit" pButton pRipple label="Lưu lại" icon="pi pi-save"
+                        (click)="moveToUserList()">
+                    </button>
+                </div> 
+                    <div class="p-fluid p-formgrid grid">
+                        <div class="field col-6" *ngIf="currentNotificationId == null">
+                            <label htmlFor="title">Thông báo mẫu</label>
+                            <p-dropdown [autoDisplayFirst]="false" optionLabel="labelName" optionValue="id" [options]="notificationTemplates" (onChange)="changeNotification($event.value)">
+                        </p-dropdown>
+                        </div>      
+                        <div class="field col-12">
+                            <label htmlFor="title">Tiêu đề thông báo</label>
+                            <input formControlName="title" pInputText id="title" type="text" [ngClass]="{
+                                    'ng-invalid ng-dirty': (postFormControl?.title?.touched) && postFormControl?.title?.errors?.required
+                                }" />
+                        </div>
+
+                        <div class="field col-12">
+                            <label htmlFor="title">Chủ đề</label>
+                            <!-- <input formControlName="description" pInputText id="description" type="text" /> -->
+                            <p-dropdown 
+                                formControlName="description" id="description" name="description" [options]="topicList" [(ngModel)]="selectedTopic" 
+                                placeholder="Chọn chủ đề" optionLabel="name" optionValue="value" [showClear]="true" styleClass="w-full"
+                                [ngClass]="{'ng-invalid ng-dirty': (postFormControl?.description?.touched) && postFormControl?.description?.errors?.required}">
+                            </p-dropdown>
+                        </div>
+                        <div class="field col-4">
+                            <label htmlFor="title">Hành động</label> 
+                            <p-multiSelect formControlName="actions" optionLabel="value" optionValue="key" [options]="actions" [ngClass]="{
+                                    'ng-invalid ng-dirty': (postFormControl?.actions?.touched) && postFormControl?.actions?.errors?.required
+                                }">
+                            </p-multiSelect>
+                        </div> 
+                        <div class="field col-4">
+                            <label htmlFor="title">Loại thông báo</label> 
+                            <p-dropdown formControlName="type" optionLabel="name" optionValue="type" [options]="types" [ngClass]="{
+                                'ng-invalid ng-dirty': (postFormControl?.type?.touched) && postFormControl?.type?.errors?.required
+                            }">
+                        </p-dropdown>
+                        </div> 
+                        <div class="field col-4">
+                            <label htmlFor="title">Trạng thái</label> 
+                            <p-dropdown formControlName="status" optionLabel="name" optionValue="value" [options]="statuses" [ngClass]="{
+                                    'ng-invalid ng-dirty': (postFormControl?.status.touched) && postFormControl?.status.errors?.required
+                                }">
+                            </p-dropdown>
+                        </div> 
+                        
+                        <!-- <div class="field col-1 md:col-1">
+                            <label htmlFor="isFeatured">Nổi bật</label>
+                            <div class="mt-1">
+                                <p-inputSwitch formControlName="isFeatured"></p-inputSwitch>
+                            </div>
+                        </div>  -->
+ 
+                        <div class="field col-12">
+                            <label htmlFor="content">Mô tả thông báo APP </label>
+                            <textarea pInputTextarea [rows]="11" formControlName="appNotificationDesc" id="appNotificationDesc" class="custom-input"></textarea>
+                        </div>
+
+                        <div  class="field col-12" *ngIf="postForm?.value?.actions.includes('PUSH_NOTIFICATION')"> 
+                            <label htmlFor="content">Loại nội dung thông báo app</label>
+                            <p-selectButton  formControlName="appNotifContentType" [ngModelOptions]="{standalone: true}" optionValue="value" class="mb-2 mt-2" [options]="htmlMarkdownOptions" optionLabel="name"></p-selectButton>
+                        </div>
+                        <div *ngIf="postForm?.value?.actions.includes('PUSH_NOTIFICATION')" class="field {{ postForm?.value.appNotifContentType == 'MARKDOWN' ? 'col-6' : 'col-12' }}">
+                            <label htmlFor="content">Nội dung thông báo app</label>
+                            <div *ngIf="postForm?.value.appNotifContentType == 'MARKDOWN'">
+                                <textarea #myTextArea (click)="getCaretPos(myTextArea)" (keyup)="getCaretPos(myTextArea)" pInputTextarea [rows]="11" formControlName="notificationContent" id="notificationContent" class="custom-input"></textarea>
+                                <div style="width: 150px;">
+                                    <p-button (click)="insertImageNotificationContent()" class="p-button-outlined p-button-info" label="Chèn ảnh" icon="pi pi-image" iconPos="left"></p-button>
+                                </div> 
+                            </div>
+                            
+                            <div *ngIf="postForm?.value.appNotifContentType == 'HTML'">
+                                <angular-editor formControlName="notificationContent" id="content" class="custom-input"  [placeholder]="'Nhập nội dung '" [config]="{height: '15rem', editable: true, sanitize: false }">
+                            </angular-editor>
+                            </div>
+                        </div>
+                        <div *ngIf="postForm?.value?.actions.includes('PUSH_NOTIFICATION') && postForm?.value.appNotifContentType == 'MARKDOWN'"  class="field col-6 md:col-6 ">
+                            <label htmlFor="content">Nội dung xem trước</label>  
+                            <markdown class="border-box" [data]="postForm?.value.notificationContent">
+                            </markdown> 
+                        </div>
+
+
+                        <div *ngIf="postForm?.value?.actions.includes('SEND_SMS')"  class="field col-12 md:col-12">
+                            <label htmlFor="content">Nội dung SMS</label>
+                            <textarea  #myTextArea (click)="getCaretPos(myTextArea)" (keyup)="getCaretPos(myTextArea)" pInputTextarea [rows]="5" formControlName="smsContent" id="smsContent" class="custom-input"> </textarea>
+                        </div>
+                        <div  class="field col-12" *ngIf="postForm?.value?.actions.includes('SEND_EMAIL')"> 
+                            <label htmlFor="content">Loại nội dung email</label>
+                            <p-selectButton  formControlName="emailContentType" [ngModelOptions]="{standalone: true}" optionValue="value" class="mb-2 mt-2" [options]="htmlMarkdownOptions" optionLabel="name"></p-selectButton>
+                        </div>
+                        <div *ngIf="postForm?.value?.actions.includes('SEND_EMAIL')" class="field {{ postForm?.value.emailContentType == 'MARKDOWN' ? 'col-6' : 'col-12' }}">
+                            <label htmlFor="content">Nội dung email</label>
+                            <div *ngIf="postForm?.value.emailContentType == 'MARKDOWN'">
+                                <textarea #myTextArea (click)="getCaretPos(myTextArea)" (keyup)="getCaretPos(myTextArea)" [rows]="11" formControlName="emailContent" id="emailContent" class="custom-input p-inputtextarea p-inputtext p-component p-element ng-touched ng-dirty ng-valid"></textarea>
+                                <div style="width: 150px;">
+                                    <p-button (click)="insertImageEmailContent()" class="p-button-outlined p-button-info" label="Chèn ảnh" icon="pi pi-image" iconPos="left"></p-button>
+                                </div> 
+                            </div>
+                            
+                            <div *ngIf="postForm?.value.emailContentType == 'HTML'">
+                                <angular-editor formControlName="emailContent" id="content" class="custom-input"  [placeholder]="'Nhập nội dung '" [config]="{height: '15rem', editable: true, sanitize: false }">
+                            </angular-editor>
+                            </div>
+                        </div>
+                        <div *ngIf="postForm?.value?.actions.includes('SEND_EMAIL') && postForm?.value.emailContentType == 'MARKDOWN'"  class="field col-6 md:col-6 ">
+                            <label htmlFor="content">Nội dung xem trước</label>  
+                            <markdown class="border-box" [data]="postForm?.value.emailContent">
+                            </markdown> 
+                        </div>
+                        
+                        <div class="field col-8">
+                            <label htmlFor="content">Action view</label>
+                            <input pInputTextarea cols="5" formControlName="actionView" id="actionView" class="custom-input" />
+                            <label htmlFor="content">External Event</label>
+                            <input pInputTextarea cols="5" formControlName="externalEvent" id="actionView" class="custom-input" />
+                            <label htmlFor="content">External Params</label>
+                            <input pInputTextarea cols="5" formControlName="externalParams" id="actionView" class="custom-input" />
+                        </div> 
+                        <div class="col-4">
+                            <div>
+                                <label htmlFor="mainImg">Ảnh đại diện</label> 
+                            </div>
+                            <div *ngIf="mainImg" class="gallery-media">
+                                <div class="gallery-image" style="background: url({{baseUrl}}/{{mainImg}});"></div>
+                                <div class="desc">
+                                    <i (click)="removeFile(img)" class="remove-img pi pi-trash"></i>
+                                </div>
+                            </div>
+                            <div *ngIf="!mainImg || mainImg?.length == 0" class="grid"> 
+                                <div class="col-12 mt-2">
+                                    <button 
+                                        (click)="selectImg()" pButton type="button" label="Thêm ảnh" class="p-button-primary mb-1">
+                                    </button> 
+                                </div> 
+                            </div>
+                        </div>
+                    </div> 
+            </form>
+        </p-tabPanel>
+        <p-tabPanel header="Danh sách gửi thông báo">
+            <p-table
+                #tableNotificationDetail  
+                [value]="listOfReciever" [loading]="isLoadingPersonList" 
+                [rowHover]="true" [paginator]="false"
+                responsiveLayout="scroll" dataKey="id" 
+                [scrollable]="true" scrollHeight="{{ (screenHeight*0.65) + 'px' }}"
+                (onHeaderCheckboxToggle)="toggleCheckboxAll($event)" 
+                [(selection)]="selectedCustomers">
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <div class="flex">
+                            <span class="p-float-label b-custom">
+                                <p-multiSelect 
+                                    class="mr-3" [style]="{'width':'160px'}"  
+                                    [options]="pushSMSStatus"  optionLabel="name" 
+                                    [filter]="false" emptyMessage="Không có dữ liệu" placeholder="T.thái gửi App"
+                                    [(ngModel)]="filters.pushAppStatus" 
+                                    (onChange)="applyFilter()" >
+                                </p-multiSelect>
+                                <label for="multiselect">T.thái gửi App</label>
+                            </span> 
+                            <!--  -->
+                            <span class="p-float-label b-custom">
+                                <p-multiSelect 
+                                    class="mr-3" [style]="{'width':'160px'}"  
+                                    [options]="pushSMSStatus"  optionLabel="name" 
+                                    [filter]="false" emptyMessage="Không có dữ liệu" placeholder="T.thái gửi Email"
+                                    [(ngModel)]="filters.sendEmailStatus" 
+                                    (onChange)="applyFilter()">
+                                </p-multiSelect>
+                                <label for="multiselect">T.thái gửi Email</label>
+                            </span>
+                            <!--  -->
+                            <span class="p-float-label b-custom">
+                                <p-multiSelect 
+                                    class="mr-3" [style]="{'width':'160px'}"  
+                                    [options]="pushSMSStatus"  optionLabel="name" 
+                                    [filter]="false" emptyMessage="Không có dữ liệu" placeholder="T.thái gửi SMS"
+                                    [(ngModel)]="filters.sendSMSStatus" 
+                                    (onChange)="applyFilter()">
+                                </p-multiSelect>
+                                <label for="multiselect">T.thái gửi SMS</label>
+                            </span>
+                            <!--  -->
+                            <span class="p-float-label b-custom">
+                                <p-dropdown 
+                                    class="mr-3" [style]="{'width':'160px'}"
+                                    [options]="SendNotifySizeConst.list" optionLabel="name" optionValue="code"
+                                    [(ngModel)]="filters.sendNotifySize" [autoDisplayFirst]="true" 
+                                    (onChange)="changeSendNotifySize($event.value)">
+                                </p-dropdown>
+                                <label for="sendNotifySize"> Số lượng KH chọn </label>
+                            </span>
+                        </div>
+                        <div class="action-list">
+                            <button 
+                                pButton pRipple label="Cài đặt DS" icon="pi pi-save" class="p-button-primary ml-1"
+                                (click)="addPeopleToSendingList()">
+                            </button>
+                            <!--  -->
+                            <button 
+                                *ngIf="selectedCustomers.length > 0" pButton pRipple label="Gửi thông báo" icon="pi pi-send" class="p-button-success ml-1"
+                                (click)="sendNotification()">
+                            </button>
+                            <!--  -->
+                            <button 
+                                *ngIf="selectedCustomers.length > 0" pButton pRipple label="Xóa KH" icon="pi pi-trash" class="p-button-danger ml-1"
+                                (click)="deleteKH()">
+                            </button>
+                            <!--  -->
+                            <button 
+                                pButton pRipple label="Thoát" icon="pi pi-times" class="p-button-warning ml-1"
+                                (click)="create()">
+                            </button>
+                        </div>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header" let-columns>
+                    <tr>
+                        <th style="min-width: 10rem; max-width: 10rem;" pFrozenColumn alignFrozen="left" [frozen]="true">
+                            <p-tableHeaderCheckbox ></p-tableHeaderCheckbox>
+                            <span class="ml-3"> Đã chọn ({{ selectedCustomers?.length }}) </span>
+                        </th>
+                        <th style="min-width: 16.5rem; max-width:16.5rem" pFrozenColumn alignFrozen="left" [frozen]="true">Tên</th>
+                        <th style="min-width: 17rem; max-width:17rem" >Email</th>
+                        <th style="min-width: 8.5rem; max-width: 8.5rem;" >Số điện thoại</th>
+                        <th style="min-width: 8rem; max-width: 8rem"> Mã NV/CH</th> 
+                        <th style="min-width: 8rem; max-width: 8rem; justify-content: center;">Gửi lên App</th>
+                        <th style="min-width: 8rem; max-width: 8rem; justify-content: center;">Gửi SMS</th>
+                        <th style="min-width: 7rem; max-width: 7rem; justify-content: center;">Gửi Email</th>
+                        <th style="width: 5rem; justify-content: center;"> </th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row>
+                    <tr>
+                        <td style="min-width: 10rem; max-width: 10rem;" pFrozenColumn alignFrozen="left" [frozen]="true">
+                            <p-tableCheckbox [value]="row"></p-tableCheckbox>
+                        </td>
+                        <td style="min-width: 16.5rem; max-width:16.5rem" pFrozenColumn alignFrozen="left" [frozen]="true"> 
+                            {{ row.fullName }} 
+                        </td>
+                        <td style="min-width: 17rem; max-width:17rem" title="{{row.email}}">
+                            <div class="b-cut-text-17">{{ row.email }}</div>
+                        </td>
+                        <td style="min-width: 8.5rem; max-width: 8.5rem;" >
+                            {{row.phoneNumber}}
+                        </td>
+                        <td style="min-width: 8rem; max-width: 8rem;"> 
+                            {{ row.personCode }} 
+                        </td>
+                        <td style="min-width: 8rem; max-width: 8rem; justify-content: center;">  
+                            <p-tag 
+                                styleClass="p-tag-{{ getStatusSeverity(row.pushAppStatus) }}" 
+                                severity="{{ getStatusSeverity(row.pushAppStatus) }}"
+                                value="{{ getStatusName(row.pushAppStatus) }}">
+                            </p-tag>
+                        </td>
+                        <td style="min-width: 8rem; max-width: 8rem; justify-content: center;"> 
+                            <p-tag 
+                                styleClass="p-tag-{{ getStatusSeverity(row.sendSMSStatus) }}" 
+                                severity="{{ getStatusSeverity(row.sendSMSStatus) }}"
+                                value="{{ getStatusName(row.sendSMSStatus) }}">
+                            </p-tag>
+                        </td>
+                        <td style="min-width: 7rem; max-width: 7rem; justify-content: center;"> 
+                            <p-tag 
+                            styleClass="p-tag-{{ getStatusSeverity(row.sendEmailStatus) }}" 
+                            severity="{{ getStatusSeverity(row.sendEmailStatus) }}"
+                            value="{{ getStatusName(row.sendEmailStatus) }}">
+                        </p-tag>
+                        </td> 
+                        <td style="width: 5rem; justify-content: center;">
+                            <div class="flex">
+                                 
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="7">Không có dữ liệu.</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="loadingbody">
+                    <tr>
+                        <td colspan="7"> Đang tải dữ liệu ... </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <p-paginator 
+                [rows]="personListPage.pageSizeNotify" 
+                [totalRecords]="personListPage.totalItems" 
+                [rowsPerPageOptions]="[personListPage.pageSizeNotify, 100, 500, 1000]" 
+                currentPageReportTemplate="Tất cả {{ personListPage.totalItems }} dòng" 
+                showCurrentPageReport="true"
+                (onPageChange)="setPersonList($event)">
+            </p-paginator>
+            <!--  -->
+        </p-tabPanel>
+        
+    </p-tabView>
+</div>

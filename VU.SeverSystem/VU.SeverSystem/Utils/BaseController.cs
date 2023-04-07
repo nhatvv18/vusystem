@@ -29,11 +29,11 @@ namespace VU.SeverSystem.Utils
             if (httpRequestEx != null)
             {
                 _logger?.LogInformation(ex, $"{ex.GetType()}: {errStr}, Message = {ex.Message}");
-                return new APIResponse(httpRequestEx.Message, (int)ErrorCode.HttpRequestException, httpRequestEx.Message);
+                return new APIResponse(httpRequestEx.Message, (int)ErrorCode.HttpRequestException, httpRequestEx.Message, 1);
             }
 
             _logger?.LogError(ex, $"{ex.GetType()}: {errStr}, Message = {ex.Message}");
-            return new APIResponse(null, (int)ErrorCode.InternalServerError, ex.Message);
+            return new APIResponse(null, (int)ErrorCode.InternalServerError, ex.Message, 1);
         }
     }
 }

@@ -112,16 +112,16 @@ namespace VU.SeverSystem.Controllers
         //}
 
         [HttpPost("login")]
-        public APIResponse Login([FromBody] LoginDto input)
+        public LoginResultDto Login([FromBody] LoginDto input)
         {
             try
             {
                 var result = _usersServices.Login(input);
-                return new APIResponse(result, 200, "");
+                return result;
             }
             catch (Exception ex)
             {
-                return OkException(ex);
+                throw new Exception(ex.Message);
             }
         }
 

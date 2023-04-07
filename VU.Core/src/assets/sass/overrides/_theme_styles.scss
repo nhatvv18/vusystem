@@ -1,0 +1,682 @@
+/* Add your customizations of theme here */
+.p-toolbar {
+    background: white;
+    border: none;
+}
+.p-float-label {
+    input:focus ~ label, input.p-filled ~ label {
+        background: white;
+        padding: 0px 5px;
+        top: 0px !important;
+    }
+} 
+.p-float-label.b-custom label{
+    left: 0;
+    top: -0.75rem !important;
+    font-size: 12px;
+}
+
+.p-toast{
+    max-width: 35rem !important;
+    width: auto !important;
+    z-index: 1103;
+    .p-toast-message-content {
+        align-items: center !important;
+        .p-toast-detail {
+            margin-top: 0px !important;
+        }
+    }
+}
+
+.p-count-price{
+    font-weight: 700 !important;
+    font-size: 1.25rem !important;
+    margin: 0 !important;
+    color: black !important;
+}
+
+
+/* CUSTOM CHO EPIC BOND */
+//  DAT TEN CLASS CO DANG b-xxx-xxx
+// add custom tag-severity (secondary, help)
+.p-tooltip.b-tooltip {
+    max-width: 32rem !important;
+}
+
+.b-loading {
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+.b-field {
+	margin-bottom: 0;
+	label.b-title-info {
+		margin-bottom: 0.3rem;
+		opacity: 0.75;
+	}
+
+    label.b-hightline-title {
+        font-weight: 500;
+        opacity: 1 !important;
+    }
+
+	p.b-info {
+		font-weight: 500;
+		opacity: 0.95;
+	}
+
+    input, textarea, .p-dropdown {
+        width: 100%;
+		&:hover {
+			border-color: blue !important;
+			outline: #6C63F0 !important;
+		}
+    }
+}
+
+.b-icon {
+    color: #6C63F0;
+    font-size: 1.2rem;
+    &:hover {
+        font-weight: bold;
+    }
+}
+
+.b-count-price{
+    margin: 0 1rem !important;
+    padding: 2rem 0 !important;
+    border: 2px solid !important;
+    border-color: var(--surface-200) !important;
+    border-radius: 13px !important;
+}
+
+.b-disabled {
+    .p-component.p-disabled, .p-component:disabled {
+        opacity: 1;
+        background: #f8f8f8;
+    }
+    &:disabled {
+        opacity: 1;
+        background: #f8f8f8;
+    }
+
+    // calendar
+    .p-calendar {
+        button {
+            border: 1px solid #ced4da !important;
+            border-left: none !important;
+        }
+    }
+}
+
+/* b-cut-text TỪ 1 -> 60 REM */
+@for $i from 1 through 60 {
+    .b-cut-text-#{$i} {
+        text-overflow: ellipsis;
+        overflow: hidden; 
+        width: #{$i}rem; 
+        white-space: nowrap;
+    }
+}
+
+.card {
+    &.b-list {
+        min-height: 86vh;
+        padding-top: 0px;
+        margin-bottom: 0px;
+    }
+    &.b-page-detail {
+        padding-top: 15px;
+        .b-header {
+            align-items: start;
+            .b-actions {
+                padding-right: 1.75rem;
+                div > * {
+                    margin-left: 1rem;
+                    // margin-right: 1rem;
+                }
+                div > p-menu {
+                    margin-left: 0px;
+                }
+            }
+        }
+    }
+}
+.b-pr-tabview {
+    padding-right: 1.25rem;
+}
+ 
+.b-w-50 {
+	width: 50%;
+}
+
+/* WIDTH REM 31 -> 60 */
+@for $i from 31 through 60 {
+	.w-#{$i}rem {
+		width: #{$i}rem;
+	}
+}
+
+/* MIN WIDTH REM 31 -> 60 */
+@for $i from 1 through 60 {
+	.w-min-#{$i}rem {
+		min-width: #{$i}rem;
+	}
+}
+
+/* FLEX 1 -> 60 */
+@for $i from 1 through 60 {
+	.flex-#{$i} {
+		flex: #{$i};
+	}
+}
+
+/* WIDTH % 1 -> 60 */
+@for $i from 1 through 60 {
+	.b-w-#{$i} {
+		width: #{$i}#{"%"};
+	}
+}
+
+/* SU DUNG CHO GRID LAYOUT */
+.b-grid {
+    display: grid;
+
+    & > div {
+        padding: 0.5rem;
+    }
+
+	@for $i from 1 through 12 {
+		.row-span-#{$i} {
+			grid-row: span #{$i} / span #{$i};
+		}
+		.col-span-#{$i} {
+			grid-column: span #{$i} / span #{$i};
+		}
+		.grid-cols-#{$i} {
+			grid-template-columns: repeat(#{$i}, 1fr);
+		}
+	}
+	
+	
+	/* SM */
+	@media (min-width : 576px){
+		@for $i from 1 through 12 {
+			.sm\:row-span-#{$i} {
+				grid-row: span #{$i} / span #{$i};
+			}
+			.sm\:col-span-#{$i} {
+				grid-column: span #{$i} / span #{$i};
+			}
+			.sm\:grid-cols-#{$i} {
+				grid-template-columns: repeat(#{$i}, 1fr);
+			}
+			.sm\:flex-#{$i} {
+				flex: #{$i};
+			}
+		}
+	}
+	
+	/* MD */
+	@media (min-width: 768px) {
+		@for $i from 1 through 12 {
+			.md\:row-span-#{$i} {
+				grid-row: span #{$i} / span #{$i};
+			}
+			.md\:col-span-#{$i} {
+				grid-column: span #{$i} / span #{$i};
+			}
+			.md\:grid-cols-#{$i} {
+				grid-template-columns: repeat(#{$i}, 1fr);
+			}
+			.md\:flex-#{$i} {
+				flex: #{$i};
+			}
+		}
+	}
+	
+	/* LG */
+	@media (min-width: 992px) {
+		@for $i from 1 through 12 {
+			.lg\:row-span-#{$i} {
+				grid-row: span #{$i} / span #{$i};
+			}
+			.lg\:col-span-#{$i} {
+				grid-column: span #{$i} / span #{$i};
+			}
+			.lg\:grid-cols-#{$i} {
+				grid-template-columns: repeat(#{$i}, 1fr);
+			}
+			.lg\:flex-#{$i} {
+				flex: #{$i};
+			}
+		}
+	}
+	
+	/* XL */
+	@media (min-width: 1200px) {
+		@for $i from 1 through 12 {
+			.xl\:row-span-#{$i} {
+				grid-row: span #{$i} / span #{$i};
+			}
+			.xl\:col-span-#{$i} {
+				grid-column: span #{$i} / span #{$i};
+			}
+			.xl\:grid-cols-#{$i} {
+				grid-template-columns: repeat(#{$i}, 1fr);
+			}
+			.xl\:flex-#{$i} {
+				flex: #{$i};
+			}
+		}
+	}
+}
+
+.custom-table {
+    .p-datatable-header {
+        // padding: 0.5rem 0rem 1.5rem 0rem;
+    }
+    thead {
+        tr {
+            th {
+                border-width: 1px 0px 1px 0px !important;
+                &.b-border-frozen-left {
+                    border-right: 1px solid #dee2e6 !important;
+                }
+                &.b-border-frozen-right {
+                    border-left: 1px solid #dee2e6 !important;
+                }
+            }
+
+        }
+    }
+    tbody {
+        tr {
+            td {
+                // border-width: 1px 0px 0px 1px !important;
+                &.p-frozen-column {
+                    font-weight: 500;
+                }
+                &.b-border-frozen-left {
+                    border-right: 1px solid #dee2e6 !important;
+                }
+                &.b-border-frozen-right {
+                    border-left: 1px solid #dee2e6 !important;
+                }
+                &.b-table-actions {
+                    justify-content: center;
+                    i {
+                        cursor: pointer;
+                        &:hover {
+                            color: #6C63F0;
+                        }
+                    }
+                }
+            }
+            
+        }
+    }
+    &.distribution-contract-payment {
+        .p-datatable-header {
+            padding: 0px;
+            padding-bottom: 0px;
+            background: white;
+            border: none;
+        }
+    }
+}
+
+/* END CUSTOM CHO EPIC BOND */
+
+
+.required-field {
+    color: red;
+}
+
+//css page phat hanh so cap 
+
+.title-group-input {
+    h6 {
+        padding-bottom: 0.5rem;
+        border-bottom: 2px solid #80808057;
+    }
+}
+
+.button-actions {
+    button:first-child {
+        display: none;
+    }
+}
+
+.detail {
+    .col-12 {
+        .card {
+            padding: 0px;
+            hr {
+                border-width: 2px 0 0;
+            }
+            h5 {}
+            .p-formgrid.grid {
+                .field {
+                    margin-bottom: 0;
+                    label.title-info {
+                        margin-bottom: 0.3rem;
+                        opacity: 0.8;
+                        &.hightline-title {
+                            font-weight: 500;
+                            opacity: 1 !important;
+                        }
+                    }
+                    p {
+                        font-weight: 500;
+                        opacity: 0.95;
+                    }
+                }
+            }
+        }
+    }
+}
+
+.p-dialog-custom {
+    &.filter-trading-provider {
+        .p-dialog-content {
+            padding-top: 0px;
+            overflow-y: hidden;
+            
+        }
+    }
+}
+
+.custom-tabview {
+    .p-tabview-nav-container {
+        .p-tabview-nav-content {
+            .p-tabview-nav {
+                border: none;
+                li {
+                    &.p-highlight {
+                        .p-tabview-nav-link {
+                            border-color: white;
+                            border-bottom: 2px solid #6C63F0 !important;
+                            color: #6C63F0;
+                        }
+                    }
+                    .p-tabview-nav-link {
+                        padding: 0 0 0.75rem 0 !important;
+                        margin: 0 0.75rem ;
+                        border-color: #ffffff #ffffff #ffffff #ffffff;
+                        &:hover {
+                            border-color: white;
+                        }
+                        &:not(.p-disabled):focus {
+                            box-shadow: none;
+                        }
+                    }
+                    &:first-child {
+                        .p-tabview-nav-link {
+                            margin-left: 0;
+                        }
+                    }
+                }
+            }
+        }
+    }
+    .p-tabview-panels {
+        .p-element:first-child {
+            .p-tabview-panel{
+                border: 1px solid gray;
+                padding: 25px 20px;
+                margin-top: 2rem;
+                border-radius: 8px;
+                border-color: rgba(0, 0, 0, 0.05);
+            }
+        }
+        .p-element:not(:first-child) {
+            .p-tabview-panel{
+                border: 1px solid gray;
+                padding: 0 20px;
+                margin-top: 2rem;
+                border-radius: 8px;
+                border-color: rgba(0, 0, 0, 0.05);
+                min-height: 65vh;
+            }
+        }
+        padding-left: 0px;
+        padding-top: 0;
+    }
+
+    &.distribution-contract-payment {
+        .p-tabview-panels {
+            display: none;
+        }
+        .p-tabview-nav-container {
+            .p-tabview-nav-content {
+                ul.p-tabview-nav {
+                    li {
+                        a {
+                            border-radius: 0px;
+                            span {
+                                // color: #6c757dc7;
+                            }
+                        }
+                        &.p-highlight {
+                            .p-tabview-nav-link {
+                                border: none;
+                                border-bottom: 2px solid #b7bcc1c7;
+                            }
+                        } 
+                    }
+                }
+            }
+        }
+    }
+} 
+
+.wrapper-files-upload {
+    .p-fileupload-content {
+        padding: 10px 0px;
+        .p-fileupload-files {
+            .p-fileupload-row {
+                div {
+                    &:first-child {
+                        display: none;
+                    }
+                    & {
+                        width: auto;
+                    }
+                    &:last-child {
+                        button {
+                            padding: 2px 10px;
+                        }
+                    }
+                }
+                
+            }
+        }
+    }
+    .p-fileupload-buttonbar {
+        background: white;
+        text-align: right;
+        padding: 10px 5px;
+    }
+}
+
+.custom-file-upload {
+    .p-fileupload-buttonbar {
+        padding: 0px;
+        background: white;
+        border: none;
+    }
+    .p-fileupload-content{
+        display: none;
+    }
+}
+
+.b-list {
+    .b-header {
+        align-items: center;
+        //
+        .b-title{
+            h4 {
+                padding-bottom: 0px;
+                margin-bottom: 0px;
+            }
+        }
+        .b-action {
+            text-align: right;
+            button {
+                width: auto;
+            }
+        }
+    }
+}
+
+.b-disabled-click {
+    pointer-events: none;
+}
+
+// custom spinner
+.b-progress-spinner {
+    position: fixed;
+    z-index: 999;
+    height: 2em;
+    width: 2em;
+    overflow: show;
+    margin: auto;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+}
+
+/* Transparent Overlay */
+.b-progress-spinner:before {
+  content: '';
+  display: block;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #ffffff94;
+}
+
+.custom-spinner .p-progress-spinner-circle {
+    stroke: #5346E0 !important;
+    animation: custom-progress-spinner-dash 1.5s ease-in-out infinite, custom-progress-spinner-color 6s ease-in-out infinite !important;
+}
+
+// custom style srcoll bar
+::-webkit-scrollbar {
+    width: 3px; //scroll-y
+    height: 8px; //scroll-x
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 5px rgb(231, 231, 231); 
+    border-radius: 5px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #b3b3b3; 
+    border-radius: 8px;
+}
+
+
+.p-paginator {
+    .p-paginator-current {
+        margin-left: auto;
+        border: none;
+    }
+
+    .p-paginator-element {
+        border: none;
+    }
+
+    .p-paginator-first, .p-paginator-last {
+        display: none;
+    }
+}
+
+// Custom topbar avatar
+.b-new-div-account-display {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;     
+    width: 409px;
+    height: 386px;            
+    background: #FFFFFF;
+    border-radius: 12px;
+    
+}
+.b-avt-detail {
+   width: 80px;
+   height: 80px;
+   border-radius: 50%;
+}
+.b-name-detail {
+    text-align: center;
+    margin-top: 2rem;
+}
+.b-display-name {
+    font-family: 'Mulish';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 16px;
+    line-height: 20px;
+}
+.b-email-detail {
+    font-family: 'Mulish';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    text-align: center;
+    color: rgba(0, 0, 0, 0.4);
+}
+.b-manage-account {
+    margin-top: 2rem;
+    padding: 8px 16px;
+    gap: 10px;
+    height: 40px;
+    background: #EEECFC;
+    border: 1px solid #5346E0;
+    border-radius: 90px;
+    cursor: pointer;
+}
+.b-manage-account:hover{
+    opacity: 0.8;
+}
+.b-manage-account-text {
+    font-family: 'Mulish';
+    color: #5346E0;
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+}
+.b-logout-detail {
+    margin-top: 3rem;               
+}
+.b-logout-detail:hover{
+    opacity: 0.8;
+
+}
+.b-logout-detail > button {
+    cursor: pointer;
+    border: none;
+    font-family: 'Mulish';
+    font-style: normal;
+    font-weight: 600;
+    font-size: 14px;
+    line-height: 24px;
+    text-align: center;
+    color: #5346E0;
+    padding: 1rem;
+    background-color: #fff;
+}
+
+
+

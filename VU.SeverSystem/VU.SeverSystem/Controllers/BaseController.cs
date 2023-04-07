@@ -66,18 +66,35 @@ namespace VU.SeverSystem.Controllers
                 {
                     _logger?.LogInformation(ex, $"{ex.GetType()}: {errStr}, Message = {ex.Message}");
                 }
-                return new APIResponse(null, int.Parse(fex.Code.Name), fex.Message);
+                return new APIResponse(null, int.Parse(fex.Code.Name), fex.Message,1);
             }
 
             var httpRequestEx = ex as HttpRequestException;
             if (httpRequestEx != null)
             {
                 _logger?.LogInformation(ex, $"{ex.GetType()}: {errStr}, Message = {ex.Message}");
-                return new APIResponse(null, (int)ErrorCode.HttpRequestException, httpRequestEx.Message);
+                return new APIResponse(null, (int)ErrorCode.HttpRequestException, httpRequestEx.Message,1);
             }
 
             _logger?.LogInformation(ex, $"{ex.GetType()}: {errStr}, Message = {ex.Message}");
-            return new APIResponse(null, (int)ErrorCode.InternalServerError, ex.Message);
+            return new APIResponse(null, (int)ErrorCode.InternalServerError, ex.Message, 1);
+        }
+
+        [NonAction]
+        protected FileContentResult FileByFormat(byte[] fileByte, string fileName)
+        {
+            string ext = Path.GetExtension(fileName)?.ToLower();
+
+            return ext switch
+            {
+                ".jpg" or ".jpeg" or ".jfif" => File(fileByte, MimeTypeNames.ImageJpeg),
+                ".png" => File(fileByte, MimeTypeNames.ImagePng),
+                ".svg" => File(fileByte, MimeTypeNames.ImageSvgXml),
+                ".gif" => File(fileByte, MimeTypeNames.ImageGif),
+                ".mp4" => File(fileByte, MimeTypeNames.VideoMp4),
+                //".pdf" => File(fileByte, MimeTypeNames.ApplicationPdf);
+                _ => File(fileByte, MimeTypeNames.ApplicationOctetStream, fileName),
+            };
         }
     }
 }

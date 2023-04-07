@@ -1,0 +1,112 @@
+<div class="grid mr-0 ml-0 mt-0">
+    <div class="col-12">
+        <div class="card">
+            <h5>Danh sách tin tức</h5>
+            <p-toast></p-toast>
+            <p-table 
+                #businessCustomerApproveTable 
+                [value]="rows" 
+                [loading]="isLoading" [rowHover]="true" [showCurrentPageReport]="true" [paginator]="false" 
+                (onPageChange)="setPage($event)" responsiveLayout="scroll" dataKey="code" 
+                [resizableColumns]="false" [scrollable]="true" scrollHeight="{{ (screenHeight*0.65) + 'px' }}" styleClass="custom-table">
+                <ng-template pTemplate="caption">
+                    <div class="flex justify-content-between flex-column sm:flex-row">
+                        <div class="flex">
+                            <span class="block mt-2 md:mt-0 p-input-icon-left mr-1">
+                                <i class="pi pi-search"></i>
+                                <input pInputText type="text" placeholder="Tìm kiếm..." [(ngModel)]="keyword" 
+                                    (keyup)="changeKeyword()" style="width: 300px;"
+                                    (input)="setPage()"/>
+                            </span>
+                            <span class="p-float-label b-custom ml-2">
+                                <p-dropdown id="dropdownStatus" [style]="{'width':'14rem'}" [options]="statusSearch" optionLabel="name"
+                                optionValue="code" placeholder="Chọn trạng thái" [(ngModel)]="status"
+                                (onChange)="changeStatus()">
+                                </p-dropdown>   
+                                <label class="font-normal" for="dropdownStatus">Trạng thái bài tin</label>
+                            </span>
+                        </div>
+                        <div class="">
+                            <button *ngIf="isGranted([PermissionCoreConst.CoreTinTuc_ThemMoi])" pButton pRipple label="Thêm mới" icon="pi pi-plus" class="p-button-success mr-2"
+                                (click)="create()"></button>
+                        </div> 
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="max-width: 6rem; min-width: 6rem;" pFrozenColumn alignFrozen="left">#ID</th>
+                        <th style="max-width: 5rem; min-width: 5rem;" pFrozenColumn alignFrozen="left" class="b-border-frozen-left">Ảnh</th>
+                        <th style="max-width: 25rem; min-width: 15rem;"> Tiêu đề</th>
+                        <th  style="max-width: 8rem; min-width: 8rem;">Loại bài viết</th>
+                        <th style="min-width: 25rem;">Nội dung </th>
+                        <th style="max-width: 7rem; min-width: 7rem;" pFrozenColumn alignFrozen="right" [frozen]="true" class="b-border-frozen-right">Trạng thái </th>
+                        <th style="max-width: 3rem; min-width: 3rem; justify-content: center;" pFrozenColumn alignFrozen="right" [frozen]="true">
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row let-rowIndex = "rowIndex">
+                    <tr>
+                        <td style="max-width: 6rem; min-width:6rem;" pFrozenColumn alignFrozen="left"> {{ row.code }} </td>
+                        <td style="max-width: 5rem; min-width: 5rem; " pFrozenColumn alignFrozen="left" class="b-border-frozen-left"> 
+                            <p-image *ngIf="row.mainImg && !row.isVideo" src="{{baseUrl}}/{{ row.mainImg }}" alt="Image" width="50"></p-image>
+                            <p-image *ngIf="row.mainImg && row.isVideo == true"  src="assets/demo/images/template/videoTemplate.png" alt="Image" width="50"></p-image>
+                        </td>
+                        <td style="max-width: 25rem; min-width: 15rem;"> {{ row.title }} </td>
+                        <td style="max-width: 8rem; min-width: 8rem;"> {{ MediaConst.getNewsType(row.type) }} </td>
+                        <td style="min-width: 25rem;"> {{row.content | slice:0:setLengthStringInScreen(14) }} {{ row?.content?.length > setLengthStringInScreen(14) ? '...' : '' }} </td>
+                        <td style="max-width: 7rem; min-width: 7rem; justify-content: center;" pFrozenColumn alignFrozen="right" [frozen]="true" class="b-border-frozen-right">
+                            <p-tag 
+                                styleClass="p-tag-{{ MediaConst.getStatusSeverity(row.status) }}" 
+                                severity="{{ MediaConst.getStatusSeverity(row.status) }}"
+                                value="{{ MediaConst.getStatusNews(row.status) }}">
+                            </p-tag>
+                        </td>
+                        <td style="max-width: 3rem; min-width: 3rem;" pFrozenColumn alignFrozen="right" [frozen]="true" class="b-table-actions"> 
+                            <div class="flex">
+                                <i class="pi pi-ellipsis-h"  (click)="menu.toggle($event)"></i>
+                                <p-menu 
+                                    #menu [popup]="true"class="button-actions"
+                                    [model]="listAction[rowIndex]" appendTo="body"
+                                    >
+                                </p-menu>
+                            </div>
+                        </td>
+                        <!-- <td style="width: 5rem; ">
+                            
+                            <div class="flex">
+                                <div class="dropdown">
+                                    <button pButton  icon="pi pi-user-edit" class="p-button-rounded p-button-info dropbtn"></button>
+                                    <div class="dropdown-content">
+                                        <button (click)="edit(row)" pButton pRipple type="button" icon="pi pi-user-edit" label="Chỉnh sửa" class="p-button-text mr-2 mb-2"></button>
+                                        <button (click)="remove(row)" pButton pRipple type="button" icon="pi pi-trash" label="Xoá tin tức" class="p-button-danger p-button-text mr-2 mb-2"></button>
+                                        <button (click)="approve(row)" pButton pRipple type="button" icon="pi pi-check-circle" label="{{ row.status == 'PENDING' ? 'Duyệt đăng' : 'Bỏ duyệt đăng' }}" class="p-button-success p-button-text mr-2 mb-2"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </td> -->
+                    </tr>
+                </ng-template>
+
+                <ng-template pTemplate="emptymessage">
+                    <tr>
+                        <td colspan="7">Không có dữ liệu.</td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="loadingbody">
+                    <tr>
+                        <td colspan="7"> Đang tải dữ liệu ... </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+            <p-paginator 
+                [rows]="page.pageSize" 
+                [totalRecords]="page.totalItems" 
+                [rowsPerPageOptions]="[25, 50, 100, 200]" 
+                currentPageReportTemplate="Tất cả {{ page.totalItems }} dòng" 
+                showCurrentPageReport="true"
+                (onPageChange)="setPage($event)">
+            </p-paginator>
+        </div>
+        <p-confirmDialog header="Xác nhận" icon="pi pi-exclamation-triangle"></p-confirmDialog>
+
+    </div>
+</div>

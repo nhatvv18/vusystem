@@ -25,7 +25,7 @@ export abstract class CrudComponentBase extends AppComponentBase{
         this.permissions = injector.get(PermissionsService);
 
         //Khởi tạo danh sách quyền
-        this.permissions.getAllPermission();
+        // this.permissions.getAllPermission();
     } 
 
     localBaseUrl = AppConsts.appBaseUrl;
