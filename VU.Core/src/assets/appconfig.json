@@ -6,7 +6,7 @@
 		"iframeSrc": "http://epic-rocketchat.stecom.vn:3000/?layout=embedded"
 	},
 	"appBaseUrl": "http://localhost:4201",
-	"baseUrlHome": "http://localhost:4200",
+	"baseUrlHome": "http://localhost:4201",
 	"clientId": "client1",
 	"clientSecret": "secret1"
 }

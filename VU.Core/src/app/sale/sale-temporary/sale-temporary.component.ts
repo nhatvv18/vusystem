@@ -107,7 +107,7 @@ export class SaleTemporaryComponent extends CrudComponentBase {
 			{ field: 'department', header: 'Phòng ban', width: '15rem'},
 			// { field: 'phone', header: 'Số điện thoại', width: '10rem', cutText: 'b-cut-text-10'  },
 			// { field: 'idNoOrTaxCode', header: 'Số CMND / Mã số thuế ', width: '10rem', cutText: 'b-cut-text-10' },
-			// { field: 'dateOfBirth', header: 'Ngày sinh', width: '10rem', cutText: 'b-cut-text-10' },
+			// { field: 'birthDay', header: 'Ngày sinh', width: '10rem', cutText: 'b-cut-text-10' },
 			// { field: 'placeOfResidenceOrAddress', header: 'Địa chỉ', width: '25rem', cutText: 'b-cut-text-25' },
 			{ field: 'source', header: 'Nguồn', width: '8rem' },
       { field: 'columnResize', header: '', type:'hidden' },
@@ -187,7 +187,7 @@ export class SaleTemporaryComponent extends CrudComponentBase {
       row.department = row?.department?.departmentName ?? '';
       // row.phone = row?.investor?.phone || row?.businessCustomer?.phone;
       // row.idNoOrTaxCode = row?.investor ? row?.investor?.investorIdentification?.idNo : (row?.businessCustomer ? row?.businessCustomer?.taxCode : null);
-      // row.dateOfBirth = this.formatDate(row?.investor?.investorIdentification?.dateOfBirth),
+      // row.birthDay = this.formatDate(row?.investor?.investorIdentification?.birthDay),
       row.placeOfResidenceOrAddress = row?.investor ? row?.investor?.investorIdentification?.placeOfResidence : (row?.businessCustomer ? row?.businessCustomer?.address : null);
 		};
 		console.log('showData', rows);

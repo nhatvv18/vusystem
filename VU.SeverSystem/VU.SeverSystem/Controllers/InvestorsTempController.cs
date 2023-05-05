@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using VU.SeverSystem.Domain.Implements;
 using VU.SeverSystem.Domain.Interfaces;
 using VU.SeverSystem.Entities.Dtos.Investors;
@@ -46,19 +47,21 @@ namespace VU.SeverSystem.Controllers
                 return OkException(ex);
             }
         }
-        //[Authorize]
-        //[HttpPost("add-info")]
-        //public APIResponse AddUserInfo([FromBody] CreateUserInfoDto input)
-        //{
-        //    try
-        //    {
-        //        _usersServices.CreateInfoUser(input);
-        //        return new APIResponse(null, 200, "");
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return OkException(ex);
-        //    }
-        //}
+
+        [HttpGet("{id}")]
+        [ProducesResponseType(typeof(APIResponse), (int)HttpStatusCode.OK)]
+        public APIResponse GetById(int id)
+        {
+            try
+            {
+                var result = _investorsServices.GetById(id);
+                return new APIResponse(result, 200, "Success", 1);
+            }
+            catch (Exception ex)
+            {
+                return OkException(ex);
+            }
+        }
+
     }
 }

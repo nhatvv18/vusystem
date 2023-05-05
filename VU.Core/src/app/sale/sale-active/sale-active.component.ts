@@ -107,7 +107,7 @@ export class SaleActiveComponent extends CrudComponentBase {
 			{ field: 'saleTypeName', header: 'Loại Sale', width: '10rem'},
 			// { field: 'phone', header: 'Số điện thoại', width: '10rem',  },
 			// { field: 'idNoOrTaxCode', header: 'Số CMND / Mã số thuế', width: '10rem', },
-			// { field: 'dateOfBirth', header: 'Ngày sinh', width: '10rem', },
+			// { field: 'birthDay', header: 'Ngày sinh', width: '10rem', },
 			// { field: 'placeOfResidenceOrAddress', header: 'Địa chỉ', width: '20rem', cutText: 'b-cut-text-20' },
       { field: 'columnResize', header: '', type:'hidden' },
 		];
@@ -187,7 +187,7 @@ export class SaleActiveComponent extends CrudComponentBase {
       row.department = row?.department?.departmentName;
       row.phone = row?.investor?.phone;
       row.idNoOrTaxCode = row?.investor ? row?.investor?.investorIdentification?.idNo : (row?.businessCustomer ? row?.businessCustomer?.taxCode : null);
-      // row.dateOfBirth = this.formatDate(row?.investor?.investorIdentification?.dateOfBirth),
+      // row.birthDay = this.formatDate(row?.investor?.investorIdentification?.birthDay),
       row.placeOfResidenceOrAddress = row?.investor ? row?.investor?.investorIdentification?.placeOfResidence : (row?.businessCustomer ? row?.businessCustomer?.address : null);
 		};
 		console.log('showData', rows);

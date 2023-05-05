@@ -15,7 +15,7 @@ import { debounceTime, switchMap } from "rxjs/operators";
 
 
 const { DEFAULT_IMAGE, MODAL_EKYC_TYPE } = OBJECT_INVESTOR_EKYC;
-const DATE_FIELDS_EKYC = ["dateOfBirth", "idIssueDate", "idIssueExpDate"];
+const DATE_FIELDS_EKYC = ["birthDay", "idIssueDate", "idIssueExpDate"];
 @Component({
 	selector: "app-create-investor-ekyc",
 	templateUrl: "./create-investor-ekyc.component.html",
@@ -48,7 +48,7 @@ export class CreateInvestorEkycComponent extends ModalDialogBase {
 	banks: any = {};
 	isDisable:boolean;
 	isInvestorVerified:boolean;
-	fieldDates = ["dateOfBirth", "idDate","idExpiredDate","idIssueDate","idIssueExpDate"];
+	fieldDates = ["birthDay", "idDate","idExpiredDate","idIssueDate","idIssueExpDate"];
 	isFeatured: any;
 	constructor(
 		injector: Injector, 
@@ -564,7 +564,7 @@ export class CreateInvestorEkycComponent extends ModalDialogBase {
 			"idType": this.model.type,
 			"idNo": investorEkyc.idNo,
 			"fullname": investorEkyc.name,
-			"dateOfBirth": investorEkyc.dateOfBirth,
+			"birthDay": investorEkyc.birthDay,
 			"nationality": investorEkyc.nationality,
 			"personalIdentification": "",
 			"idIssuer": investorEkyc.idIssuer,

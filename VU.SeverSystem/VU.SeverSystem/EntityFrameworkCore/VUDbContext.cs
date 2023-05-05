@@ -189,7 +189,7 @@ namespace VU.SeverSystem.EntityFrameworkCore
                     .IsRequired(false);
 
                 entity.Property(e => e.FullName)
-                    .HasColumnType("VARCHAR(50)")
+                    .HasColumnType("NVARCHAR(50)")
                     .IsRequired(false);
 
                 entity.Property(e => e.BirthDay)
@@ -200,11 +200,11 @@ namespace VU.SeverSystem.EntityFrameworkCore
                    .HasColumnType("VARCHAR(50)")
                    .IsRequired(false);
                 entity.Property(e => e.Nationality)
-                    .HasColumnType("VARCHAR(50)")
+                    .HasColumnType("NVARCHAR(50)")
                     .IsRequired(false);
 
                 entity.Property(e => e.Sex)
-                    .HasColumnType("VARCHAR(50)")
+                    .HasColumnType("NVARCHAR(50)")
                     .IsRequired(false);
 
                 entity.Property(e => e.PlaceOfResidence)
@@ -220,11 +220,11 @@ namespace VU.SeverSystem.EntityFrameworkCore
                    .IsRequired(false);
 
                 entity.Property(e => e.PlaceOfOrigin)
-                   .HasColumnType("VARCHAR(50)")
+                   .HasColumnType("NVARCHAR(50)")
                    .IsRequired(false);
 
                 entity.Property(e => e.IdIssuer)
-                   .HasColumnType("VARCHAR(50)")
+                   .HasColumnType("NVARCHAR(50)")
                    .IsRequired(false);
 
                 entity.Property(e => e.IdDate)

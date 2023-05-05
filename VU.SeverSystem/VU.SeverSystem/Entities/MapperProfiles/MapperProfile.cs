@@ -10,8 +10,9 @@ namespace VU.SeverSystem.Entities.MapperProfiles
         public MapperProfile()
         {
             CreateMap<Users, CreateUsersDto>().ReverseMap();
-            CreateMap<Users, UsersDto>();
+            CreateMap<Users, UsersDto>().ReverseMap();
             CreateMap<InvestorIdentification, InvestorDto>().ReverseMap();
+            CreateMap<Investors, InvestorDto>().ReverseMap();
         }
     }
 }

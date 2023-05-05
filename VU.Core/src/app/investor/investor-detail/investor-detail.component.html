@@ -109,9 +109,9 @@
 												<label class="title-info {{ isEdit ? 'hightline-title' : '' }}" htmlFor="code">
 													Ngày sinh (<span class="required-field"> * </span>)
 												</label>
-												<p-calendar dateMask [disabled]="!isEdit" styleClass="w-full" inputId="dateOfBirth"
+												<p-calendar dateMask [disabled]="!isEdit" styleClass="w-full" inputId="birthDay"
 													dateFormat="dd/mm/yy" locale="vi" appendTo="body" utc="false"
-													[(ngModel)]="investor.defaultIdentification.dateOfBirth"
+													[(ngModel)]="investor.defaultIdentification.birthDay"
 													[showIcon]="false" class="custom-input-disabled">
 												</p-calendar>				
 											</div>

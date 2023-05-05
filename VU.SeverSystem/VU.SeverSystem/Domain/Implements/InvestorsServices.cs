@@ -133,5 +133,16 @@ namespace VU.SeverSystem.Domain.Implements
             });
             _dbContext.SaveChanges();
         }
+
+        public InvestorDto GetById(int id)
+        {
+            int? userId = CommonUtils.GetCurrentUserId(_httpContext);
+            var query = _dbContext.Investors.FirstOrDefault(d => d.Id == id && d.Deleted == YesNo.NO);
+            var identifiQuery = _investorIdentificationServices.FindByInvestorId(id);
+            var result = _mapper.Map<InvestorDto>(query);
+            result.DefaultIdentification = _mapper.Map<InvestorIdentification>(identifiQuery);
+
+            return result;
+        }
     }
 }

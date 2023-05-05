@@ -12,7 +12,7 @@ import { DynamicDialogConfig, DynamicDialogRef } from 'primeng/dynamicdialog';
 import { forkJoin } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
 const { DEFAULT_IMAGE, MODAL_EKYC_TYPE } = OBJECT_INVESTOR_EKYC;
-const DATE_FIELDS_EKYC = ["dateOfBirth", "idIssueDate", "idIssueExpDate"];
+const DATE_FIELDS_EKYC = ["birthDay", "idIssueDate", "idIssueExpDate"];
 
   @Component({
     selector: 'app-replace-identification',
@@ -63,7 +63,7 @@ const DATE_FIELDS_EKYC = ["dateOfBirth", "idIssueDate", "idIssueExpDate"];
         passportImage: DEFAULT_IMAGE.IMAGE_PASSPORT,
         type: "",
       };
-      fieldDates = ["dateOfBirth", "idDate","idExpiredDate","idIssueDate","idIssueExpDate"];
+      fieldDates = ["birthDay", "idDate","idExpiredDate","idIssueDate","idIssueExpDate"];
       isToastIdentifi: boolean = true;
 
     ngOnInit(): void {
@@ -100,7 +100,7 @@ const DATE_FIELDS_EKYC = ["dateOfBirth", "idIssueDate", "idIssueExpDate"];
         "idType": this.model.type,
         "idNo": investorEkyc.idNo,
         "fullname": investorEkyc.name,
-        "dateOfBirth": investorEkyc.dateOfBirth,
+        "birthDay": investorEkyc.birthDay,
         "nationality": investorEkyc.nationality,
         "personalIdentification": "",
         "idIssuer": investorEkyc.idIssuer,

@@ -78,7 +78,7 @@ export class InvestorApproveComponent extends CrudComponentBase {
 		idType: InvestorConst.ID_TYPES.CMND,
 		idNo: "",
 		fullname: "",
-		dateOfBirth: null,
+		birthDay: null,
 		nationality: "",
 		personalIdentification: "",
 		idIssuer: "",
@@ -132,7 +132,7 @@ export class InvestorApproveComponent extends CrudComponentBase {
 		this.cols = [
 			{ field: 'cifCode', header: 'Mã KH', width: '10rem', class: 'justify-content-left', isPin: true },
 			{ field: 'fullname', header: 'Họ tên', width: '16rem', cutText: 'b-cut-text-16',class: 'justify-content-left', isPin: true },
-			{ field: 'dateOfBirth', header: 'Ngày sinh',class: 'justify-content-center', width: '10rem' },
+			{ field: 'birthDay', header: 'Ngày sinh',class: 'justify-content-center', width: '10rem' },
 			{ field: 'nameSex', header: 'Giới tính', class: 'justify-content-left',width: '6rem' },
 			// { field: 'nationality', header: 'Quốc tịch', width: '10rem' },
 			{ field: 'phone', header: 'Điện thoại',class: 'justify-content-left', width: '10rem' },
@@ -187,7 +187,7 @@ export class InvestorApproveComponent extends CrudComponentBase {
 		for (let row of rows) {
 			row.cifCode = row.cifCode;
 			row.nameSex = this.InvestorConst.getSexName(row.defaultIdentification?.sex),
-			row.dateOfBirth = this.formatDate(row.defaultIdentification?.birthDay);
+			row.birthDay = this.formatDate(row.defaultIdentification?.birthDay);
 			row.fullname = row.defaultIdentification?.fullName;
 			// row.nationality = row.defaultIdentification?.nationality;
 			row.phone = row.phone;
@@ -201,7 +201,9 @@ export class InvestorApproveComponent extends CrudComponentBase {
 	 * @param investor
 	 */
 	view(investor) {
-		this.router.navigate([`/customer/investor/${this.cryptEncode(investor?.investorId)}/temp/1`]);
+		console.log("investor",investor);
+		
+		this.router.navigate([`/customer/investor/${this.cryptEncode(investor?.id)}/temp/1`]);
 	}
 
 	/**

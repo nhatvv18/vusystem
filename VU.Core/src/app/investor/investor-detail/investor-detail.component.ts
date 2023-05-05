@@ -80,7 +80,7 @@ export class InvestorDetailComponent extends CrudComponentBase {
   actionsDisplay: any[] = [];
   listAction: any[] = [];
   isEdit = false;
-  fieldDates = ["dateOfBirth", "idDate", "idExpiredDate"];
+  fieldDates = ["birthDay", "idDate", "idExpiredDate"];
   fieldErrors = {};
   investorDetail = {};
   labelButtonEdit = "Chỉnh sửa";
@@ -107,7 +107,7 @@ export class InvestorDetailComponent extends CrudComponentBase {
   isTemp = InvestorConst.TEMP.YES;
 
   fieldDateInit = {
-    identification: ["idDate", "idExpiredDate", "dateOfBirth"],
+    identification: ["idDate", "idExpiredDate", "birthDay"],
     investor: ["birthDate"],
   };
 
@@ -522,7 +522,7 @@ export class InvestorDetailComponent extends CrudComponentBase {
     //     },
     //   });
     // }
-    if (invsetorItem.approve.status == this.InvestorConst.STATUS.KHOI_TAO && this.isTemp == InvestorConst.TEMP.YES && this.isGranted([PermissionCoreConst.CoreDuyetKHCN_TrinhDuyet])) {
+    if (invsetorItem?.approve?.status == this.InvestorConst.STATUS.KHOI_TAO && this.isTemp == InvestorConst.TEMP.YES && this.isGranted([PermissionCoreConst.CoreDuyetKHCN_TrinhDuyet])) {
       this.actions.push({
         data: invsetorItem,
         label: "Trình duyệt",

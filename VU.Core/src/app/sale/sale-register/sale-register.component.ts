@@ -89,7 +89,7 @@ export class SaleRegisterComponent extends CrudComponentBase {
 			{ field: 'department', header: 'Phòng ban', width: '20rem', isPin: true },
 			// { field: 'phone', header: 'Số điện thoại', width: '10rem'},
 			// { field: 'idNo', header: 'Số CMND/CCCD', width: '10rem', cutText: 'b-cut-text-10' },
-			{ field: 'dateOfBirth', header: 'Ngày sinh', width: '10rem'},
+			{ field: 'birthDay', header: 'Ngày sinh', width: '10rem'},
 			// { field: 'placeOfResidence', header: 'Địa chỉ thường trú', width: '40rem', cutText: 'b-cut-text-40' },
       { field: 'columnResize', header: '', type:'hidden' },
 		];
@@ -251,7 +251,7 @@ export class SaleRegisterComponent extends CrudComponentBase {
       // row.phone = row?.investor?.phone,
       // row.idNo = row?.investor?.investorIdentification?.idNo,
       row.department = row?.departmentName ?? "Sale chưa thuộc phòng ban"
-      row.dateOfBirth = this.formatDate(row?.investor?.investorIdentification?.dateOfBirth)
+      row.birthDay = this.formatDate(row?.investor?.investorIdentification?.birthDay)
       // row.placeOfResidence = row?.investor?.investorIdentification?.placeOfResidence,
 			// row.repPosition = row.repPosition;
 		};

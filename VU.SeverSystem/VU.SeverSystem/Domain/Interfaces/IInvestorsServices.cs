@@ -10,5 +10,6 @@ namespace VU.SeverSystem.Domain.Interfaces
         void Create(CreateInvestorDto input);
         //List<Investors> GetAll();
         PageResultDto<List<InvestorDto>> GetAll(FilterDto input);
+        InvestorDto GetById(int id);
     }
 }

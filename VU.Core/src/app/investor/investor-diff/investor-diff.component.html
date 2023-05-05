@@ -86,12 +86,12 @@
                                 </td>
                             </tr>
 
-                            <tr *ngIf="diffDefaultIdentification?.DateOfBirth?.newValue != null">
+                            <tr *ngIf="diffDefaultIdentification?.birthDay?.newValue != null">
                                 <td style="width: 10%;"> Ngày sinh </td>
                                 <td style="width: 40%;">
                                     <div>
                                         <div class="b-wrapper-info b-cut-text">
-                                            {{diffDefaultIdentification?.DateOfBirth?.oldValue | dateview }} 
+                                            {{diffDefaultIdentification?.birthDay?.oldValue | dateview }} 
                                         </div>
                                     </div>
                                 </td>
@@ -99,7 +99,7 @@
                                 <td style="width: 40%;">
                                     <div>
                                         <div class="b-wrapper-info b-cut-text">
-                                            {{diffDefaultIdentification?.DateOfBirth?.newValue | dateview }}
+                                            {{diffDefaultIdentification?.birthDay?.newValue | dateview }}
                                         </div>
                                     </div>
                                 </td>
